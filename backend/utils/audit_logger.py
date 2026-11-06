@@ -2,6 +2,7 @@ import logging
 import uuid
 import hashlib
 import json
+import asyncio
 from datetime import datetime
 from typing import Optional, Dict, Any, Tuple
 from database import db
@@ -11,6 +12,9 @@ audit_collection = db["audit_logs"]
 
 GENESIS_HASH = "0000000000000000000000000000000000000000000000000000000000000000"
 SENSITIVE_KEYS = {"password", "password_hash", "token", "access_token", "secret", "authorization", "value"}
+
+# Process-level serialization lock for atomic sequence and chain append operations
+_append_lock = asyncio.Lock()
 
 def sanitize_details(details: Optional[Dict[str, Any]]) -> Dict[str, Any]:
     """Recursively redacts sensitive keys from audit log details"""
@@ -30,6 +34,33 @@ def compute_entry_hash(
     sequence: int,
     timestamp: str,
     actor_id: str,
+    actor_name: str,
+    actor_role: str,
+    action: str,
+    resource_type: str,
+    resource_id: str,
+    ip_address: str,
+    status: str,
+    prev_hash: str,
+    details: Dict[str, Any]
+) -> str:
+    """
+    Computes deterministic SHA-256 hash sealing ALL security-relevant fields:
+    sequence, timestamp, actor_id, actor_name, actor_role, action, resource_type,
+    resource_id, ip_address, status, prev_hash, and deterministic sorted details.
+    """
+    details_serialized = json.dumps(details, sort_keys=True, default=str)
+    payload = (
+        f"{sequence}|{timestamp}|{actor_id}|{actor_name}|{actor_role}|"
+        f"{action}|{resource_type}|{resource_id}|{ip_address}|{status}|"
+        f"{prev_hash}|{details_serialized}"
+    )
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+def compute_entry_hash_v1(
+    sequence: int,
+    timestamp: str,
+    actor_id: str,
     action: str,
     resource_type: str,
     resource_id: str,
@@ -37,7 +68,7 @@ def compute_entry_hash(
     prev_hash: str,
     details: Dict[str, Any]
 ) -> str:
-    """Computes deterministic SHA-256 hash for audit entry sealing"""
+    """Computes deterministic SHA-256 hash for legacy v1 audit entries"""
     details_serialized = json.dumps(details, sort_keys=True, default=str)
     payload = f"{sequence}|{timestamp}|{actor_id}|{action}|{resource_type}|{resource_id}|{status}|{prev_hash}|{details_serialized}"
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
@@ -55,58 +86,64 @@ async def record_audit_log(
 ) -> Optional[str]:
     """
     Persists a cryptographically sealed, tamper-evident audit log document.
+    Serializes concurrent appends via an async mutex to prevent sequence race conditions.
     Chains the entry to the preceding document via SHA-256 hash chaining.
     """
-    try:
-        clean_details = sanitize_details(details)
-        timestamp = datetime.utcnow().isoformat()
+    async with _append_lock:
+        try:
+            clean_details = sanitize_details(details)
+            timestamp = datetime.utcnow().isoformat()
+            resolved_ip = ip_address or "unknown"
 
-        # Retrieve the latest entry to link the hash chain
-        latest_entry = await audit_collection.find_one(
-            sort=[("sequence", -1)]
-        )
+            # Retrieve the latest entry to link the hash chain
+            latest_entry = await audit_collection.find_one(
+                sort=[("sequence", -1)]
+            )
 
-        if latest_entry:
-            sequence = latest_entry.get("sequence", 0) + 1
-            prev_hash = latest_entry.get("entry_hash", GENESIS_HASH)
-        else:
-            sequence = 1
-            prev_hash = GENESIS_HASH
+            if latest_entry:
+                sequence = latest_entry.get("sequence", 0) + 1
+                prev_hash = latest_entry.get("entry_hash", GENESIS_HASH)
+            else:
+                sequence = 1
+                prev_hash = GENESIS_HASH
 
-        entry_hash = compute_entry_hash(
-            sequence=sequence,
-            timestamp=timestamp,
-            actor_id=actor_id,
-            action=action,
-            resource_type=resource_type,
-            resource_id=str(resource_id),
-            status=status,
-            prev_hash=prev_hash,
-            details=clean_details
-        )
+            entry_hash = compute_entry_hash(
+                sequence=sequence,
+                timestamp=timestamp,
+                actor_id=actor_id,
+                actor_name=actor_name,
+                actor_role=actor_role,
+                action=action,
+                resource_type=resource_type,
+                resource_id=str(resource_id),
+                ip_address=resolved_ip,
+                status=status,
+                prev_hash=prev_hash,
+                details=clean_details
+            )
 
-        log_entry = {
-            "id": str(uuid.uuid4()),
-            "sequence": sequence,
-            "timestamp": timestamp,
-            "actor_id": actor_id,
-            "actor_name": actor_name,
-            "actor_role": actor_role,
-            "action": action,
-            "resource_type": resource_type,
-            "resource_id": str(resource_id),
-            "ip_address": ip_address or "unknown",
-            "status": status,
-            "details": clean_details,
-            "prev_hash": prev_hash,
-            "entry_hash": entry_hash
-        }
+            log_entry = {
+                "id": str(uuid.uuid4()),
+                "sequence": sequence,
+                "timestamp": timestamp,
+                "actor_id": actor_id,
+                "actor_name": actor_name,
+                "actor_role": actor_role,
+                "action": action,
+                "resource_type": resource_type,
+                "resource_id": str(resource_id),
+                "ip_address": resolved_ip,
+                "status": status,
+                "details": clean_details,
+                "prev_hash": prev_hash,
+                "entry_hash": entry_hash
+            }
 
-        await audit_collection.insert_one(log_entry)
-        return entry_hash
-    except Exception as e:
-        logger.error(f"Failed to record audit log: {str(e)}")
-        return None
+            await audit_collection.insert_one(log_entry)
+            return entry_hash
+        except Exception as e:
+            logger.error(f"Failed to record audit log: {str(e)}")
+            return None
 
 async def verify_audit_log_chain(limit: int = 1000) -> Dict[str, Any]:
     """
@@ -162,22 +199,38 @@ async def verify_audit_log_chain(limit: int = 1000) -> Dict[str, Any]:
                 sequence=seq,
                 timestamp=entry.get("timestamp", ""),
                 actor_id=entry.get("actor_id", ""),
+                actor_name=entry.get("actor_name", ""),
+                actor_role=entry.get("actor_role", ""),
                 action=entry.get("action", ""),
                 resource_type=entry.get("resource_type", ""),
                 resource_id=entry.get("resource_id", ""),
+                ip_address=entry.get("ip_address", "unknown"),
                 status=entry.get("status", ""),
                 prev_hash=prev_hash,
                 details=entry.get("details", {})
             )
 
             if stored_hash != recomputed_hash:
-                return {
-                    "verified": False,
-                    "chain_intact": False,
-                    "broken_at_index": idx,
-                    "broken_sequence": seq,
-                    "error": f"Tampering detected! Recomputed hash does not match stored hash at sequence {seq}."
-                }
+                # Check backwards-compatibility for legacy v1 entries
+                recomputed_v1 = compute_entry_hash_v1(
+                    sequence=seq,
+                    timestamp=entry.get("timestamp", ""),
+                    actor_id=entry.get("actor_id", ""),
+                    action=entry.get("action", ""),
+                    resource_type=entry.get("resource_type", ""),
+                    resource_id=entry.get("resource_id", ""),
+                    status=entry.get("status", ""),
+                    prev_hash=prev_hash,
+                    details=entry.get("details", {})
+                )
+                if stored_hash != recomputed_v1:
+                    return {
+                        "verified": False,
+                        "chain_intact": False,
+                        "broken_at_index": idx,
+                        "broken_sequence": seq,
+                        "error": f"Tampering detected! Recomputed hash does not match stored hash at sequence {seq}."
+                    }
 
             expected_prev_hash = stored_hash
             expected_sequence += 1

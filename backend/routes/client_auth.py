@@ -17,8 +17,8 @@ async def client_login(credentials: ClientLogin, request: Request):
     normalized_email = credentials.email.strip().lower()
     rate_key = f"client_login:{client_ip}:{normalized_email}"
 
-    # Check brute force limit: 5 attempts per 5 minutes
-    allowed, retry_after = login_rate_limiter.check_rate_limit(rate_key, max_attempts=5, window_seconds=300)
+    # Atomic check-and-record brute force limit: 5 attempts per 5 minutes
+    allowed, retry_after = login_rate_limiter.check_and_record(rate_key, max_attempts=5, window_seconds=300)
     if not allowed:
         raise HTTPException(
             status_code=status.HTTP_429_TOO_MANY_REQUESTS,
@@ -29,7 +29,6 @@ async def client_login(credentials: ClientLogin, request: Request):
     client_doc = await clients_collection.find_one({"email": {"$regex": f"^{normalized_email}$", "$options": "i"}})
     
     if not client_doc:
-        login_rate_limiter.record_attempt(rate_key)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password"
@@ -44,7 +43,6 @@ async def client_login(credentials: ClientLogin, request: Request):
     
     # Verify password
     if not verify_password(credentials.password, client_doc['password_hash']):
-        login_rate_limiter.record_attempt(rate_key)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password"

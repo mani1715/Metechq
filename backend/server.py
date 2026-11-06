@@ -178,7 +178,7 @@ async def startup_event():
                 raise ValueError("CRITICAL: INIT_SUPERADMIN_PASSWORD is required in production to bootstrap the initial super admin!")
             else:
                 bootstrap_password = secrets.token_urlsafe(16)
-                logger.warning(f"⚠️ No INIT_SUPERADMIN_PASSWORD set. Generated temporary secure admin password: {bootstrap_password}")
+                logger.warning("⚠️ No INIT_SUPERADMIN_PASSWORD set. Generated temporary secure admin password.")
 
             admin_user = {
                 "id": str(uuid.uuid4()),

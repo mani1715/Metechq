@@ -215,14 +215,33 @@ async def get_storage_file(
     filename: str,
     current_admin: dict = Depends(get_current_admin)
 ):
-    """Authenticated file retrieval for storage items"""
+    """Authenticated file retrieval for storage items with role and ownership checks"""
     clean_name = sanitize_filename(filename)
     target_path = (UPLOAD_DIR / clean_name).resolve()
     
     if not str(target_path).startswith(str(UPLOAD_DIR.resolve())):
-        raise HTTPException(status_code=400, detail="Invalid path")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid path")
     
+    # 1. Permission check: require super_admin or canAccessStorage permission
+    if current_admin['role'] != 'super_admin' and not check_permission(current_admin, 'canAccessStorage'):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You don't have permission to access storage. Contact super admin."
+        )
+
     if not target_path.exists():
-        raise HTTPException(status_code=404, detail="File not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="File not found")
+
+    # 2. Ownership / Visibility check if linked to a storage item
+    item = await storage_collection.find_one({"fileUrl": {"$regex": f"{clean_name}$"}})
+    if item and current_admin['role'] != 'super_admin':
+        visible_to = item.get("visibleTo", [])
+        creator = item.get("created_by")
+        username = current_admin.get("username")
+        if visible_to and (username != creator and username not in visible_to):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Access denied: You do not have visibility permissions for this private file."
+            )
     
     return FileResponse(path=str(target_path), filename=clean_name)

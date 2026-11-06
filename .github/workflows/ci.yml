@@ -2,7 +2,7 @@ name: Metechq CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, master, remediation-review ]
   pull_request:
     branches: [ main, master ]
 
@@ -10,6 +10,17 @@ jobs:
   backend-tests:
     name: Backend Security & API Tests
     runs-on: ubuntu-latest
+    services:
+      mongodb:
+        image: mongo:6.0
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.adminCommand(\"ping\")'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - uses: actions/checkout@v3
 
@@ -24,15 +35,50 @@ jobs:
           pip install -r backend/requirements.txt
           pip install pytest pytest-asyncio httpx requests
 
-      - name: Run Backend Security Tests
+      - name: Start API & Wait for Readiness
         env:
-          JWT_SECRET_KEY: test_jwt_secret_for_ci_minimum_32_characters_long_1234
-          JWT_SECRET: test_jwt_secret_for_ci_minimum_32_characters_long_1234
-          CLIENT_JWT_SECRET: test_client_jwt_secret_for_ci_minimum_32_chars
+          MONGODB_URI: mongodb://127.0.0.1:27017
+          DB_NAME: metechq_ci_test_isolated
+          JWT_SECRET_KEY: ci_test_only_secret_key_minimum_32_characters_12345
+          CLIENT_JWT_SECRET: ci_test_only_client_secret_minimum_32_characters
           ENVIRONMENT: test
           UPLOAD_DIR: /tmp/metechq_uploads
+          INIT_SUPERADMIN_USERNAME: maneesh
+          INIT_SUPERADMIN_PASSWORD: maneesh123
+          PORT: 8002
+          HOST: 127.0.0.1
+        run: |
+          mkdir -p /tmp/metechq_uploads
+          cd backend
+          python -m uvicorn server:app --host 127.0.0.1 --port 8002 &
+          echo "Waiting for API readiness at http://127.0.0.1:8002/api/..."
+          for i in $(seq 1 30); do
+            if curl -s -f http://127.0.0.1:8002/api/ > /dev/null; then
+              echo "API is ready!"
+              break
+            fi
+            echo "Waiting for API ($i/30)..."
+            sleep 2
+          done
+          cd ..
+
+      - name: Run Pytest Comprehensive Security Suite
+        env:
+          BACKEND_URL: http://127.0.0.1:8002/api
         run: |
           python -m pytest tests/backend/test_comprehensive_security.py -v
+
+      - name: Run Admin API Suite
+        env:
+          BACKEND_URL: http://127.0.0.1:8002/api
+        run: |
+          python tests/backend/backend_test.py
+
+      - name: Run Client Management Suite
+        env:
+          BACKEND_URL: http://127.0.0.1:8002/api
+        run: |
+          python tests/backend/client_management_test.py
 
   frontend-build:
     name: Frontend Build Check

@@ -22,8 +22,8 @@ async def admin_login(credentials: AdminLogin, request: Request):
     normalized_user = credentials.username.strip().lower()
     rate_key = f"admin_login:{client_ip}:{normalized_user}"
 
-    # Check brute force limit: 5 attempts per 5 minutes
-    allowed, retry_after = login_rate_limiter.check_rate_limit(rate_key, max_attempts=5, window_seconds=300)
+    # Atomic check-and-record brute force limit: 5 attempts per 5 minutes
+    allowed, retry_after = login_rate_limiter.check_and_record(rate_key, max_attempts=5, window_seconds=300)
     if not allowed:
         await record_audit_log(
             actor_id="anonymous",
@@ -48,7 +48,6 @@ async def admin_login(credentials: AdminLogin, request: Request):
         ]
     })
     if not admin_doc:
-        login_rate_limiter.record_attempt(rate_key)
         await record_audit_log(
             actor_id="anonymous",
             actor_name=normalized_user,
@@ -68,7 +67,6 @@ async def admin_login(credentials: AdminLogin, request: Request):
     # Verify password - handle both password and password_hash fields
     password_hash = admin_doc.get('password_hash', admin_doc.get('password'))
     if not password_hash or not verify_password(credentials.password, password_hash):
-        login_rate_limiter.record_attempt(rate_key)
         await record_audit_log(
             actor_id=admin_doc['id'],
             actor_name=admin_doc.get('username', 'admin'),
