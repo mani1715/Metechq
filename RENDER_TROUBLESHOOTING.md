@@ -143,7 +143,7 @@ curl https://mspn-dev.onrender.com/api/
 
 **Expected response:**
 ```json
-{"message": "MSPN DEV API is running"}
+{"message": "METECHQ API is running"}
 ```
 
 ### 2. Test Specific Endpoints

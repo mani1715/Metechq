@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document provides a complete production-ready architecture for the MSPN DEV full-stack application with optimizations, best practices, and deployment strategies.
+This document provides a complete production-ready architecture for the METECHQ full-stack application with optimizations, best practices, and deployment strategies.
 
 ---
 
@@ -289,7 +289,7 @@ import App from './App';
 
 test('renders homepage', () => {
   render(<App />);
-  const element = screen.getByText(/MSPN DEV/i);
+  const element = screen.getByText(/METECHQ/i);
   expect(element).toBeInTheDocument();
 });
 ```
@@ -577,4 +577,4 @@ yarn test
 
 **Document Version:** 1.0.0  
 **Last Updated:** January 2025  
-**Maintained By:** MSPN DEV Team
+**Maintained By:** METECHQ Team

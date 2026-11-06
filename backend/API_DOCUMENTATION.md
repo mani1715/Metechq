@@ -1,4 +1,4 @@
-# MSPN DEV API Documentation
+# METECHQ API Documentation
 
 ## Base URL
 ```
@@ -20,7 +20,7 @@ POST /api/auth/login
 Content-Type: application/json
 
 {
-  "email": "admin@mspndev.com",
+  "email": "admin@metechq.com",
   "password": "admin123"
 }
 
@@ -31,7 +31,7 @@ Response:
   "user": {
     "id": "uuid",
     "name": "Admin",
-    "email": "admin@mspndev.com",
+    "email": "admin@metechq.com",
     "role": "admin"
   }
 }
@@ -273,9 +273,9 @@ GET /api/settings/
 Response:
 {
   "id": "global_settings",
-  "agency_name": "MSPN DEV",
+  "agency_name": "METECHQ",
   "owner_name": "Maneesh",
-  "email": "info@mspndev.com",
+  "email": "info@metechq.com",
   "phone": "+1234567890",
   "address": "123 Main St",
   "description": "...",
@@ -330,7 +330,7 @@ Error Response Format:
 ```bash
 TOKEN=$(curl -X POST http://localhost:8001/api/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email":"admin@mspndev.com","password":"admin123"}' \
+  -d '{"email":"admin@metechq.com","password":"admin123"}' \
   | python -c "import sys, json; print(json.load(sys.stdin)['access_token'])")
 ```
 

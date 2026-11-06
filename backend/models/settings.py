@@ -20,14 +20,14 @@ class Settings(BaseModel):
     class Config:
         json_schema_extra = {
             "example": {
-                "agency_name": "MSPN DEV",
+                "agency_name": "METECHQ",
                 "owner_name": "Maneesh",
-                "email": "info@mspndev.com",
+                "email": "info@metechq.com",
                 "phone": "+1234567890",
                 "address": "123 Main St, City, Country",
                 "social_links": {
-                    "facebook": "https://facebook.com/mspndev",
-                    "twitter": "https://twitter.com/mspndev"
+                    "facebook": "https://facebook.com/metechq",
+                    "twitter": "https://twitter.com/metechq"
                 }
             }
         }

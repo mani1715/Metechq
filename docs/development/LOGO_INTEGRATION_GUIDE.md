@@ -1,7 +1,7 @@
-# MSPN DEV Logo Integration - Complete Implementation
+# METECHQ Logo Integration - Complete Implementation
 
 ## Overview
-The beautiful MSPN DEV logo has been elegantly integrated throughout the website in multiple strategic locations to enhance brand identity and create a sophisticated, aesthetic appearance.
+The beautiful METECHQ logo has been elegantly integrated throughout the website in multiple strategic locations to enhance brand identity and create a sophisticated, aesthetic appearance.
 
 ## Integration Points
 
@@ -9,7 +9,7 @@ The beautiful MSPN DEV logo has been elegantly integrated throughout the website
 - **Location**: Top-left of every page
 - **Features**:
   - Logo image displayed at 45px height with auto width
-  - Gradient text "MSPN DEV" next to the logo
+  - Gradient text "METECHQ" next to the logo
   - Drop shadow effect for elegant depth (rgba(139, 92, 246, 0.3))
   - Gradient colors: Blue (#60A5FA) → Purple (#A78BFA) → Deep Purple (#8B5CF6)
   - Responsive design for mobile and desktop

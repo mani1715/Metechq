@@ -75,3 +75,5 @@ coverage/
 
 # Misc
 .cache/
+.emergent/
+test_reports/

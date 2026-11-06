@@ -103,7 +103,7 @@ const Sidebar = ({ isOpen, onClose }) => {
             <div className="admin-logo-icon">
               <Sparkles size={24} />
             </div>
-            <span>MSPN DEV</span>
+            <span>METECHQ</span>
           </a>
           
           {/* Mobile Close Button */}

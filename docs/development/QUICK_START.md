@@ -1,4 +1,4 @@
-# 🚀 Quick Start Guide - MSPN DEV Application
+# 🚀 Quick Start Guide - METECHQ Application
 
 ## ✅ Application is LIVE and Running!
 

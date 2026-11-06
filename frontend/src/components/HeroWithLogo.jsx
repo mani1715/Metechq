@@ -20,7 +20,7 @@ const HeroWithLogo = ({ children, showLogo = true, logoOpacity = 0.04 }) => {
           zIndex: 0
         }}>
           <img 
-            src="/mspn-logo-transparent.png" 
+            src="/favicon.svg" 
             alt="" 
             style={{
               width: '100%',

@@ -76,12 +76,12 @@ const Login = () => {
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <img
-            src="/mspn-logo-transparent.png"
-            alt="MSPN DEV Logo"
-            style={{ height: '80px', marginBottom: '16px' }}
+            src="/favicon.svg"
+            alt="METECHQ Logo"
+            style={{ height: '64px', width: '64px', margin: '0 auto 16px auto', display: 'block', borderRadius: '16px', boxShadow: '0 8px 24px rgba(139, 92, 246, 0.35)' }}
           />
           <h1 style={{ fontSize: '28px', fontWeight: '700' }}>
-            MSPN DEV Admin
+            METECHQ Admin
           </h1>
           <p style={{ color: '#6B7280' }}>
             Sign in to manage your website

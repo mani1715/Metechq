@@ -11,7 +11,7 @@ class Blog(BaseModel):
     cover_image: str  # URL to cover image
     category: str
     tags: List[str] = []
-    author: str = "MSPN DEV"
+    author: str = "METECHQ"
     status: str = "draft"  # draft or published
     seo_title: Optional[str] = None
     seo_description: Optional[str] = None
@@ -28,7 +28,7 @@ class Blog(BaseModel):
                 "cover_image": "https://example.com/blog-image.jpg",
                 "category": "Web Development",
                 "tags": ["React", "JavaScript", "Frontend"],
-                "author": "MSPN DEV",
+                "author": "METECHQ",
                 "status": "published",
                 "seo_title": "Getting Started with React - A Complete Guide",
                 "seo_description": "Learn React from scratch with this step-by-step guide"

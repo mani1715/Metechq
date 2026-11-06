@@ -1,9 +1,15 @@
 from fastapi import FastAPI, APIRouter
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
+import sys
 import os
 import logging
 from pathlib import Path
+
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+if hasattr(sys.stderr, 'reconfigure'):
+    sys.stderr.reconfigure(encoding='utf-8', errors='replace')
 from database import close_db_connection
 
 # Import all routers
@@ -51,8 +57,8 @@ logger = logging.getLogger(__name__)
 PORT = int(os.environ.get("PORT", 8001))
 
 app = FastAPI(
-    title="MSPN DEV API",
-    description="Backend API for MSPN DEV website and admin panel",
+    title="METECHQ API",
+    description="Backend API for METECHQ website and admin panel",
     version="1.0.0",
     root_path="/api" if os.environ.get("TRUST_PROXY") == "true" else ""
 )
@@ -77,14 +83,21 @@ class ProxyHeaderMiddleware(BaseHTTPMiddleware):
 
 app.add_middleware(ProxyHeaderMiddleware)
 
-# -------------------------------------------------------------------
-# ✅ CORS (FIXED FOR VERCEL + RENDER)
-# -------------------------------------------------------------------
+cors_origins_env = os.environ.get("CORS_ORIGINS", "")
 ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "http://localhost:3001",
+    "http://localhost:3002",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:3002",
     "http://localhost:5173",
     "https://new-159.vercel.app"
 ]
+if cors_origins_env:
+    for origin in cors_origins_env.split(","):
+        origin_clean = origin.strip()
+        if origin_clean and origin_clean not in ALLOWED_ORIGINS:
+            ALLOWED_ORIGINS.append(origin_clean)
 
 app.add_middleware(
     CORSMiddleware,
@@ -101,11 +114,11 @@ api_router = APIRouter(prefix="/api")
 
 @app.get("/")
 async def health_check():
-    return {"status": "healthy", "service": "MSPN DEV API"}
+    return {"status": "healthy", "service": "METECHQ API"}
 
 @api_router.get("/")
 async def root():
-    return {"message": "MSPN DEV API is running"}
+    return {"message": "METECHQ API is running"}
 
 api_router.include_router(auth_router)
 api_router.include_router(pages_router)

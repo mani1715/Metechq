@@ -67,7 +67,7 @@ const Services = () => {
             Our Services
           </h1>
           <p className="services-hero-description" data-admin-editable="services-description">
-            What MSPN DEV delivers with quality and innovation. Comprehensive web solutions tailored to elevate your digital presence.
+            What METECHQ delivers with quality and innovation. Comprehensive web solutions tailored to elevate your digital presence.
           </p>
         </div>
       </section>
@@ -129,13 +129,13 @@ const Services = () => {
         <div className="section-container-premium">
           <div className="section-header-premium">
             <div className="section-badge" data-admin-editable="why-badge">
-              Why Choose MSPN DEV
+              Why Choose METECHQ
             </div>
             <h2 className="section-title-premium" data-admin-editable="why-title">
               What Makes Us Different
             </h2>
             <p className="section-description-premium" data-admin-editable="why-description">
-              The advantages that set MSPN DEV apart in delivering exceptional web solutions
+              The advantages that set METECHQ apart in delivering exceptional web solutions
             </p>
           </div>
 
@@ -234,7 +234,7 @@ const Services = () => {
           </h2>
           
           <p className="cta-description-services" data-admin-editable="cta-description">
-            Let's transform your vision into a stunning digital reality. Start your project with MSPN DEV today.
+            Let's transform your vision into a stunning digital reality. Start your project with METECHQ today.
           </p>
           
           <Link to="/contact" data-admin-editable="cta-button-link">

@@ -95,7 +95,7 @@ const Home = () => {
   } : {
     badge: '',
     headline: 'Build Your Dream Website',
-    subheadline: 'MSPN DEV Web Development Solutions',
+    subheadline: 'METECHQ Web Development Solutions',
     description: 'Transform your vision into stunning reality with our premium web development services.',
     cta1: { text: 'Start Your Project', link: '/contact' },
     cta2: { text: 'View Our Work', link: '/portfolio' }

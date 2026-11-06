@@ -6,9 +6,10 @@ from auth.jwt import create_access_token
 from auth.client_auth import get_current_client
 from datetime import datetime
 
-router = APIRouter(prefix="/client/auth", tags=["client-auth"])
+router = APIRouter(tags=["client-auth"])
 
-@router.post("/login", response_model=ClientTokenResponse)
+@router.post("/client/auth/login", response_model=ClientTokenResponse)
+@router.post("/client/login", response_model=ClientTokenResponse)
 async def client_login(credentials: ClientLogin):
     """Client login endpoint"""
     # Find client by email
@@ -56,7 +57,8 @@ async def client_login(credentials: ClientLogin):
         )
     )
 
-@router.get("/me", response_model=ClientResponse)
+@router.get("/client/auth/me", response_model=ClientResponse)
+@router.get("/client/me", response_model=ClientResponse)
 async def get_client_profile(client = Depends(get_current_client)):
     """Get current client profile"""
     client_doc = await clients_collection.find_one({"id": client["id"]})
@@ -77,7 +79,8 @@ async def get_client_profile(client = Depends(get_current_client)):
         created_at=client_doc['created_at'] if isinstance(client_doc['created_at'], str) else client_doc['created_at'].isoformat()
     )
 
-@router.post("/logout")
+@router.post("/client/auth/logout")
+@router.post("/client/logout")
 async def client_logout():
     """Client logout endpoint (token invalidation handled on client side)"""
     return {"message": "Logged out successfully"}

@@ -46,12 +46,12 @@ const About = () => {
   // Default content fallback
   const getDefaultAboutContent = () => ({
     hero_badge: "Premium Web Development Agency",
-    hero_title: "About MSPN DEV",
+    hero_title: "About METECHQ",
     hero_subtitle: "Crafting Digital Excellence Through Innovation & Precision",
     hero_description: "Building exceptional digital experiences that transform businesses and delight users worldwide.",
     story_title: "Our Story",
     story_paragraphs: [
-      "Founded by Maneesh, a passionate and skilled full-stack developer, MSPN DEV was born from a vision to help businesses thrive in the digital age.",
+      "Founded by Maneesh, a passionate and skilled full-stack developer, METECHQ was born from a vision to help businesses thrive in the digital age.",
       "We specialize in full-stack development, creating custom websites and e-commerce platforms that perform exceptionally.",
     ],
     story_expertise: [
@@ -79,7 +79,7 @@ const About = () => {
       { id: "4", icon: "Layers", value: "10+", label: "Technologies" },
     ],
     founder_badge: "Meet the Founder",
-    founder_title: "The Mind Behind MSPN DEV",
+    founder_title: "The Mind Behind METECHQ",
     founder_name: "Maneesh",
     founder_role: "Full-Stack Developer & Founder",
     founder_bio: "With a passion for creating seamless digital experiences, Maneesh brings years of expertise in full-stack development.",

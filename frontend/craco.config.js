@@ -6,37 +6,13 @@ require("dotenv").config();
  */
 const config = {
   disableHotReload: process.env.DISABLE_HOT_RELOAD === "true",
-  enableVisualEdits: process.env.REACT_APP_ENABLE_VISUAL_EDITS === "true",
-  enableHealthCheck: process.env.ENABLE_HEALTH_CHECK === "true",
   isProduction: process.env.NODE_ENV === "production",
 };
-
-/**
- * Optional modules (loaded only when enabled)
- */
-let babelMetadataPlugin;
-let setupDevServer;
-
-if (config.enableVisualEdits) {
-  babelMetadataPlugin = require("./plugins/visual-edits/babel-metadata-plugin");
-  setupDevServer = require("./plugins/visual-edits/dev-server-setup");
-}
-
-let WebpackHealthPlugin;
-let setupHealthEndpoints;
-let healthPluginInstance;
-
-if (config.enableHealthCheck) {
-  WebpackHealthPlugin = require("./plugins/health-check/webpack-health-plugin");
-  setupHealthEndpoints = require("./plugins/health-check/health-endpoints");
-  healthPluginInstance = new WebpackHealthPlugin();
-}
 
 /**
  * CRACO configuration
  */
 const cracoConfig = {
-  // 🔴 REQUIRED for react-scripts v5
   reactScriptsVersion: "react-scripts",
 
   webpack: {
@@ -45,7 +21,6 @@ const cracoConfig = {
     },
 
     configure: (webpackConfig) => {
-      // Production builds should be clean and minimal
       if (!config.isProduction) {
         if (config.disableHotReload) {
           webpackConfig.plugins = webpackConfig.plugins.filter(
@@ -70,23 +45,10 @@ const cracoConfig = {
         }
       }
 
-      if (!config.isProduction && config.enableHealthCheck && healthPluginInstance) {
-        webpackConfig.plugins.push(healthPluginInstance);
-      }
-
       return webpackConfig;
     },
   },
 };
-
-/**
- * Optional Babel plugin
- */
-if (config.enableVisualEdits) {
-  cracoConfig.babel = {
-    plugins: [babelMetadataPlugin],
-  };
-}
 
 /**
  * DevServer configuration (DEV ONLY)
@@ -95,6 +57,8 @@ cracoConfig.devServer = (devServerConfig) => {
   if (config.isProduction) {
     return devServerConfig;
   }
+
+  devServerConfig.historyApiFallback = true;
 
   const useProxy = process.env.USE_WEBPACK_PROXY === "true";
 
@@ -114,23 +78,6 @@ cracoConfig.devServer = (devServerConfig) => {
     };
 
     console.log(`[Proxy] /api → ${backendTarget}`);
-  }
-
-  if (config.enableVisualEdits && setupDevServer) {
-    devServerConfig = setupDevServer(devServerConfig);
-  }
-
-  if (config.enableHealthCheck && setupHealthEndpoints && healthPluginInstance) {
-    const originalSetup = devServerConfig.setupMiddlewares;
-
-    devServerConfig.setupMiddlewares = (middlewares, devServer) => {
-      if (originalSetup) {
-        middlewares = originalSetup(middlewares, devServer);
-      }
-
-      setupHealthEndpoints(devServer, healthPluginInstance);
-      return middlewares;
-    };
   }
 
   return devServerConfig;

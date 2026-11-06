@@ -1,19 +1,19 @@
-// Mock data for MSPN DEV Agency Website
+// Mock data for METECHQ Agency Website
 
 export const agencyInfo = {
-  name: 'MSPN DEV',
+  name: 'METECHQ',
   tagline: 'Crafting Digital Excellence',
   description: 'Full-stack web development agency specializing in custom solutions',
   developer: 'Maneesh',
-  email: 'contact@mspndev.com',
+  email: 'contact@metechq.com',
   phone: '+1 (555) 123-4567',
   location: 'Worldwide',
   whatsapp: '+918328284501',
   socialLinks: {
-    github: 'https://github.com/mspndev',
+    github: 'https://github.com/metechq',
     linkedin: 'https://linkedin.com/in/maneesh',
-    twitter: 'https://twitter.com/mspndev',
-    instagram: 'https://instagram.com/mspndev',
+    twitter: 'https://twitter.com/metechq',
+    instagram: 'https://instagram.com/metechq',
     whatsapp: '+918328284501'
   }
 };
@@ -240,7 +240,7 @@ export const testimonials = [
     name: 'Sarah Johnson',
     company: 'TechStart Inc',
     role: 'CEO',
-    content: 'MSPN DEV delivered an exceptional e-commerce platform that exceeded our expectations. Their attention to detail and technical expertise is outstanding.',
+    content: 'METECHQ delivered an exceptional e-commerce platform that exceeded our expectations. Their attention to detail and technical expertise is outstanding.',
     rating: 5
   },
   {
@@ -375,8 +375,8 @@ export const contactConfig = {
         id: 1,
         icon: 'Mail',
         label: 'Email Address',
-        value: 'mspndev.in@gmail.com',
-        href: 'mailto:mspndev.in@gmail.com',
+        value: 'contact@metechq.com',
+        href: 'mailto:contact@metechq.com',
         description: 'Send us an email anytime'
       },
       {
@@ -470,15 +470,15 @@ export const contactConfig = {
 // About Page Data
 export const aboutData = {
   hero: {
-    title: 'About MSPN DEV',
+    title: 'About METECHQ',
     subtitle: 'Crafting Digital Excellence Through Innovation & Precision',
     description: 'Building exceptional digital experiences that transform businesses and delight users worldwide.'
   },
   story: {
     title: 'Our Story',
     paragraphs: [
-      'Founded by Maneesh, a passionate and skilled full-stack developer, MSPN DEV was born from a vision to help businesses thrive in the digital age. With expertise spanning across HTML, CSS, JavaScript, and modern frameworks, we bring ideas to life with precision and creativity.',
-      'At MSPN DEV, we specialize in full-stack development, creating custom websites and e-commerce platforms that don\'t just look beautiful—they perform exceptionally. Every project is approached with meticulous attention to detail, ensuring seamless user experiences and robust functionality.',
+      'Founded by Maneesh, a passionate and skilled full-stack developer, METECHQ was born from a vision to help businesses thrive in the digital age. With expertise spanning across HTML, CSS, JavaScript, and modern frameworks, we bring ideas to life with precision and creativity.',
+      'At METECHQ, we specialize in full-stack development, creating custom websites and e-commerce platforms that don\'t just look beautiful—they perform exceptionally. Every project is approached with meticulous attention to detail, ensuring seamless user experiences and robust functionality.',
       'Our journey is defined by continuous learning, adopting cutting-edge technologies, and delivering solutions that exceed expectations. From sleek corporate websites to complex web applications, we transform visions into powerful digital realities.'
     ],
     expertise: [
@@ -519,7 +519,7 @@ export const aboutData = {
   founder: {
     name: 'Maneesh',
     role: 'Full-Stack Developer & Founder',
-    bio: 'With a passion for creating seamless digital experiences, Maneesh brings years of expertise in full-stack development, specializing in modern web technologies. His commitment to excellence and innovation drives MSPN DEV to deliver exceptional results for every client.',
+    bio: 'With a passion for creating seamless digital experiences, Maneesh brings years of expertise in full-stack development, specializing in modern web technologies. His commitment to excellence and innovation drives METECHQ to deliver exceptional results for every client.',
     skills: [
       'HTML, CSS, JavaScript',
       'React & Node.js',
@@ -635,7 +635,7 @@ export const portfolioProjects = [
       }
     ],
     seo: {
-      title: 'StyleHub E-Commerce Platform - MSPN DEV Portfolio',
+      title: 'StyleHub E-Commerce Platform - METECHQ Portfolio',
       description: 'A modern e-commerce platform with real-time inventory management and seamless checkout experience built with React and Node.js.'
     }
   },
@@ -724,7 +724,7 @@ export const portfolioProjects = [
       }
     ],
     seo: {
-      title: 'TechVentures Inc. Corporate Website Redesign - MSPN DEV Portfolio',
+      title: 'TechVentures Inc. Corporate Website Redesign - METECHQ Portfolio',
       description: 'Modern corporate website redesign featuring comprehensive service showcase, team profiles, case studies, and premium design built with React.'
     }
   },
@@ -744,7 +744,7 @@ export const portfolioProjects = [
     technologies: ['React', 'Python', 'MongoDB', 'D3.js', 'Chart.js'],
     techStack: ['React', 'Python', 'Flask', 'MongoDB', 'D3.js', 'Chart.js', 'Redis', 'WebSockets'],
     featured: false,
-    githubLink: 'https://github.com/mspndev/analytics-dashboard',
+    githubLink: 'https://github.com/metechq/analytics-dashboard',
     liveLink: null,
     date: '2024-09-10',
     clientName: 'DataMetrics SaaS',
@@ -756,7 +756,7 @@ export const portfolioProjects = [
       revenue: '+95%'
     },
     seo: {
-      title: 'Analytics Dashboard Pro - MSPN DEV Portfolio',
+      title: 'Analytics Dashboard Pro - METECHQ Portfolio',
       description: 'Real-time analytics dashboard with data visualization, custom reports, and predictive analytics built with React and Python.'
     }
   },
@@ -845,7 +845,7 @@ export const portfolioProjects = [
       }
     ],
     seo: {
-      title: 'FitLife Mobile App Design System - MSPN DEV Portfolio',
+      title: 'FitLife Mobile App Design System - METECHQ Portfolio',
       description: 'Comprehensive mobile design system with 120+ components, accessibility guidelines, and documentation built with Figma, React Native, and TypeScript.'
     }
   },
@@ -940,7 +940,7 @@ export const portfolioProjects = [
       }
     ],
     seo: {
-      title: 'Restaurant Booking Platform - MSPN DEV Portfolio',
+      title: 'Restaurant Booking Platform - METECHQ Portfolio',
       description: 'Restaurant reservation system with real-time availability, automated SMS/email confirmations, and comprehensive CRM built with React, Node.js, and PostgreSQL.'
     }
   },
@@ -1030,7 +1030,7 @@ export const portfolioProjects = [
       }
     ],
     seo: {
-      title: 'TaskFlow Pro SaaS Landing Page - MSPN DEV Portfolio',
+      title: 'TaskFlow Pro SaaS Landing Page - METECHQ Portfolio',
       description: 'High-converting SaaS landing page for TaskFlow Pro with interactive demos, dynamic pricing calculator, and comprehensive feature showcase built with React.'
     }
   },
@@ -1062,7 +1062,7 @@ export const portfolioProjects = [
       revenue: '+165%'
     },
     seo: {
-      title: 'Real Estate Portal - MSPN DEV Portfolio',
+      title: 'Real Estate Portal - METECHQ Portfolio',
       description: 'Property listing platform with advanced search, virtual tours, and agent dashboard built with React and Node.js.'
     }
   },
@@ -1161,7 +1161,7 @@ export const portfolioProjects = [
       }
     ],
     seo: {
-      title: 'EduLearn Educational LMS Platform - MSPN DEV Portfolio',
+      title: 'EduLearn Educational LMS Platform - METECHQ Portfolio',
       description: 'Comprehensive learning management system with 500+ courses, video streaming, progress tracking, and certificates serving 250,000+ students worldwide.'
     }
   }

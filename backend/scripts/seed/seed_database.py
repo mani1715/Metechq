@@ -1,12 +1,26 @@
 """
 Seed script to populate the database with initial data from mock data
 """
+
+import sys
+from pathlib import Path
+from dotenv import load_dotenv
+
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+if hasattr(sys.stderr, 'reconfigure'):
+    sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+
+BACKEND_DIR = Path(__file__).resolve().parent.parent.parent
+if str(BACKEND_DIR) not in sys.path:
+    sys.path.insert(0, str(BACKEND_DIR))
+load_dotenv(BACKEND_DIR / ".env")
+
 import asyncio
 import sys
 from pathlib import Path
 
 # Add parent directory to path to import modules
-sys.path.insert(0, str(Path(__file__).parent))
 
 from database import (
     users_collection,
@@ -183,7 +197,7 @@ async def seed_settings():
     await settings_collection.delete_many({})
     
     settings = Settings(
-        agency_name="MSPN DEV",
+        agency_name="METECHQ",
         owner_name="Maneesh",
         email="info@mspndev.com",
         phone="+1234567890",

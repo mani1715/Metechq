@@ -14,7 +14,7 @@ class User(BaseModel):
         json_schema_extra = {
             "example": {
                 "name": "Admin User",
-                "email": "admin@mspndev.com",
+                "email": "admin@metechq.com",
                 "role": "admin"
             }
         }

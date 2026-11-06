@@ -46,7 +46,7 @@ const BlogDetail = () => {
       if (data.seo_title) {
         document.title = data.seo_title;
       } else {
-        document.title = `${data.title} | MSPN DEV Blog`;
+        document.title = `${data.title} | METECHQ Blog`;
       }
       
       // Update meta description

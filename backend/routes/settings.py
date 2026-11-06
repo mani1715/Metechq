@@ -14,9 +14,9 @@ async def get_settings():
     if not settings:
         # Return default settings if none exist
         default_settings = Settings(
-            agency_name="MSPN DEV",
+            agency_name="METECHQ",
             owner_name="Maneesh",
-            email="info@mspndev.com",
+            email="info@metechq.com",
             phone="+1234567890",
             social_links={},
             theme={},
@@ -43,9 +43,9 @@ async def update_settings(settings_data: SettingsUpdate):
     else:
         # Create new settings
         settings = Settings(
-            agency_name=settings_data.agency_name or "MSPN DEV",
+            agency_name=settings_data.agency_name or "METECHQ",
             owner_name=settings_data.owner_name or "Admin",
-            email=settings_data.email or "info@mspndev.com",
+            email=settings_data.email or "info@metechq.com",
             phone=settings_data.phone or "+1234567890",
             address=settings_data.address,
             description=settings_data.description,

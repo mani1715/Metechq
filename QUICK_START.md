@@ -1,8 +1,8 @@
-# 🚀 MSPN DEV - Quick Start Guide
+# 🚀 METECHQ - Quick Start Guide
 
 ## ✅ Setup Complete!
 
-Your MSPN DEV Portfolio & Business Management Platform is now **fully configured** and **running locally** with:
+Your METECHQ Portfolio & Business Management Platform is now **fully configured** and **running locally** with:
 
 - ✅ Secure JWT authentication
 - ✅ Mobile-responsive design (iPhone, iPad, Android)
@@ -401,7 +401,7 @@ sudo supervisorctl restart mongodb
 
 ## 🎉 Success!
 
-Your MSPN DEV platform is now **fully configured** and **ready to use**!
+Your METECHQ platform is now **fully configured** and **ready to use**!
 
 ### **Current Status:**
 - ✅ Backend: Running on http://localhost:8001

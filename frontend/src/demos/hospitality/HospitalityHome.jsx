@@ -742,7 +742,7 @@ const HospitalityHome = () => {
             </div>
           </div>
           <div className="footer-bottom">
-            <p>© 2024 LuxeStay Hotels. Demo project by MSPN DEV</p>
+            <p>© 2024 LuxeStay Hotels. Demo project by METECHQ</p>
           </div>
         </div>
       </footer>

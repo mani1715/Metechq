@@ -58,7 +58,7 @@ git push -u origin main
 curl https://your-backend-name.onrender.com/
 
 # Expected response:
-# {"status":"healthy","service":"MSPN DEV API","message":"Backend is running successfully"}
+# {"status":"healthy","service":"METECHQ API","message":"Backend is running successfully"}
 ```
 
 ---

@@ -241,7 +241,7 @@ async def health_check():
     """Root health check endpoint for Render deployment monitoring"""
     return {
         "status": "healthy",
-        "service": "MSPN DEV API",
+        "service": "METECHQ API",
         "message": "Backend is running successfully"
     }
 ```
@@ -255,7 +255,7 @@ curl https://your-backend.onrender.com/
 ```json
 {
   "status": "healthy",
-  "service": "MSPN DEV API",
+  "service": "METECHQ API",
   "message": "Backend is running successfully"
 }
 ```

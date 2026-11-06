@@ -414,7 +414,7 @@ const AboutManager = () => {
                   value={aboutContent.hero_title || ''}
                   onChange={(e) => updateField('hero_title', e.target.value)}
                   className="admin-input"
-                  placeholder="About MSPN DEV"
+                  placeholder="About METECHQ"
                   style={{
                     width: '100%',
                     padding: '12px 16px',
@@ -769,10 +769,10 @@ const AboutManager = () => {
           </div>
         )}
 
-        {/* Founder Section - The Mind Behind MSPN DEV */}
+        {/* Founder Section - The Mind Behind METECHQ */}
         {activeTab === 'founder' && (
           <div>
-            <h2 style={{ fontSize: '24px', fontWeight: '600', marginBottom: '24px' }}>The Mind Behind MSPN DEV</h2>
+            <h2 style={{ fontSize: '24px', fontWeight: '600', marginBottom: '24px' }}>The Mind Behind METECHQ</h2>
             
             <div style={{ marginBottom: '20px' }}>
               <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Section Badge</label>

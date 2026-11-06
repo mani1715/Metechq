@@ -1,4 +1,4 @@
-# MSPN DEV - Deployment Guide
+# METECHQ - Deployment Guide
 
 ## 📋 Table of Contents
 1. [Pre-Deployment Checklist](#pre-deployment-checklist)
@@ -314,7 +314,7 @@ services:
    ```json
    {
      "status": "healthy",
-     "service": "MSPN DEV API",
+     "service": "METECHQ API",
      "message": "Backend is running successfully"
    }
    ```
@@ -326,7 +326,7 @@ services:
    Expected response:
    ```json
    {
-     "message": "MSPN DEV API is running",
+     "message": "METECHQ API is running",
      "status": "healthy"
    }
    ```
@@ -480,7 +480,7 @@ yarn start
 
 ## 🎉 Deployment Complete!
 
-Your MSPN DEV website is now live and accessible worldwide!
+Your METECHQ website is now live and accessible worldwide!
 
 **Frontend**: https://your-app.vercel.app
 **Backend**: https://your-backend.onrender.com

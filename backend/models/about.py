@@ -71,7 +71,7 @@ class AboutContent(BaseModel):
     
     # Founder Section
     founder_badge: str = "Meet the Founder"
-    founder_title: str = "The Mind Behind MSPN DEV"
+    founder_title: str = "The Mind Behind METECHQ"
     founder_name: str
     founder_role: str
     founder_bio: str

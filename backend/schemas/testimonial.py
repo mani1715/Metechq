@@ -62,7 +62,7 @@ class TestimonialSubmit(BaseModel):
                 "role": "Marketing Director",
                 "company": "ABC Corp",
                 "email": "jane@abccorp.com",
-                "message": "Working with MSPN DEV was an amazing experience. They delivered exactly what we needed!",
+                "message": "Working with METECHQ was an amazing experience. They delivered exactly what we needed!",
                 "rating": 5
             }
         }

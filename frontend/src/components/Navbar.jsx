@@ -31,10 +31,10 @@ const Navbar = () => {
           textDecoration: 'none'
         }}>
           <img 
-            src="/mspn-logo-transparent.png" 
-            alt="MSPN DEV Logo" 
+            src="/favicon.svg" 
+            alt="METECHQ Logo" 
             style={{
-              height: '50px',
+              height: '38px', width: '38px', borderRadius: '10px',
               width: 'auto',
               objectFit: 'contain',
               filter: 'drop-shadow(0 2px 8px rgba(139, 92, 246, 0.3))'

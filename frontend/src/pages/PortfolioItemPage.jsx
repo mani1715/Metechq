@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
+import SEO from '../components/SEO';
 import { 
   ArrowLeft, 
   ExternalLink, 
@@ -61,13 +61,13 @@ const PortfolioItemPage = () => {
             description: currentProject.description,
             shortDesc: currentProject.description,
             longDesc: currentProject.case_study_content || currentProject.description,
-            image: currentProject.image_url,
-            images: [currentProject.image_url],
-            technologies: currentProject.tech_stack || [],
-            techStack: currentProject.tech_stack || [],
+            image: currentProject.image_url || currentProject.image || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=60',
+            images: (currentProject.images && currentProject.images.length > 0) ? currentProject.images : [currentProject.image_url || currentProject.image || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=60'],
+            technologies: currentProject.tech_stack || currentProject.technologies || [],
+            techStack: currentProject.tech_stack || currentProject.technologies || [],
             featured: currentProject.featured,
-            liveLink: currentProject.live_demo_url,
-            githubLink: currentProject.github_url,
+            liveLink: currentProject.live_demo_url || currentProject.liveUrl,
+            githubLink: currentProject.github_url || currentProject.githubUrl,
             status: currentProject.status,
             date: currentProject.completion_date || currentProject.created_at,
             clientName: currentProject.client_name,
@@ -86,8 +86,8 @@ const PortfolioItemPage = () => {
               category: p.category,
               description: p.description,
               shortDesc: p.description,
-              image: p.image_url,
-              technologies: p.tech_stack || [],
+              image: p.image_url || p.image || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=60',
+              technologies: p.tech_stack || p.technologies || [],
               featured: p.featured
             }));
           setRelatedProjects(related);
@@ -130,9 +130,7 @@ const PortfolioItemPage = () => {
   if (!project) {
     return (
       <>
-        <Helmet>
-          <title>Project Not Found - MSPN DEV</title>
-        </Helmet>
+        <SEO title="Project Not Found - METECHQ" />
         <div className="portfolio-item-page-premium">
           <div className="not-found-container">
             <div className="not-found-content">
@@ -160,7 +158,7 @@ const PortfolioItemPage = () => {
     "image": project.image,
     "author": {
       "@type": "Organization",
-      "name": "MSPN DEV"
+      "name": "METECHQ"
     },
     "datePublished": project.date,
     "keywords": project.technologies.join(', ')
@@ -177,29 +175,22 @@ const PortfolioItemPage = () => {
   return (
     <>
       {/* SEO Meta Tags */}
-      <Helmet>
-        <title>{project.seo?.title || `${project.title} - MSPN DEV Portfolio`}</title>
-        <meta name="description" content={project.seo?.description || project.description} />
-        <meta name="keywords" content={project.technologies.join(', ')} />
-        
-        {/* Open Graph Tags */}
-        <meta property="og:type" content="article" />
-        <meta property="og:title" content={project.title} />
-        <meta property="og:description" content={project.description} />
-        <meta property="og:image" content={project.image} />
-        <meta property="og:url" content={`https://mspndev.com/portfolio/${project.slug || project.id}`} />
-        
-        {/* Twitter Card Tags */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={project.title} />
-        <meta name="twitter:description" content={project.description} />
-        <meta name="twitter:image" content={project.image} />
-        
-        <link rel="canonical" href={`https://mspndev.com/portfolio/${project.slug || project.id}`} />
-        <script type="application/ld+json">
-          {JSON.stringify(structuredData)}
-        </script>
-      </Helmet>
+      <SEO
+        title={project.seo?.title || `${project.title} - METECHQ Portfolio`}
+        description={project.seo?.description || project.description}
+        keywords={project.technologies ? project.technologies.join(', ') : ''}
+        canonical={`https://metechq.com/portfolio/${project.slug || project.id}`}
+        ogType="article"
+        ogTitle={project.title}
+        ogDescription={project.description}
+        ogImage={project.image}
+        ogUrl={`https://metechq.com/portfolio/${project.slug || project.id}`}
+        twitterCard="summary_large_image"
+        twitterTitle={project.title}
+        twitterDescription={project.description}
+        twitterImage={project.image}
+        structuredData={structuredData}
+      />
 
       <div className="portfolio-item-page-premium">
         {/* Back Navigation */}
@@ -575,6 +566,10 @@ const PortfolioItemPage = () => {
                         alt={relatedProject.title}
                         className="related-project-image"
                         loading="lazy"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=60';
+                        }}
                       />
                       {relatedProject.featured && (
                         <div className="related-project-featured">

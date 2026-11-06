@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Helmet } from 'react-helmet';
+import SEO from '../components/SEO';
 import { Breadcrumb, Home as HomeIcon, ChevronRight, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import projectService from '../services/projectService';
@@ -34,19 +34,31 @@ const Portfolio = () => {
         setLoading(true);
         const data = await projectService.getPublicProjects();
         // Transform backend data to match frontend structure
-        const transformedProjects = data.map(project => ({
-          id: project.id,
-          title: project.title,
-          slug: project.slug,
-          category: project.category,
-          description: project.description,
-          image: project.image_url,
-          technologies: project.tech_stack || [],
-          featured: project.featured,
-          liveUrl: project.live_demo_url,
-          status: project.status,
-          date: project.created_at
-        }));
+        const transformedProjects = data.map(project => {
+          const img = project.image_url || project.image || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=60';
+          const tech = project.tech_stack || project.technologies || [];
+          const live = project.live_demo_url || project.liveUrl || '';
+          const github = project.github_url || project.githubUrl || '';
+          return {
+            ...project,
+            id: project.id || project._id,
+            title: project.title,
+            slug: project.slug,
+            category: project.category,
+            description: project.description,
+            image: img,
+            image_url: img,
+            images: (project.images && project.images.length > 0) ? project.images : [img],
+            technologies: tech,
+            tech_stack: tech,
+            featured: Boolean(project.featured),
+            liveUrl: live,
+            live_demo_url: live,
+            github_url: github,
+            status: project.status,
+            date: project.created_at || project.date
+          };
+        });
         setPortfolioProjects(transformedProjects);
       } catch (error) {
         console.error('Error fetching projects:', error);
@@ -155,12 +167,12 @@ const Portfolio = () => {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    "name": "MSPN DEV Portfolio",
+    "name": "METECHQ Portfolio",
     "description": "Explore our portfolio of web development projects including e-commerce platforms, dashboards, and custom web applications.",
     "provider": {
       "@type": "Organization",
-      "name": "MSPN DEV",
-      "url": "https://mspndev.com"
+      "name": "METECHQ",
+      "url": "https://metechq.com"
     },
     "hasPart": portfolioProjects.map(project => ({
       "@type": "CreativeWork",
@@ -186,15 +198,13 @@ const Portfolio = () => {
   return (
     <>
       {/* SEO Meta Tags */}
-      <Helmet>
-        <title>Portfolio - MSPN DEV | Web Development Projects</title>
-        <meta name="description" content="Explore MSPN DEV's portfolio of web development projects including e-commerce platforms, web applications, dashboards, and UI/UX design work. View live demos and case studies." />
-        <meta name="keywords" content="web development portfolio, react projects, e-commerce websites, web applications, MSPN DEV projects" />
-        <link rel="canonical" href="https://mspndev.com/portfolio" />
-        <script type="application/ld+json">
-          {JSON.stringify(structuredData)}
-        </script>
-      </Helmet>
+      <SEO
+        title="Portfolio - METECHQ | Web Development Projects"
+        description="Explore METECHQ's portfolio of web development projects including e-commerce platforms, web applications, dashboards, and UI/UX design work. View live demos and case studies."
+        keywords="web development portfolio, react projects, e-commerce websites, web applications, METECHQ projects"
+        canonical="https://metechq.com/portfolio"
+        structuredData={structuredData}
+      />
 
       <div className="portfolio-page-premium">
         {/* Portfolio Hero Section */}

@@ -363,7 +363,7 @@ const Chat = () => {
             <div>
               <h1 className="text-2xl font-bold text-gray-900 flex items-center">
                 <MessageCircle className="h-6 w-6 mr-2 text-purple-600" />
-                Chat with MSPN DEV
+                Chat with METECHQ
               </h1>
               <p className="text-sm text-gray-600 mt-1">
                 Logged in as {userInfo.name} ({userInfo.email})

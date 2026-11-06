@@ -6,7 +6,7 @@ export const adminData = {
       hero: {
         badge: '',
         headline: 'Build Your Dream Website',
-        subheadline: 'MSPN DEV Web Development Solutions',
+        subheadline: 'METECHQ Web Development Solutions',
         description: 'Transform your vision into stunning reality with our premium web development services. We craft bespoke digital experiences that captivate, engage, and convert.',
         cta1Text: 'Start Your Project',
         cta1Link: '/contact',
@@ -41,7 +41,7 @@ export const adminData = {
     },
     about: {
       hero: {
-        headline: 'About MSPN DEV',
+        headline: 'About METECHQ',
         subheadline: 'Your Trusted Web Development Partner',
         description: 'We are a team of passionate developers and designers dedicated to creating exceptional digital experiences.',
         visible: true
@@ -106,7 +106,7 @@ export const adminData = {
       },
       info: {
         visible: true,
-        email: 'contact@mspndev.com',
+        email: 'contact@metechq.com',
         phone: '+1 (555) 123-4567',
         address: 'San Francisco, CA'
       }
@@ -248,20 +248,20 @@ export const adminData = {
 
   settings: {
     agency: {
-      name: 'MSPN DEV',
+      name: 'METECHQ',
       owner: 'Maneesh',
-      email: 'contact@mspndev.com',
+      email: 'contact@metechq.com',
       phone: '+1 (555) 123-4567',
       address: 'San Francisco, CA',
       description: 'Premium Web Development Agency',
       tagline: 'Transforming Ideas into Digital Reality'
     },
     social: {
-      facebook: 'https://facebook.com/mspndev',
-      twitter: 'https://twitter.com/mspndev',
-      linkedin: 'https://linkedin.com/company/mspndev',
-      instagram: 'https://instagram.com/mspndev',
-      github: 'https://github.com/mspndev'
+      facebook: 'https://facebook.com/metechq',
+      twitter: 'https://twitter.com/metechq',
+      linkedin: 'https://linkedin.com/company/metechq',
+      instagram: 'https://instagram.com/metechq',
+      github: 'https://github.com/metechq'
     },
     theme: {
       primaryColor: '#7C5CFF',

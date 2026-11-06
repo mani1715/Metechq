@@ -2,7 +2,7 @@
 
 ## Overview
 
-The MSPN DEV Portfolio & Business Management Platform is **fully responsive** and optimized for mobile devices including iPhone, iPad, and Android.
+The METECHQ Portfolio & Business Management Platform is **fully responsive** and optimized for mobile devices including iPhone, iPad, and Android.
 
 ---
 
@@ -337,7 +337,7 @@ Potential improvements for even better mobile experience:
 
 ## ✅ Conclusion
 
-The MSPN DEV platform is **fully responsive** and ready for mobile deployment. All pages and features have been tested and optimized for:
+The METECHQ platform is **fully responsive** and ready for mobile deployment. All pages and features have been tested and optimized for:
 
 - ✅ iPhone (all models)
 - ✅ iPad (all models)

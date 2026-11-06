@@ -65,7 +65,7 @@ const Footer = () => {
 
   const handleWhatsAppClick = () => {
     if (whatsappNumber) {
-      const message = encodeURIComponent("Hi MSPN DEV, I'm interested in your services.");
+      const message = encodeURIComponent("Hi METECHQ, I'm interested in your services.");
       window.open(`https://wa.me/${whatsappNumber.replace(/[^0-9]/g, '')}?text=${message}`, '_blank');
     }
   };
@@ -79,10 +79,10 @@ const Footer = () => {
             {/* Transparent Logo Image */}
             <div style={{ marginBottom: '16px' }}>
               <img 
-                src="/mspn-logo-transparent.png" 
-                alt="MSPN DEV Logo" 
+                src="/favicon.svg" 
+                alt="METECHQ Logo" 
                 style={{
-                  height: '70px',
+                  height: '48px', width: '48px', borderRadius: '12px',
                   width: 'auto',
                   objectFit: 'contain',
                   filter: 'drop-shadow(0 4px 12px rgba(139, 92, 246, 0.5)) brightness(1.2) saturate(1.2)'

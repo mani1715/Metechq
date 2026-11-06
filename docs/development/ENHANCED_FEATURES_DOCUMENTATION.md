@@ -455,4 +455,4 @@ If you need any assistance:
 
 ---
 
-**Thank you for using MSPN DEV Client Portal! 🚀**
+**Thank you for using METECHQ Client Portal! 🚀**

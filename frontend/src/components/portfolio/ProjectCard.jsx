@@ -1,25 +1,25 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ExternalLink, Github, Star } from 'lucide-react';
+import { ExternalLink, Github, Star, Eye } from 'lucide-react';
 import { Card } from '../ui/card';
 import { Button } from '../ui/button';
 import './portfolio-components.css';
 
-const ProjectCard = ({ project }) => {
+const DEFAULT_PROJECT_IMAGE = 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=60';
+
+const ProjectCard = ({ project, onQuickView }) => {
   if (!project) return null;
 
-  const {
-    id,
-    title,
-    slug,
-    category,
-    description,
-    image_url,
-    tech_stack = [],
-    featured,
-    live_demo_url,
-    github_url
-  } = project;
+  const id = project.id || project._id;
+  const title = project.title || 'Untitled Project';
+  const slug = project.slug || id;
+  const category = project.category || 'Web Development';
+  const description = project.description || '';
+  const imageUrl = project.image_url || project.image || DEFAULT_PROJECT_IMAGE;
+  const techStack = project.tech_stack || project.technologies || [];
+  const featured = Boolean(project.featured);
+  const liveDemoUrl = project.live_demo_url || project.liveUrl;
+  const githubUrl = project.github_url || project.githubUrl;
 
   return (
     <Card className="project-card-premium" data-admin-editable={`project-${id}`}>
@@ -34,10 +34,14 @@ const ProjectCard = ({ project }) => {
       {/* Project Image */}
       <div className="project-card-image-wrapper">
         <img
-          src={image_url}
+          src={imageUrl}
           alt={title}
           className="project-card-image"
           loading="lazy"
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = DEFAULT_PROJECT_IMAGE;
+          }}
         />
 
         {/* Hover Overlay */}
@@ -49,8 +53,23 @@ const ProjectCard = ({ project }) => {
               </Button>
             </Link>
 
-            {live_demo_url && (
-              <a href={live_demo_url} target="_blank" rel="noopener noreferrer">
+            {onQuickView && (
+              <Button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onQuickView(project);
+                }}
+                className="project-overlay-btn btn-view"
+              >
+                <Eye className="h-4 w-4 mr-1" />
+                <span>Quick View</span>
+              </Button>
+            )}
+
+            {liveDemoUrl && (
+              <a href={liveDemoUrl} target="_blank" rel="noopener noreferrer">
                 <Button className="project-overlay-btn btn-demo">
                   <ExternalLink className="h-4 w-4" />
                   <span>Live Demo</span>
@@ -80,14 +99,14 @@ const ProjectCard = ({ project }) => {
 
         {/* Tech Stack */}
         <div className="project-tech-tags">
-          {tech_stack.slice(0, 4).map((tech, idx) => (
+          {techStack.slice(0, 4).map((tech, idx) => (
             <span key={idx} className="tech-tag">
               {tech}
             </span>
           ))}
-          {tech_stack.length > 4 && (
+          {techStack.length > 4 && (
             <span className="tech-tag tech-tag-more">
-              +{tech_stack.length - 4}
+              +{techStack.length - 4}
             </span>
           )}
         </div>
@@ -98,12 +117,13 @@ const ProjectCard = ({ project }) => {
             View Details →
           </Link>
 
-          {github_url && (
+          {githubUrl && (
             <a
-              href={github_url}
+              href={githubUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="project-github-link"
+              aria-label="GitHub Repository"
             >
               <Github className="h-4 w-4" />
             </a>

@@ -1,6 +1,6 @@
-# Frontend - MSPN DEV
+# Frontend - METECHQ
 
-React-based frontend for the MSPN DEV platform.
+React-based frontend for the METECHQ platform.
 
 ## 🚀 Quick Start
 

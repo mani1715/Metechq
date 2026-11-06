@@ -1,4 +1,4 @@
-# 🚀 MSPN DEV – Portfolio & Client Management Platform
+# 🚀 METECHQ – Portfolio & Client Management Platform
 
 A **full stack portfolio and agency management platform** designed for developers, freelancers, and software agencies. The system includes a **public portfolio website**, a **powerful admin dashboard**, and a **secure client portal** for managing projects and client communication.
 

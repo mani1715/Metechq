@@ -28,7 +28,7 @@ const WhatsAppButton = () => {
 
   const handleWhatsAppClick = () => {
     if (whatsappNumber) {
-      const message = encodeURIComponent("Hi MSPN DEV, I'm interested in your services.");
+      const message = encodeURIComponent("Hi METECHQ, I'm interested in your services.");
       const cleanNumber = whatsappNumber.replace(/[^0-9]/g, '');
       window.open(`https://wa.me/${cleanNumber}?text=${message}`, '_blank');
     }

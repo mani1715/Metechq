@@ -124,7 +124,7 @@ const ContentEditor = () => {
                 type="text"
                 value={content.hero_subheadline || ''}
                 onChange={(e) => handleChange('hero_subheadline', e.target.value)}
-                placeholder="MSPN DEV Web Development Solutions"
+                placeholder="METECHQ Web Development Solutions"
               />
             </div>
             <div className="content-field">
@@ -407,7 +407,7 @@ const ContentEditor = () => {
                 type="text"
                 value={content.about_title || ''}
                 onChange={(e) => handleChange('about_title', e.target.value)}
-                placeholder="About MSPN DEV"
+                placeholder="About METECHQ"
               />
             </div>
             <div className="content-field">
@@ -468,7 +468,7 @@ const ContentEditor = () => {
                 type="email"
                 value={content.contact_email || ''}
                 onChange={(e) => handleChange('contact_email', e.target.value)}
-                placeholder="info@mspndev.com"
+                placeholder="info@metechq.com"
               />
             </div>
             <div className="content-field">

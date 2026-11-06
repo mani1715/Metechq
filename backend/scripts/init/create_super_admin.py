@@ -3,6 +3,21 @@
 Script to create super admin in the admins collection
 Uses environment variables for MongoDB connection
 """
+
+import sys
+from pathlib import Path
+from dotenv import load_dotenv
+
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+if hasattr(sys.stderr, 'reconfigure'):
+    sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+
+BACKEND_DIR = Path(__file__).resolve().parent.parent.parent
+if str(BACKEND_DIR) not in sys.path:
+    sys.path.insert(0, str(BACKEND_DIR))
+load_dotenv(BACKEND_DIR / ".env")
+
 import asyncio
 from motor.motor_asyncio import AsyncIOMotorClient
 from auth import hash_password
@@ -13,8 +28,6 @@ from dotenv import load_dotenv
 from pathlib import Path
 
 # Load environment variables
-ROOT_DIR = Path(__file__).parent
-load_dotenv(ROOT_DIR / '.env')
 
 async def create_super_admin():
     # Get MongoDB URI from environment

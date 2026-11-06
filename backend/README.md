@@ -1,6 +1,6 @@
-# Backend - MSPN DEV API
+# Backend - METECHQ API
 
-FastAPI backend service for the MSPN DEV platform.
+FastAPI backend service for the METECHQ platform.
 
 ## 🚀 Quick Start
 
@@ -358,7 +358,7 @@ uvicorn server:app --host 0.0.0.0 --port $PORT --workers 4
 ### Health Check Endpoint
 ```bash
 curl http://your-domain.com/
-# Should return: {"status": "healthy", "service": "MSPN DEV API"}
+# Should return: {"status": "healthy", "service": "METECHQ API"}
 ```
 
 ---

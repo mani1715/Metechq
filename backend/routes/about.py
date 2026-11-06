@@ -110,14 +110,14 @@ def get_default_about_content() -> AboutContentResponse:
     """Get default About page content"""
     return AboutContentResponse(
         id=str(uuid.uuid4()),
-        hero_title="About MSPN DEV",
+        hero_title="About METECHQ",
         hero_subtitle="Crafting Digital Excellence Through Innovation & Precision",
         hero_description="Building exceptional digital experiences that transform businesses and delight users worldwide.",
         hero_badge="Premium Web Development Agency",
         story_title="Our Story",
         story_paragraphs=[
-            "Founded by Maneesh, a passionate and skilled full-stack developer, MSPN DEV was born from a vision to help businesses thrive in the digital age. With expertise spanning across HTML, CSS, JavaScript, and modern frameworks, we bring ideas to life with precision and creativity.",
-            "At MSPN DEV, we specialize in full-stack development, creating custom websites and e-commerce platforms that don't just look beautiful—they perform exceptionally. Every project is approached with meticulous attention to detail, ensuring seamless user experiences and robust functionality.",
+            "Founded by Maneesh, a passionate and skilled full-stack developer, METECHQ was born from a vision to help businesses thrive in the digital age. With expertise spanning across HTML, CSS, JavaScript, and modern frameworks, we bring ideas to life with precision and creativity.",
+            "At METECHQ, we specialize in full-stack development, creating custom websites and e-commerce platforms that don't just look beautiful—they perform exceptionally. Every project is approached with meticulous attention to detail, ensuring seamless user experiences and robust functionality.",
             "Our journey is defined by continuous learning, adopting cutting-edge technologies, and delivering solutions that exceed expectations. From sleek corporate websites to complex web applications, we transform visions into powerful digital realities."
         ],
         story_expertise=[
@@ -186,10 +186,10 @@ def get_default_about_content() -> AboutContentResponse:
             }
         ],
         founder_badge="Meet the Founder",
-        founder_title="The Mind Behind MSPN DEV",
+        founder_title="The Mind Behind METECHQ",
         founder_name="Maneesh",
         founder_role="Full-Stack Developer & Founder",
-        founder_bio="With a passion for creating seamless digital experiences, Maneesh brings years of expertise in full-stack development, specializing in modern web technologies. His commitment to excellence and innovation drives MSPN DEV to deliver exceptional results for every client.",
+        founder_bio="With a passion for creating seamless digital experiences, Maneesh brings years of expertise in full-stack development, specializing in modern web technologies. His commitment to excellence and innovation drives METECHQ to deliver exceptional results for every client.",
         founder_skills=[
             "HTML, CSS, JavaScript",
             "React & Node.js",

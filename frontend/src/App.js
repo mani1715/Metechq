@@ -192,7 +192,7 @@ function App() {
     <AdminProvider>
       <CartProvider>
         <div className="App">
-          <BrowserRouter>
+          <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <AppContent />
           </BrowserRouter>
         </div>

@@ -20,7 +20,7 @@ const BlogsManager = () => {
     cover_image: '',
     category: 'Web Development',
     tags: [],
-    author: 'MSPN DEV',
+    author: 'METECHQ',
     status: 'draft',
     seo_title: '',
     seo_description: ''
@@ -57,7 +57,7 @@ const BlogsManager = () => {
         cover_image: blog.cover_image || '',
         category: blog.category || 'Web Development',
         tags: blog.tags || [],
-        author: blog.author || 'MSPN DEV',
+        author: blog.author || 'METECHQ',
         status: blog.status || 'draft',
         seo_title: blog.seo_title || '',
         seo_description: blog.seo_description || ''
@@ -72,7 +72,7 @@ const BlogsManager = () => {
         cover_image: '',
         category: 'Web Development',
         tags: [],
-        author: 'MSPN DEV',
+        author: 'METECHQ',
         status: 'draft',
         seo_title: '',
         seo_description: ''
@@ -462,7 +462,7 @@ const BlogsManager = () => {
                     value={formData.author}
                     onChange={(e) => handleInputChange('author', e.target.value)}
                     className="admin-form-input"
-                    placeholder="MSPN DEV"
+                    placeholder="METECHQ"
                   />
                 </div>
               </div>

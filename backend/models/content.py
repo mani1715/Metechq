@@ -8,7 +8,7 @@ class WebsiteContent(BaseModel):
     
     # Hero Section
     hero_headline: str = "Build Your Dream Website"
-    hero_subheadline: str = "MSPN DEV Web Development Solutions"
+    hero_subheadline: str = "METECHQ Web Development Solutions"
     hero_description: str = "Transform your vision into stunning reality with our premium web development services."
     hero_cta1_text: str = "Start Your Project"
     hero_cta2_text: str = "View Our Work"
@@ -44,7 +44,7 @@ class WebsiteContent(BaseModel):
     cta_button_text: str = "Get in Touch"
     
     # About Page
-    about_title: str = "About MSPN DEV"
+    about_title: str = "About METECHQ"
     about_description: str = "We are a team of passionate developers and designers."
     about_mission: str = "Our mission is to create exceptional digital experiences."
     about_vision: str = "Our vision is to be the leading web development agency."
@@ -52,7 +52,7 @@ class WebsiteContent(BaseModel):
     # Contact Page
     contact_title: str = "Get In Touch"
     contact_description: str = "Have a project in mind? Let's discuss how we can help."
-    contact_email: str = "info@mspndev.com"
+    contact_email: str = "info@metechq.com"
     contact_phone: str = "+1 234 567 890"
     contact_address: str = "123 Main Street, City, Country"
     

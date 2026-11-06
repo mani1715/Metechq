@@ -14,11 +14,11 @@
 
 
 /* ============================================
-   MSPN DEV - Agency Website Styles
+   METECHQ - Agency Website Styles
    Premium Purple Theme with Modern Design
    ============================================ */
 
-/* Root Variables - MSPN DEV Premium Theme */
+/* Root Variables - METECHQ Premium Theme */
 :root {
   /* Brand Colors - Gold & Purple Premium Palette */
   --color-gold: #D4AF37;
@@ -118,11 +118,6 @@ body::after {
   pointer-events: none;
 }
 
-/* Hide Emergent badge */
-#emergent-badge,
-a[href*="emergent.sh"] {
-  display: none !important;
-}
 
 .App {
   min-height: 100vh;
