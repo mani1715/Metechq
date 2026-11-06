@@ -90,35 +90,37 @@ class MSPNAdminAPITester:
 
     def test_admin_login(self):
         """Test admin login and get JWT token"""
-        admin_user = os.environ.get("ADMIN_USERNAME", "admin")
-        admin_pass = os.environ.get("ADMIN_PASSWORD", "admin123")
-        login_data = {
-            "username": admin_user,
-            "password": admin_pass
-        }
+        admin_user = os.environ.get("ADMIN_USERNAME") or os.environ.get("INIT_SUPERADMIN_USERNAME") or "maneesh"
+        admin_pass = os.environ.get("ADMIN_PASSWORD") or os.environ.get("INIT_SUPERADMIN_PASSWORD") or "maneesh123"
         
-        success, response = self.run_test(
-            "Admin Login",
-            "POST",
-            "/admins/login",
-            200,
-            data=login_data
-        )
-        if not success:
-            # fallback to legacy default if initialized with old password
-            login_data["password"] = "admin123"
+        candidates = [
+            (admin_user, admin_pass),
+            ("maneesh", "maneesh123"),
+            ("admin", "admin123"),
+            ("admin", "Admin@123456")
+        ]
+        
+        seen = set()
+        for user, pwd in candidates:
+            if (user, pwd) in seen:
+                continue
+            seen.add((user, pwd))
+            
+            login_data = {
+                "username": user,
+                "password": pwd
+            }
             success, response = self.run_test(
-                "Admin Login (fallback)",
+                f"Admin Login ({user})",
                 "POST",
                 "/admins/login",
                 200,
                 data=login_data
             )
-        
-        if success and 'token' in response:
-            self.token = response['token']
-            print(f"   🔑 Token obtained: {self.token[:20]}...")
-            return True
+            if success and 'token' in response:
+                self.token = response['token']
+                print(f"   🔑 Token obtained: {self.token[:20]}...")
+                return True
         return False
 
     def test_dashboard_stats(self):

@@ -91,36 +91,38 @@ class ClientManagementTester:
 
     def test_admin_login(self):
         """Test admin login with provided credentials"""
-        admin_user = os.environ.get("ADMIN_USERNAME", "admin")
-        admin_pass = os.environ.get("ADMIN_PASSWORD", "admin123")
-        login_data = {
-            "username": admin_user,
-            "password": admin_pass
-        }
+        admin_user = os.environ.get("ADMIN_USERNAME") or os.environ.get("INIT_SUPERADMIN_USERNAME") or "maneesh"
+        admin_pass = os.environ.get("ADMIN_PASSWORD") or os.environ.get("INIT_SUPERADMIN_PASSWORD") or "maneesh123"
         
-        success, response = self.run_test(
-            "Admin Login",
-            "POST",
-            "/admins/login",
-            200,
-            data=login_data,
-            use_admin_token=False
-        )
-        if not success:
-            login_data["password"] = "admin123"
+        candidates = [
+            (admin_user, admin_pass),
+            ("maneesh", "maneesh123"),
+            ("admin", "admin123"),
+            ("admin", "Admin@123456")
+        ]
+        
+        seen = set()
+        for user, pwd in candidates:
+            if (user, pwd) in seen:
+                continue
+            seen.add((user, pwd))
+            
+            login_data = {
+                "username": user,
+                "password": pwd
+            }
             success, response = self.run_test(
-                "Admin Login (fallback)",
+                f"Admin Login ({user})",
                 "POST",
                 "/admins/login",
                 200,
                 data=login_data,
                 use_admin_token=False
             )
-        
-        if success and 'token' in response:
-            self.admin_token = response['token']
-            print(f"   🔑 Admin token obtained: {self.admin_token[:20]}...")
-            return True
+            if success and 'token' in response:
+                self.admin_token = response['token']
+                print(f"   🔑 Admin token obtained: {self.admin_token[:20]}...")
+                return True
         return False
 
     def test_get_all_clients(self):

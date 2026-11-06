@@ -31,6 +31,8 @@ jobs:
       UPLOAD_DIR: /tmp/metechq_uploads
       INIT_SUPERADMIN_USERNAME: maneesh
       INIT_SUPERADMIN_PASSWORD: maneesh123
+      ADMIN_USERNAME: maneesh
+      ADMIN_PASSWORD: maneesh123
       PORT: 8002
       HOST: 127.0.0.1
       BACKEND_URL: http://127.0.0.1:8002/api
