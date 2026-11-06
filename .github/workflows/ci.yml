@@ -21,11 +21,26 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
+    env:
+      MONGODB_URI: mongodb://127.0.0.1:27017/metechq_ci_test_isolated
+      MONGO_URL: mongodb://127.0.0.1:27017/metechq_ci_test_isolated
+      DB_NAME: metechq_ci_test_isolated
+      JWT_SECRET_KEY: ci_test_only_secret_key_minimum_32_characters_12345
+      CLIENT_JWT_SECRET: ci_test_only_client_secret_minimum_32_characters
+      ENVIRONMENT: test
+      UPLOAD_DIR: /tmp/metechq_uploads
+      INIT_SUPERADMIN_USERNAME: maneesh
+      INIT_SUPERADMIN_PASSWORD: maneesh123
+      PORT: 8002
+      HOST: 127.0.0.1
+      BACKEND_URL: http://127.0.0.1:8002/api
+      PYTHONPATH: backend:.
+
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up Python 3.10
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
@@ -35,59 +50,64 @@ jobs:
           pip install -r backend/requirements.txt
           pip install pytest pytest-asyncio httpx requests
 
-      - name: Start API & Wait for Readiness
-        env:
-          MONGODB_URI: mongodb://127.0.0.1:27017
-          DB_NAME: metechq_ci_test_isolated
-          JWT_SECRET_KEY: ci_test_only_secret_key_minimum_32_characters_12345
-          CLIENT_JWT_SECRET: ci_test_only_client_secret_minimum_32_characters
-          ENVIRONMENT: test
-          UPLOAD_DIR: /tmp/metechq_uploads
-          INIT_SUPERADMIN_USERNAME: maneesh
-          INIT_SUPERADMIN_PASSWORD: maneesh123
-          PORT: 8002
-          HOST: 127.0.0.1
+      - name: Start API, Wait for Readiness & Run All Test Suites
         run: |
           mkdir -p /tmp/metechq_uploads
           cd backend
-          python -m uvicorn server:app --host 127.0.0.1 --port 8002 &
+          python -m uvicorn server:app --host 127.0.0.1 --port 8002 > /tmp/uvicorn.log 2>&1 &
+          SERVER_PID=$!
+          echo "Server started with PID: $SERVER_PID"
+          cd ..
+
+          # Ensure server is stopped on script exit
+          trap 'echo "Stopping API server (PID: $SERVER_PID)..."; kill $SERVER_PID 2>/dev/null || true' EXIT
+
           echo "Waiting for API readiness at http://127.0.0.1:8002/api/..."
+          READY=0
           for i in $(seq 1 30); do
-            if curl -s -f http://127.0.0.1:8002/api/ > /dev/null; then
-              echo "API is ready!"
+            if curl -s -f http://127.0.0.1:8002/api/ > /dev/null 2>&1; then
+              echo "✅ API is ready after ${i} checks!"
+              READY=1
               break
             fi
             echo "Waiting for API ($i/30)..."
             sleep 2
           done
-          cd ..
 
-      - name: Run Pytest Comprehensive Security Suite
-        env:
-          BACKEND_URL: http://127.0.0.1:8002/api
-        run: |
+          if [ $READY -ne 1 ]; then
+            echo "❌ CRITICAL: API server failed to become ready within 60 seconds!"
+            echo "====== UVICORN STARTUP LOGS ======"
+            cat /tmp/uvicorn.log || true
+            exit 1
+          fi
+
+          echo "============================================================"
+          echo "1. Running Pytest Comprehensive Security Suite..."
+          echo "============================================================"
           python -m pytest tests/backend/test_comprehensive_security.py -v
 
-      - name: Run Admin API Suite
-        env:
-          BACKEND_URL: http://127.0.0.1:8002/api
-        run: |
+          echo "============================================================"
+          echo "2. Running Admin API CRUD Functional Suite..."
+          echo "============================================================"
           python tests/backend/backend_test.py
 
-      - name: Run Client Management Suite
-        env:
-          BACKEND_URL: http://127.0.0.1:8002/api
-        run: |
+          echo "============================================================"
+          echo "3. Running Client Management & Project Assignment Suite..."
+          echo "============================================================"
           python tests/backend/client_management_test.py
+
+          echo "============================================================"
+          echo "✅ All 3 Backend Test Suites Passed Successfully!"
+          echo "============================================================"
 
   frontend-build:
     name: Frontend Build Check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up Node.js 18
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: 'yarn'

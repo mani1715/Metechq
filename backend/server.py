@@ -180,12 +180,15 @@ async def startup_event():
                 bootstrap_password = secrets.token_urlsafe(16)
                 logger.warning("⚠️ No INIT_SUPERADMIN_PASSWORD set. Generated temporary secure admin password.")
 
+            from models.admin import AdminPermissions
+            full_permissions = {k: True for k in AdminPermissions.model_fields.keys()}
+
             admin_user = {
                 "id": str(uuid.uuid4()),
                 "username": bootstrap_user,
                 "password_hash": hash_password(bootstrap_password),
                 "role": "super_admin",
-                "permissions": {"canManageAdmins": True},
+                "permissions": full_permissions,
                 "created_at": datetime.utcnow().isoformat(),
                 "created_by": "system"
             }

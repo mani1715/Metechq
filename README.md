@@ -243,8 +243,8 @@ To bootstrap the initial administrator account securely:
    INIT_SUPERADMIN_PASSWORD=YourStrongUniquePassword2026!
    ```
 2. On initial startup, the backend automatically registers the super-administrator with the salted bcrypt hash of your configured password.
-3. If no initial password is provided in `.env`, the server generates a cryptographically secure random temporary secret at initialization and logs it once to the secure server console.
-4. Additional administrators can only be created by an authenticated super-administrator via `/api/auth/register`.
+3. In production, configuring `INIT_SUPERADMIN_PASSWORD` is required; startup aborts if it is omitted. In development, if omitted, a temporary random password is generated, but in accordance with the platform's strict zero-logging credential policy, **passwords and secrets are never logged or printed to the console or logs**. Administrators must explicitly configure `INIT_SUPERADMIN_PASSWORD` in their environment or `.env` file.
+4. Additional administrators can only be created by an authenticated super-administrator via `/api/admins/create`.
 
 ---
 

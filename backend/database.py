@@ -20,12 +20,12 @@ ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / ".env")
 
 # ---------------- ENV VARIABLES ----------------
-MONGODB_URI = os.getenv("MONGODB_URI") or os.getenv("MONGO_URL")
+MONGODB_URI = os.getenv("MONGODB_URI") or os.getenv("MONGO_URL") or ("mongodb://127.0.0.1:27017" if os.getenv("ENVIRONMENT") != "production" else "")
 DB_NAME = os.getenv("DB_NAME", "metechq")
 
 if not MONGODB_URI:
     logger.error("❌ MONGODB_URI (or MONGO_URL) is missing!")
-    raise ValueError("MONGODB_URI environment variable is required.")
+    raise ValueError("MONGODB_URI environment variable is required in production.")
 
 # ---------------- SAFE URI HANDLING ----------------
 def build_safe_mongo_uri(uri: str) -> str:
