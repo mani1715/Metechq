@@ -52,9 +52,9 @@ curl https://your-backend.onrender.com/
 curl https://your-backend.onrender.com/api/
 
 # Test login endpoint
-curl -X POST https://your-backend.onrender.com/api/auth/login \
+curl -X POST https://your-backend.onrender.com/api/admins/login \
   -H "Content-Type: application/json" \
-  -d '{"username":"admin","password":"admin123"}'
+  -d '{"username":"admin","password":"<your-init-superadmin-password>"}'
 ```
 
 ### Step 2: Update Backend CORS
@@ -127,9 +127,8 @@ Open browser DevTools (F12) → Console:
 ### Admin Panel
 - [ ] Navigate to `/admin/login`
 - [ ] Login form loads
-- [ ] Login with credentials works:
-  - Username: `admin`
-  - Password: `admin123`
+- [ ] Login with configured administrator credentials works
+- [ ] Credentials configured via `INIT_SUPERADMIN_PASSWORD` in `.env`
 - [ ] Dashboard displays after login
 - [ ] Admin navigation works
 - [ ] Can view/edit services

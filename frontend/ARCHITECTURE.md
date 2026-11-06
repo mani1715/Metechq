@@ -348,7 +348,7 @@ Returns protected data
 
 2. Enters credentials:
    username: admin
-   password: admin123
+   password: <configured-admin-password>
 
 3. API call:
    POST https://backend.onrender.com/api/auth/login

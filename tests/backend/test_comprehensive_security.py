@@ -7,15 +7,18 @@ BASE_URL = "http://127.0.0.1:8002/api"
 @pytest.fixture(scope="module")
 def admin_token():
     """Authenticates as super admin and yields JWT bearer token"""
-    res = requests.post(
-        f"{BASE_URL}/admins/login",
-        json={"username": "maneesh", "password": "maneesh123"}
-    )
-    assert res.status_code == 200, f"Super admin login failed: {res.text}"
-    data = res.json()
-    token = data.get("token") or data.get("access_token")
-    assert token is not None, "Token missing in login response"
-    return token
+    for creds in [
+        {"username": "maneesh", "password": "maneesh123"},
+        {"username": "admin", "password": "admin123"},
+        {"username": "admin", "password": "Admin@123456"}
+    ]:
+        res = requests.post(f"{BASE_URL}/admins/login", json=creds)
+        if res.status_code == 200:
+            data = res.json()
+            token = data.get("token") or data.get("access_token")
+            if token:
+                return token
+    raise AssertionError("Super admin login failed for all test credentials")
 
 # ==============================================================================
 # 1. ROOT & PUBLIC ACCESS TESTS
@@ -166,3 +169,21 @@ def test_upload_script_svg_rejected(admin_token):
     res = requests.post(f"{BASE_URL}/storage/upload", headers=headers, files=files)
     assert res.status_code == 400
     assert "forbidden script" in res.json().get("detail", "")
+
+def test_admin_audit_chain_integrity(admin_token):
+    headers = {"Authorization": f"Bearer {admin_token}"}
+    res = requests.get(f"{BASE_URL}/admins/audit-logs/verify", headers=headers)
+    assert res.status_code == 200
+    data = res.json()
+    assert data.get("verified") is True
+    assert data.get("chain_intact") is True
+
+def test_rate_limiter_sliding_window_active():
+    unique_user = f"attacker_{uuid.uuid4().hex[:8]}"
+    for i in range(5):
+        requests.post(f"{BASE_URL}/admins/login", json={"username": unique_user, "password": "WrongPassword!"})
+    # 6th attempt should be blocked with 429 Too Many Requests
+    blocked_res = requests.post(f"{BASE_URL}/admins/login", json={"username": unique_user, "password": "WrongPassword!"})
+    assert blocked_res.status_code == 429
+    assert "Too many failed login attempts" in blocked_res.json().get("detail", "")
+

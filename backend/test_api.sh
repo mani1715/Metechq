@@ -27,7 +27,7 @@ echo ""
 echo -e "${YELLOW}2. Testing Login...${NC}"
 login_response=$(curl -s -X POST "$BASE_URL/auth/login" \
     -H "Content-Type: application/json" \
-    -d '{"email":"admin@mspndev.com","password":"admin123"}')
+    -d '{"email":"'"${ADMIN_EMAIL:-admin@metechq.com}"'","password":"'"${ADMIN_PASSWORD:-<set-admin-password>}"'"}')
 
 TOKEN=$(echo $login_response | python3 -c "import sys, json; print(json.load(sys.stdin).get('access_token', ''))" 2>/dev/null)
 

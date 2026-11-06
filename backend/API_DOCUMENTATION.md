@@ -21,7 +21,7 @@ Content-Type: application/json
 
 {
   "email": "admin@metechq.com",
-  "password": "admin123"
+  "password": "<your-secure-password>"
 }
 
 Response:
@@ -330,7 +330,7 @@ Error Response Format:
 ```bash
 TOKEN=$(curl -X POST http://localhost:8001/api/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email":"admin@metechq.com","password":"admin123"}' \
+  -d '{"email":"admin@metechq.com","password":"<your-secure-password>"}' \
   | python -c "import sys, json; print(json.load(sys.stdin)['access_token'])")
 ```
 

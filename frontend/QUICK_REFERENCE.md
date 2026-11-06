@@ -163,9 +163,9 @@ curl https://YOUR-BACKEND.onrender.com/
 curl https://YOUR-BACKEND.onrender.com/api/
 
 # Test login
-curl -X POST https://YOUR-BACKEND.onrender.com/api/auth/login \
+curl -X POST https://YOUR-BACKEND.onrender.com/api/admins/login \
   -H "Content-Type: application/json" \
-  -d '{"username":"admin","password":"admin123"}'
+  -d '{"username":"admin","password":"<your-init-superadmin-password>"}'
 ```
 
 ---
@@ -180,13 +180,9 @@ curl -X POST https://YOUR-BACKEND.onrender.com/api/auth/login \
 
 ---
 
-## 🎯 Default Credentials
-
+## 🎯 Administrator Authentication
 **Admin Panel:** `/admin/login`
-- Username: `admin`
-- Password: `admin123`
-
-⚠️ **IMPORTANT:** Change after first login!
+- Use the credentials initialized via `INIT_SUPERADMIN_PASSWORD` in your backend `.env` configuration.
 
 ---
 

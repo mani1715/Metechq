@@ -359,17 +359,13 @@ Open browser DevTools (F12) → Console:
 **Solutions:**
 
 1. **Check Backend Credentials**
-   ```bash
-   # Default admin credentials
-   username: admin
-   password: admin123
-   ```
+   Ensure `INIT_SUPERADMIN_PASSWORD` was set during backend initialization.
 
 2. **Verify Backend Health**
    ```bash
-   curl https://your-backend.onrender.com/api/auth/login \
+   curl https://your-backend.onrender.com/api/admins/login \
      -H "Content-Type: application/json" \
-     -d '{"username":"admin","password":"admin123"}'
+     -d '{"username":"admin","password":"<your-init-superadmin-password>"}'
    ```
 
 3. **Check Browser Console**

@@ -185,9 +185,9 @@ Expected response:
 
 ### Test 3: Admin Login
 ```bash
-curl -X POST https://your-backend-url.onrender.com/api/auth/login \
+curl -X POST https://your-backend-url.onrender.com/api/admins/login \
   -H "Content-Type: application/json" \
-  -d '{"username":"admin","password":"admin123"}'
+  -d '{"username":"admin","password":"<your-init-superadmin-password>"}'
 ```
 
 Expected: JWT token response (if admin was created during startup)
@@ -278,9 +278,9 @@ Or keep using `/api` for local development with the existing setup.
 - Generate with: `python -c "import secrets; print(secrets.token_urlsafe(32))"`
 - Never reuse keys across environments
 
-✅ **Change default admin password**
-- Default: `admin` / `admin123`
-- Change immediately after first login
+✅ **Set strong INIT_SUPERADMIN_PASSWORD**
+- Configure `INIT_SUPERADMIN_PASSWORD` in your Render Environment Variables
+- Never use default or predictable passwords
 
 ✅ **Restrict CORS origins**
 - Only allow your actual frontend domains

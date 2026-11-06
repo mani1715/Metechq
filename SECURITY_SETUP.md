@@ -51,18 +51,20 @@ METECHQ implements defense-in-depth across the application lifecycle:
 
 ---
 
-## 2. Environment Variables Specification
+## 2. Authoritative Environment Variables Specification
 
-| Variable | Required in Prod | Description | Safe Example Format |
+| Variable | Required in Prod | Description | Supported Aliases |
 | :--- | :--- | :--- | :--- |
-| `ENVIRONMENT` | Yes | `production`, `staging`, or `development` | `production` |
-| `JWT_SECRET` | Yes | 32+ char secret for Admin tokens | `openssl rand -hex 32` |
-| `CLIENT_JWT_SECRET`| Yes | 32+ char secret for Client tokens | `openssl rand -hex 32` |
-| `MONGO_URL` | Yes | Production MongoDB connection string | `mongodb+srv://user:pass@cluster.mongodb.net/metechq` |
-| `DB_NAME` | Yes | Database name | `metechq` |
-| `ALLOWED_ORIGINS` | Yes | Comma-separated list of allowed CORS origins | `https://metechq.com,https://admin.metechq.com` |
-| `UPLOAD_DIR` | No | Absolute or relative upload directory | `/app/uploads` |
-| `INIT_SUPERADMIN_PASSWORD` | Optional | Initial bootstrap password for `admin` account | `A$trongRandomPassword2026!` |
+| `ENVIRONMENT` | Yes | `production`, `staging`, `development`, or `test` | - |
+| `MONGODB_URI` | Yes | Production MongoDB connection string | `MONGO_URL` |
+| `DB_NAME` | Yes | Database name (`metechq`) | - |
+| `JWT_SECRET_KEY` | Yes | 32+ char secret for Admin tokens | `JWT_SECRET`, `SECRET_KEY` |
+| `CLIENT_JWT_SECRET`| Yes | 32+ char secret for Client tokens | `CLIENT_JWT_SECRET_KEY` |
+| `CORS_ORIGINS` | Yes | Comma-separated list of allowed origins | `ALLOWED_ORIGINS` |
+| `UPLOAD_DIR` | No | Absolute or relative upload directory | - |
+| `INIT_SUPERADMIN_USERNAME` | No | Initial super-admin username (default `admin`) | - |
+| `INIT_SUPERADMIN_PASSWORD` | Required on init | Bootstrap password for initial super-admin | - |
+| `REDIS_URL` | Optional | Redis connection URI for distributed rate limiting | - |
 
 ---
 

@@ -1,22 +1,29 @@
 import time
+import logging
 from collections import defaultdict
 from threading import Lock
 from typing import Optional, Tuple
+import os
+
+logger = logging.getLogger("metechq.rate_limiter")
 
 class InMemoryRateLimiter:
-    """Thread-safe sliding-window in-memory rate limiter"""
+    """
+    Thread-safe sliding-window in-memory rate limiter.
+    
+    IMPORTANT SCOPE LIMITATION:
+    This limiter operates within a single process memory space.
+    It is thread-safe within a single Uvicorn worker, but does NOT synchronize
+    state across multiple worker processes (--workers > 1) or distributed container nodes.
+    For horizontal scaling, configure REDIS_URL.
+    """
     def __init__(self):
         self._lock = Lock()
         self._attempts = defaultdict(list)
     
     def check_rate_limit(self, key: str, max_attempts: int, window_seconds: int) -> Tuple[bool, int]:
-        """
-        Check if an action is permitted under the rate limit.
-        Returns: (is_allowed: bool, retry_after_seconds: int)
-        """
         now = time.time()
         with self._lock:
-            # Filter attempts inside the active window
             valid_attempts = [t for t in self._attempts[key] if now - t < window_seconds]
             self._attempts[key] = valid_attempts
             
@@ -28,17 +35,104 @@ class InMemoryRateLimiter:
             return True, 0
     
     def record_attempt(self, key: str):
-        """Record an attempt timestamp"""
         now = time.time()
         with self._lock:
             self._attempts[key].append(now)
     
     def reset(self, key: str):
-        """Reset attempts for a key (e.g. after successful login)"""
         with self._lock:
             if key in self._attempts:
                 del self._attempts[key]
 
-# Global instances for authentication and API endpoints
-login_rate_limiter = InMemoryRateLimiter()
-public_api_limiter = InMemoryRateLimiter()
+class HybridRateLimiter:
+    """
+    Sliding-window rate limiter that uses Redis when REDIS_URL is configured,
+    and falls back to InMemoryRateLimiter with an explicit scope warning.
+    """
+    def __init__(self, redis_url: Optional[str] = None):
+        self._redis_url = redis_url or os.getenv("REDIS_URL", "").strip()
+        self._in_memory = InMemoryRateLimiter()
+        self._redis_client = None
+        self.is_distributed = False
+        
+        if self._redis_url:
+            try:
+                import redis
+                client = redis.Redis.from_url(self._redis_url, socket_timeout=2.0)
+                client.ping()
+                self._redis_client = client
+                self.is_distributed = True
+                logger.info("✅ Distributed Redis rate limiter initialized successfully.")
+            except Exception as e:
+                logger.warning(
+                    f"⚠️ Failed to connect to Redis at {self._redis_url}: {e}. "
+                    "Falling back to single-process in-memory rate limiting."
+                )
+                self._redis_client = None
+                self.is_distributed = False
+        else:
+            logger.info(
+                "ℹ️  REDIS_URL not set. Running in-memory rate limiter "
+                "(scope: single worker process; not synchronized across multiple workers/nodes)."
+            )
+
+    def check_rate_limit(self, key: str, max_attempts: int, window_seconds: int) -> Tuple[bool, int]:
+        if self._redis_client:
+            try:
+                now = time.time()
+                redis_key = f"ratelimit:{key}"
+                pipe = self._redis_client.pipeline()
+                # Clean up expired entries
+                pipe.zremrangebyscore(redis_key, 0, now - window_seconds)
+                # Count current attempts
+                pipe.zcard(redis_key)
+                # Get oldest active attempt to calculate retry_after
+                pipe.zrange(redis_key, 0, 0, withscores=True)
+                results = pipe.execute()
+                
+                current_count = results[1]
+                oldest_entries = results[2]
+                
+                if current_count >= max_attempts:
+                    if oldest_entries:
+                        oldest_ts = oldest_entries[0][1]
+                        retry_after = int(window_seconds - (now - oldest_ts)) + 1
+                    else:
+                        retry_after = window_seconds
+                    return False, max(1, retry_after)
+                return True, 0
+            except Exception as e:
+                logger.warning(f"Redis rate check failed ({e}), falling back to in-memory.")
+                return self._in_memory.check_rate_limit(key, max_attempts, window_seconds)
+        
+        return self._in_memory.check_rate_limit(key, max_attempts, window_seconds)
+
+    def record_attempt(self, key: str):
+        if self._redis_client:
+            try:
+                now = time.time()
+                redis_key = f"ratelimit:{key}"
+                pipe = self._redis_client.pipeline()
+                pipe.zadd(redis_key, {str(now): now})
+                pipe.expire(redis_key, 3600)  # 1 hour safety TTL
+                pipe.execute()
+                return
+            except Exception as e:
+                logger.warning(f"Redis record attempt failed ({e}), falling back to in-memory.")
+                self._in_memory.record_attempt(key)
+                return
+
+        self._in_memory.record_attempt(key)
+
+    def reset(self, key: str):
+        if self._redis_client:
+            try:
+                redis_key = f"ratelimit:{key}"
+                self._redis_client.delete(redis_key)
+            except Exception:
+                pass
+        self._in_memory.reset(key)
+
+# Global rate limiter singletons
+login_rate_limiter = HybridRateLimiter()
+public_api_limiter = HybridRateLimiter()

@@ -26,6 +26,7 @@ jobs:
 
       - name: Run Backend Security Tests
         env:
+          JWT_SECRET_KEY: test_jwt_secret_for_ci_minimum_32_characters_long_1234
           JWT_SECRET: test_jwt_secret_for_ci_minimum_32_characters_long_1234
           CLIENT_JWT_SECRET: test_client_jwt_secret_for_ci_minimum_32_chars
           ENVIRONMENT: test

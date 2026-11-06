@@ -355,9 +355,9 @@ services:
 
 1. Visit: `https://your-app.vercel.app/admin/login`
 2. Login with:
-   - Username: `admin`
-   - Password: `admin123`
-3. **⚠️ IMPORTANT**: Change password immediately after first login!
+   - Username: Configured via `INIT_SUPERADMIN_USERNAME` (default `admin`)
+   - Password: Set via `INIT_SUPERADMIN_PASSWORD` in your deployment environment
+3. Rotate administrative passwords periodically via Settings.
 
 ---
 
@@ -422,9 +422,9 @@ services:
 
 ### Production Checklist:
 
-1. **Change Default Credentials**
-   - ✅ Change admin password from `admin123`
-   - ✅ Use strong passwords (12+ characters)
+1. **Administrator Bootstrap Security**
+   - ✅ Configure strong `INIT_SUPERADMIN_PASSWORD` in production environment
+   - ✅ Enforce strong passwords (minimum 8-12 characters with symbols and digits)
    
 2. **Environment Variables**
    - ✅ Never commit .env files

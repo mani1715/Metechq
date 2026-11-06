@@ -45,7 +45,7 @@ from routes.client_projects import router as client_projects_router
 from routes.bookings import router as bookings_router
 from routes.booking_settings import router as booking_settings_router
 
-from config import validate_config, get_allowed_origins, PORT, TRUST_PROXY, INIT_SUPERADMIN_PASSWORD
+from config import validate_config, get_allowed_origins, PORT, TRUST_PROXY, INIT_SUPERADMIN_PASSWORD, INIT_SUPERADMIN_USERNAME, IS_PRODUCTION
 
 ROOT_DIR = Path(__file__).parent
 
@@ -171,11 +171,18 @@ async def startup_event():
         existing_admin = await admins_collection.find_one({"role": "super_admin"})
 
         if not existing_admin:
-            # Use configured password or generate secure random one
-            bootstrap_password = INIT_SUPERADMIN_PASSWORD if INIT_SUPERADMIN_PASSWORD else "maneesh123"
+            bootstrap_user = INIT_SUPERADMIN_USERNAME or "admin"
+            if INIT_SUPERADMIN_PASSWORD:
+                bootstrap_password = INIT_SUPERADMIN_PASSWORD
+            elif IS_PRODUCTION:
+                raise ValueError("CRITICAL: INIT_SUPERADMIN_PASSWORD is required in production to bootstrap the initial super admin!")
+            else:
+                bootstrap_password = secrets.token_urlsafe(16)
+                logger.warning(f"⚠️ No INIT_SUPERADMIN_PASSWORD set. Generated temporary secure admin password: {bootstrap_password}")
+
             admin_user = {
                 "id": str(uuid.uuid4()),
-                "username": "maneesh",
+                "username": bootstrap_user,
                 "password_hash": hash_password(bootstrap_password),
                 "role": "super_admin",
                 "permissions": {"canManageAdmins": True},
@@ -184,7 +191,7 @@ async def startup_event():
             }
 
             await admins_collection.insert_one(admin_user)
-            logger.info("✅ Super admin created successfully (username: maneesh). Please rotate password immediately.")
+            logger.info(f"✅ Initial super admin registered (username: {bootstrap_user}).")
         else:
             logger.info("✅ Super admin account confirmed.")
 

@@ -187,7 +187,7 @@ Password: demo123
 ```
 URL: http://localhost:3000/admin/login
 Username: admin
-Password: admin123
+Password: <configured via INIT_SUPERADMIN_PASSWORD>
 ```
 
 ---

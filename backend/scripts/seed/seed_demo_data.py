@@ -451,7 +451,7 @@ async def seed_demo_data():
     print("\n  Admin Panel:")
     print("    URL: /admin/login")
     print("    Username: admin")
-    print("    Password: admin123")
+    print("    Password: <configured via INIT_SUPERADMIN_PASSWORD>")
     print("\n  Client Portal:")
     print("    URL: /client/login")
     print("    Email: john@acmecorp.com")

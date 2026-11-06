@@ -11,7 +11,7 @@ Your METECHQ platform now has **complete client project management** with all 8 
 ### Admin Panel
 - **URL:** `/admin/login`
 - **Username:** `admin`
-- **Password:** `admin123`
+- **Password:** Configured via `INIT_SUPERADMIN_PASSWORD` in `.env`
 
 ### Client Portal  
 - **URL:** `/client/login`
@@ -128,7 +128,7 @@ This means:
 ### Step 1: Login as Admin
 ```
 1. Go to /admin/login
-2. Login with admin/admin123
+2. Login with your administrator credentials
 3. Navigate to "Client Projects" in sidebar
 ```
 

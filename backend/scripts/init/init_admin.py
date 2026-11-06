@@ -44,11 +44,15 @@ async def init_admin():
             client.close()
             return
         
+        import secrets
+        admin_pass = os.environ.get("INIT_SUPERADMIN_PASSWORD") or secrets.token_urlsafe(16)
+        admin_user_name = os.environ.get("INIT_SUPERADMIN_USERNAME", "admin")
+        
         # Create default super admin
         admin_user = {
             "id": str(uuid.uuid4()),
-            "username": "admin",
-            "password_hash": hash_password("admin123"),
+            "username": admin_user_name,
+            "password_hash": hash_password(admin_pass),
             "role": "super_admin",
             "permissions": {
                 "canManageAdmins": True,
@@ -62,10 +66,8 @@ async def init_admin():
         
         await admins_collection.insert_one(admin_user)
         print("✅ Super admin created successfully!")
-        print(f"Username: admin")
-        print(f"Password: admin123")
-        print("\n⚠️  IMPORTANT: Please change this password after first login!")
-        print("    Go to Admin Panel -> Settings to change your password")
+        print(f"Username: {admin_user_name}")
+        print(f"Password: {admin_pass}")
         
         client.close()
         

@@ -232,15 +232,19 @@ http://localhost:3000/client/login
 
 ---
 
-# 🔐 Default Admin Credentials
+# 🔐 Administrator Initialization & Security Bootstrap
 
-Username:
-admin
+Initial super-administrator accounts are **not** created with static or hardcoded passwords.
 
-Password:
-admin123
-
-⚠️ Change these credentials in production.
+To bootstrap the initial administrator account securely:
+1. Define a strong, unique password in your backend `.env` configuration:
+   ```env
+   INIT_SUPERADMIN_USERNAME=admin
+   INIT_SUPERADMIN_PASSWORD=YourStrongUniquePassword2026!
+   ```
+2. On initial startup, the backend automatically registers the super-administrator with the salted bcrypt hash of your configured password.
+3. If no initial password is provided in `.env`, the server generates a cryptographically secure random temporary secret at initialization and logs it once to the secure server console.
+4. Additional administrators can only be created by an authenticated super-administrator via `/api/auth/register`.
 
 ---
 

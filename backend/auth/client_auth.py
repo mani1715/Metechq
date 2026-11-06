@@ -26,7 +26,7 @@ async def get_current_client(authorization: Optional[str] = Header(None)):
         )
     
     # Decode token
-    payload = decode_access_token(token)
+    payload = decode_access_token(token, is_client=True)
     if not payload:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

@@ -298,7 +298,7 @@ Key dependencies (70 total):
 **File**: `server.py` (Lines 171-296)
 
 **Startup Event** initializes:
-1. ✅ Super Admin (username: `admin`, password: `admin123`)
+1. ✅ Super Admin (configured via `INIT_SUPERADMIN_PASSWORD`)
 2. ✅ Contact Page default content
 3. ✅ Booking Settings (default time slots)
 4. ✅ Portfolio and services data
@@ -406,9 +406,9 @@ curl https://your-backend.onrender.com/
 curl https://your-backend.onrender.com/api/
 
 # Login test
-curl -X POST https://your-backend.onrender.com/api/auth/login \
+curl -X POST https://your-backend.onrender.com/api/admins/login \
   -H "Content-Type: application/json" \
-  -d '{"username":"admin","password":"admin123"}'
+  -d '{"username":"admin","password":"<your-init-superadmin-password>"}'
 ```
 
 ---
@@ -449,20 +449,15 @@ curl -X POST https://your-backend.onrender.com/api/auth/login \
 
 ## 🔐 Security Notes
 
-### Default Credentials
-⚠️ **IMPORTANT**: Change these after first deployment!
-
-- **Admin Username**: `admin`
-- **Admin Password**: `admin123`
+### Administrator Initialization
+Administrator credentials are never hardcoded. Configure `INIT_SUPERADMIN_PASSWORD` in your production environment variables to securely bootstrap the initial super administrator.
 
 ### Generate Secure Keys
 
 ```bash
-# Generate SECRET_KEY
+# Generate 256-bit secure secret
 python -c "import secrets; print(secrets.token_urlsafe(32))"
-
-# Example output:
-# KjoVBWf-lh7uVzNd-zECj8mU3RSQa614FBXGFyb_V0Q
+```
 ```
 
 ### Password Policy

@@ -44,10 +44,12 @@ async def seed_admin_user():
         print("Admin user already exists, skipping...")
         return
     
+    import secrets
+    admin_pass = os.environ.get("INIT_SUPERADMIN_PASSWORD") or secrets.token_urlsafe(16)
     admin = User(
         name="Admin",
-        email="admin@mspndev.com",
-        password_hash=hash_password("admin123"),
+        email="admin@metechq.com",
+        password_hash=hash_password(admin_pass),
         role="admin"
     )
     
@@ -56,6 +58,7 @@ async def seed_admin_user():
     
     await users_collection.insert_one(admin_dict)
     print(f"✓ Created admin user: {admin.email}")
+    print(f"  Password: {admin_pass}")
 
 async def seed_services():
     """Seed initial services"""
@@ -353,8 +356,8 @@ async def main():
         
         print("\n✅ Database seeding completed successfully!\n")
         print("Admin Login Credentials:")
-        print("  Email: admin@mspndev.com")
-        print("  Password: admin123\n")
+        print("  Email: admin@metechq.com")
+        print("  Password: <configured via INIT_SUPERADMIN_PASSWORD>\n")
         
     except Exception as e:
         print(f"\n❌ Error during seeding: {e}\n")

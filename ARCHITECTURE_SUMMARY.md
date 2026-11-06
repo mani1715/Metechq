@@ -267,9 +267,9 @@ async def admin_token():
 # tests/test_auth.py
 @pytest.mark.asyncio
 async def test_admin_login(client):
-    response = await client.post("/api/v1/auth/login", json={
+    response = await client.post("/api/admins/login", json={
         "username": "admin",
-        "password": "admin123"
+        "password": "ValidComplexPassword123!"
     })
     assert response.status_code == 200
     assert "token" in response.json()

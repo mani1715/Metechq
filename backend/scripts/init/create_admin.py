@@ -53,21 +53,24 @@ async def create_admin_user():
         client.close()
         return
     
+    import secrets
+    admin_password = os.environ.get("INIT_SUPERADMIN_PASSWORD") or secrets.token_urlsafe(16)
+    admin_email = os.environ.get("INIT_SUPERADMIN_EMAIL", "admin@metechq.com")
+    
     # Create admin user
     admin_user = {
         "id": str(uuid.uuid4()),
-        "name": "Admin",
-        "email": "admin@mspn.com",
-        "password_hash": hash_password("admin123"),
+        "name": "Super Admin",
+        "email": admin_email,
+        "password_hash": hash_password(admin_password),
         "role": "admin",
         "created_at": datetime.utcnow().isoformat()
     }
     
     await users_collection.insert_one(admin_user)
     print("✅ Admin user created successfully!")
-    print(f"Email: admin@mspn.com")
-    print(f"Password: admin123")
-    print("\n⚠️  IMPORTANT: Change this password after first login!")
+    print(f"Email: {admin_email}")
+    print(f"Password: {admin_password}")
     
     client.close()
 

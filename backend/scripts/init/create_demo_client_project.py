@@ -365,7 +365,7 @@ async def create_demo_data():
     print("\nAdmin Login:")
     print("  URL: http://localhost:3000/admin/login")
     print("  Username: admin")
-    print("  Password: admin123")
+    print("  Password: <configured via INIT_SUPERADMIN_PASSWORD>")
     print("="*60)
 
 if __name__ == "__main__":

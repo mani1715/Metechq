@@ -18,9 +18,9 @@ Your METECHQ Portfolio & Business Management Platform is now **fully configured*
 
 ### **Admin Panel**
 - **URL:** http://localhost:3000/admin/login
-- **Username:** `admin`
-- **Password:** `admin123`
-- **⚠️ IMPORTANT:** Change this password after first login!
+- **Username:** `admin` (or configured `INIT_SUPERADMIN_USERNAME`)
+- **Password:** Configured via `INIT_SUPERADMIN_PASSWORD` in your `.env` file
+- **⚠️ IMPORTANT:** Set a strong password in your `.env` before starting the application!
 
 ### **Application URLs**
 - **Frontend:** http://localhost:3000
@@ -122,10 +122,10 @@ Your METECHQ Portfolio & Business Management Platform is now **fully configured*
 #### **Backend (.env)**
 ```env
 MONGODB_URI=mongodb://localhost:27017
-DB_NAME=mspn_dev_db
+DB_NAME=metechq
 CORS_ORIGINS=http://localhost:3000
-JWT_SECRET_KEY=O4YWPtWuX0mkD8I6QDPoHEeHmPK5d3jLhETvcVfOjy4
-PORT=8001
+JWT_SECRET_KEY=replace-with-a-cryptographically-secure-random-key-at-least-32-chars
+PORT=8002
 TRUST_PROXY=false
 ```
 
@@ -212,10 +212,10 @@ curl http://localhost:8001/
 # Get projects
 curl http://localhost:8001/api/projects/
 
-# Admin login (use proper endpoint)
-curl -X POST http://localhost:8001/api/admin/auth/login \
+# Admin login (use your configured password)
+curl -X POST http://localhost:8002/api/admins/login \
   -H "Content-Type: application/json" \
-  -d '{"username":"admin","password":"admin123"}'
+  -d '{"username":"admin","password":"<your-init-superadmin-password>"}'
 ```
 
 ### **2. Test Frontend**
@@ -361,8 +361,8 @@ sudo supervisorctl restart mongodb
 
 1. **✅ Log in to Admin Panel**
    - Go to http://localhost:3000/admin/login
-   - Username: `admin`, Password: `admin123`
-   - **Change the default password immediately!**
+   - Use the administrator username and password configured in your `.env` (`INIT_SUPERADMIN_PASSWORD`).
+   - Rotate passwords regularly through the Admin Settings.
 
 2. **✅ Customize Content**
    - Update About page information

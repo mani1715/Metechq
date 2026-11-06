@@ -89,12 +89,10 @@ Look for these in Render logs:
 
 ---
 
-## 🔐 Default Admin Credentials
+## 🔐 Administrator Credentials
 
-- **Username**: `admin`
-- **Password**: `admin123`
-
-⚠️ **Change these immediately after first login!**
+- **Username**: Configured via `INIT_SUPERADMIN_USERNAME` (default `admin`)
+- **Password**: Configured via `INIT_SUPERADMIN_PASSWORD` in Render environment variables
 
 ---
 

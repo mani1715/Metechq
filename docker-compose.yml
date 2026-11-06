@@ -29,13 +29,16 @@ services:
     ports:
       - "8000:8000"
     environment:
+      - MONGODB_URI=mongodb://${MONGO_ROOT_USER:-admin}:${MONGO_ROOT_PASSWORD:-change_in_production}@mongodb:27017/metechq?authSource=admin
       - MONGO_URL=mongodb://${MONGO_ROOT_USER:-admin}:${MONGO_ROOT_PASSWORD:-change_in_production}@mongodb:27017/metechq?authSource=admin
       - DB_NAME=metechq
-      - JWT_SECRET=${JWT_SECRET}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-${JWT_SECRET}}
       - CLIENT_JWT_SECRET=${CLIENT_JWT_SECRET}
       - ENVIRONMENT=production
-      - ALLOWED_ORIGINS=http://localhost,http://localhost:3000,http://localhost:80
+      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost,http://localhost:3000,http://localhost:80}
+      - ALLOWED_ORIGINS=${CORS_ORIGINS:-http://localhost,http://localhost:3000,http://localhost:80}
       - UPLOAD_DIR=/app/uploads
+      - INIT_SUPERADMIN_USERNAME=${INIT_SUPERADMIN_USERNAME:-admin}
       - INIT_SUPERADMIN_PASSWORD=${INIT_SUPERADMIN_PASSWORD}
     volumes:
       - backend_uploads:/app/uploads

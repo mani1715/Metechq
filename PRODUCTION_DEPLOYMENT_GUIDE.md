@@ -185,22 +185,25 @@ spec:
 
 ### Environment Variables
 
-**Required:**
-```env
-MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/dbname
-SECRET_KEY=your-super-secret-key-min-32-chars
-CORS_ORIGINS=https://yourdomain.com,https://www.yourdomain.com
-```
-
-**Optional but Recommended:**
+**Required in Production:**
 ```env
 ENVIRONMENT=production
+MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/metechq?retryWrites=true&w=majority
+DB_NAME=metechq
+JWT_SECRET_KEY=your-super-secret-key-minimum-32-characters-long
+CLIENT_JWT_SECRET=your-client-secret-key-minimum-32-characters-long
+CORS_ORIGINS=https://yourdomain.com,https://www.yourdomain.com
+INIT_SUPERADMIN_USERNAME=admin
+INIT_SUPERADMIN_PASSWORD=your-secure-initial-admin-password
+```
+
+**Optional Configurations:**
+```env
+PORT=8000
+HOST=0.0.0.0
 TRUST_PROXY=true
-RATE_LIMIT_ENABLED=true
-RATE_LIMIT_PER_MINUTE=60
-LOG_LEVEL=INFO
-SENTRY_DSN=https://your-sentry-dsn
-REDIS_URL=redis://your-redis-url
+UPLOAD_DIR=/app/uploads
+REDIS_URL=redis://your-redis-cluster:6379/0
 ```
 
 ### Database Setup (MongoDB Atlas)

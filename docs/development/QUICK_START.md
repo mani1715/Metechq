@@ -16,7 +16,7 @@
 ### Admin Access
 - URL: `/admin/login`
 - Username: `admin`
-- Password: `admin123`
+- Password: Configured via `INIT_SUPERADMIN_PASSWORD` in `.env`
 
 ### Client Access (3 Demo Clients)
 - URL: `/client/login`

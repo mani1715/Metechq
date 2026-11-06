@@ -8,9 +8,10 @@ from auth.password import validate_password_strength
 from models.admin import Admin, AdminPermissions
 from utils import serialize_document
 from utils.rate_limiter import login_rate_limiter
-from config import INIT_SUPERADMIN_PASSWORD, IS_PRODUCTION
+import secrets
+from config import INIT_SUPERADMIN_PASSWORD, IS_PRODUCTION, INIT_SUPERADMIN_USERNAME
 
-from utils.audit_logger import record_audit_log, audit_collection
+from utils.audit_logger import record_audit_log, audit_collection, verify_audit_log_chain
 
 router = APIRouter(prefix="/admins", tags=["admins"])
 
@@ -138,12 +139,21 @@ async def initialize_super_admin():
             detail="Super admin already exists"
         )
     
-    # Secure bootstrap password: from environment or default dev credentials
-    bootstrap_password = INIT_SUPERADMIN_PASSWORD if INIT_SUPERADMIN_PASSWORD else "admin123"
+    if INIT_SUPERADMIN_PASSWORD:
+        bootstrap_password = INIT_SUPERADMIN_PASSWORD
+    elif IS_PRODUCTION:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Super admin initialization is disabled in production without INIT_SUPERADMIN_PASSWORD."
+        )
+    else:
+        bootstrap_password = secrets.token_urlsafe(16)
+    
+    bootstrap_username = INIT_SUPERADMIN_USERNAME or "admin"
     
     # Create default super admin with all permissions
     admin = Admin(
-        username="admin",
+        username=bootstrap_username,
         password_hash=hash_password(bootstrap_password),
         role="super_admin",
         permissions=AdminPermissions(
@@ -383,3 +393,11 @@ async def get_audit_logs(
         entry.pop('_id', None)
         logs.append(entry)
     return {"audit_logs": logs, "count": len(logs)}
+ 
+@router.get("/audit-logs/verify")
+async def verify_audit_trail(
+    limit: int = 1000,
+    current_admin: dict = Depends(require_super_admin)
+):
+    """Cryptographically verify the tamper-evident audit hash-chain (super admin only)"""
+    return await verify_audit_log_chain(limit=limit)
