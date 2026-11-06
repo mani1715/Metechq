@@ -1,7 +1,8 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Depends
 from schemas.settings import SettingsUpdate, SettingsResponse
 from database import settings_collection
 from utils import serialize_document
+from auth.admin_auth import get_current_admin
 from models import Settings
 from datetime import datetime
 
@@ -9,7 +10,7 @@ router = APIRouter(prefix="/settings", tags=["settings"])
 
 @router.get("/", response_model=SettingsResponse)
 async def get_settings():
-    """Get global settings"""
+    """Get global settings (public endpoint)"""
     settings = await settings_collection.find_one({"id": "global_settings"})
     if not settings:
         # Return default settings if none exist
@@ -27,8 +28,8 @@ async def get_settings():
     return serialize_document(settings)
 
 @router.put("/", response_model=SettingsResponse)
-async def update_settings(settings_data: SettingsUpdate):
-    """Update global settings"""
+async def update_settings(settings_data: SettingsUpdate, admin: dict = Depends(get_current_admin)):
+    """Update global settings (admin only)"""
     existing = await settings_collection.find_one({"id": "global_settings"})
     
     update_data = settings_data.model_dump(exclude_unset=True)

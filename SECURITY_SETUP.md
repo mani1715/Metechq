@@ -1,232 +1,102 @@
-# 🔐 Security Setup Documentation
+# 🔐 METECHQ Security Architecture & Configuration Guide
 
-## JWT Secret Key Management
-
-This document explains how the application securely handles JWT secret keys for token signing and verification.
+This document defines the security architecture, configuration standards, and deployment hardening rules for the **METECHQ** agency and client portal platform.
 
 ---
 
-## ✅ Current Security Implementation
+## 1. Security Architecture Summary
 
-### 1. **Where the SECRET_KEY is Stored**
+METECHQ implements defense-in-depth across the application lifecycle:
 
-The JWT secret key is stored **ONLY** in the following locations:
+1. **Dual Secret Domain Isolation**:
+   - `JWT_SECRET`: Admin dashboard authentication.
+   - `CLIENT_JWT_SECRET`: Independent client portal authentication.
+   - Even if one secret realm is rotated or invalidated, the other realm remains securely isolated.
 
-- **Local Development:** `/app/backend/.env` file (NOT committed to Git)
-- **Production (Render/Railway/etc.):** Environment variables in the hosting platform's dashboard
+2. **Automated Configuration Validation**:
+   - `backend/config.py` runs `validate_config()` on application startup.
+   - In `ENVIRONMENT=production`, the application refuses to start if placeholder or default secrets are detected.
+   - Minimum secret length is enforced (>= 32 characters).
 
-**File Location:**
-```bash
-/app/backend/.env
-```
+3. **Strict RBAC & Resource Ownership (Zero IDOR)**:
+   - All administrative routes (`/admin/*`, `/projects`, `/services`, `/contacts/admin/*`, `/pages`, `/content`, `/settings`) require authenticated admin tokens with valid claims.
+   - Client portal endpoints enforce tenant isolation: clients can only query and mutate projects, documents, and tasks assigned to their specific `client_id`.
+   - Super-admin authorization (`require_super_admin`) is strictly required for admin user provisioning (`/api/auth/register`) and viewing audit logs.
 
-**Environment Variable Name:**
-```bash
-JWT_SECRET_KEY=O4YWPtWuX0mkD8I6QDPoHEeHmPK5d3jLhETvcVfOjy4
-```
+4. **Sliding-Window Rate Limiting**:
+   - Implemented via `backend/utils/rate_limiter.py`.
+   - Admin and client login endpoints enforce strict brute-force limits (5 failed attempts per 5-minute sliding window per client IP).
+   - AI conversation endpoints are protected from denial-of-wallet / resource exhaustion attacks.
+
+5. **Multi-Layer File & Upload Security**:
+   - Implemented via `backend/utils/file_security.py`.
+   - Extension allowlisting (`.jpg`, `.jpeg`, `.png`, `.webp`, `.pdf`, `.doc`, `.docx`, `.xls`, `.xlsx`, `.zip`).
+   - Magic byte MIME verification: checks file binary header against declared extension.
+   - Active content scanning: SVG files are checked for embedded `<script>`, `javascript:`, and malicious event attributes (`onload=`).
+   - Strict size limiting: 15MB file ceiling.
+   - Path traversal prevention: UUID-prefixed randomized filenames; sanitized disk paths.
+   - Authenticated private downloads: files are served via `/api/storage/files/{filename}` requiring active authentication.
+
+6. **Defense-in-Depth HTTP Headers**:
+   - `X-Content-Type-Options: nosniff` (MIME sniffing disabled).
+   - `X-Frame-Options: SAMEORIGIN` (Clickjacking mitigation).
+   - `Referrer-Policy: strict-origin-when-cross-origin`.
+   - `Permissions-Policy: geolocation=(), camera=(), microphone=()`.
+
+7. **Tamper-Evident Audit Logging**:
+   - Implemented in `backend/utils/audit_logger.py`.
+   - Records actor ID, username, action, resource, IP address, and status.
+   - Automatically sanitizes and removes credentials, passwords, and tokens before logging.
+   - Stored in append-only MongoDB `audit_logs` collection with query indexes.
 
 ---
 
-### 2. **Why It Is Safe for GitHub**
+## 2. Environment Variables Specification
 
-The codebase is **100% safe** to push to GitHub because:
-
-✅ **`.env` files are in `.gitignore`**
-   - Both `/app/backend/.env` and `/app/frontend/.env` are excluded from Git
-   - Only `.env.example` files (with placeholder values) are committed
-
-✅ **No hardcoded secrets in source code**
-   - The backend reads the secret from environment variables using:
-     ```python
-     SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'your-secret-key-change-in-production')
-     ```
-   - If the environment variable is missing, it falls back to a placeholder (which should be changed in production)
-
-✅ **`.env.example` contains placeholder values**
-   - The example file shows the format but NOT the actual secret
-   - Safe to commit to version control as a template for other developers
+| Variable | Required in Prod | Description | Safe Example Format |
+| :--- | :--- | :--- | :--- |
+| `ENVIRONMENT` | Yes | `production`, `staging`, or `development` | `production` |
+| `JWT_SECRET` | Yes | 32+ char secret for Admin tokens | `openssl rand -hex 32` |
+| `CLIENT_JWT_SECRET`| Yes | 32+ char secret for Client tokens | `openssl rand -hex 32` |
+| `MONGO_URL` | Yes | Production MongoDB connection string | `mongodb+srv://user:pass@cluster.mongodb.net/metechq` |
+| `DB_NAME` | Yes | Database name | `metechq` |
+| `ALLOWED_ORIGINS` | Yes | Comma-separated list of allowed CORS origins | `https://metechq.com,https://admin.metechq.com` |
+| `UPLOAD_DIR` | No | Absolute or relative upload directory | `/app/uploads` |
+| `INIT_SUPERADMIN_PASSWORD` | Optional | Initial bootstrap password for `admin` account | `A$trongRandomPassword2026!` |
 
 ---
 
-### 3. **How to Configure in Production (Render/Railway/Vercel/etc.)**
+## 3. Secret Generation & Key Rotation
 
-When deploying to production platforms, follow these steps:
-
-#### **Step 1: Generate a New Secret Key**
-
-**Never reuse the development key in production!** Generate a new one:
-
+### Generating Cryptographic Secrets
+Run in your secure terminal:
 ```bash
 python -c "import secrets; print(secrets.token_urlsafe(32))"
 ```
-
-This will output something like:
-```
-xY7Z9aB2cD3eF4gH5iJ6kL7mN8oP9qR0sT1uV2wX3yZ4
-```
-
-#### **Step 2: Set Environment Variables in Your Hosting Platform**
-
-##### **Render:**
-1. Go to your Render dashboard
-2. Select your backend service
-3. Navigate to **Environment** tab
-4. Add the following environment variables:
-   ```
-   JWT_SECRET_KEY=<your-generated-secret-key>
-   MONGODB_URI=<your-mongodb-atlas-uri>
-   CORS_ORIGINS=https://your-frontend-domain.com
-   DB_NAME=mspn_dev_db
-   PORT=8001
-   TRUST_PROXY=true
-   ```
-
-##### **Railway:**
-1. Go to your Railway project
-2. Select your backend service
-3. Go to **Variables** tab
-4. Add the same environment variables as above
-
-##### **AWS/DigitalOcean/Self-Hosted:**
-1. Create a `.env` file on your server (outside version control)
-2. Set strict file permissions:
-   ```bash
-   chmod 600 /app/backend/.env
-   ```
-3. Ensure the file is owned by the application user only
-
----
-
-### 4. **Security Best Practices Implemented**
-
-✅ **Cryptographically Secure Key Generation**
-   - Generated using Python's `secrets.token_urlsafe(32)`
-   - Produces a 256-bit random key
-   - Resistant to brute-force attacks
-
-✅ **Environment-Based Configuration**
-   - Secrets are never hardcoded in the source code
-   - Different keys for development and production
-   - Easy to rotate keys without code changes
-
-✅ **Token Expiration**
-   - JWT tokens expire after 7 days
-   - Reduces the impact of token compromise
-   - Configured in `/app/backend/auth/jwt.py`:
-     ```python
-     ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 7 days
-     ```
-
-✅ **HTTPS Enforcement (Production)**
-   - All production deployments should use HTTPS
-   - Prevents token interception during transmission
-   - Configured via reverse proxy (Nginx, Render, etc.)
-
----
-
-## 📁 File Structure
-
-```
-/app/
-├── backend/
-│   ├── .env                    # ❌ NOT in Git (actual secrets)
-│   ├── .env.example            # ✅ IN Git (placeholder values)
-│   └── auth/
-│       └── jwt.py              # ✅ Reads from environment variables
-├── .gitignore                  # ✅ Excludes .env files
-└── SECURITY_SETUP.md           # ✅ This documentation
+Or with OpenSSL:
+```bash
+openssl rand -hex 32
 ```
 
----
-
-## 🔄 Key Rotation (If Compromised)
-
-If you suspect your JWT secret key has been compromised:
-
-1. **Generate a new secret key:**
-   ```bash
-   python -c "import secrets; print(secrets.token_urlsafe(32))"
-   ```
-
-2. **Update the key in your production environment:**
-   - Render: Update the `JWT_SECRET_KEY` environment variable
-   - Railway: Update in the Variables tab
-   - Self-hosted: Update the `.env` file
-
-3. **Restart your backend service:**
-   - All existing JWT tokens will become invalid
-   - Users will need to log in again
-
-4. **Notify your security team (if applicable)**
+### Rotating Compromised Secrets
+1. Generate new strings for `JWT_SECRET` and `CLIENT_JWT_SECRET`.
+2. Update the environment variables in your hosting provider (Render, Railway, AWS ECS, or Docker Compose).
+3. Restart the backend service.
+4. All existing tokens will be immediately invalidated, forcing active sessions to re-authenticate with the database.
 
 ---
 
-## ⚠️ Common Mistakes to Avoid
+## 4. Verification & Security Testing
 
-❌ **DON'T commit `.env` files to Git**
-❌ **DON'T hardcode secrets in source code**
-❌ **DON'T use the same secret for development and production**
-❌ **DON'T share your `.env` file in chat messages or emails**
-❌ **DON'T use weak or predictable secret keys**
+Run the automated security test suite to verify authorization, headers, rate limits, and upload defenses:
 
----
+```bash
+# Run backend security test suite
+python -m pytest tests/backend/test_comprehensive_security.py -v
 
-## 📋 Checklist for Deployment
+# Run full backend API functional tests
+python tests/backend/backend_test.py
 
-Before deploying to production, ensure:
-
-- [ ] New JWT_SECRET_KEY generated for production
-- [ ] JWT_SECRET_KEY set in production environment variables
-- [ ] MONGODB_URI set to production database (MongoDB Atlas)
-- [ ] CORS_ORIGINS set to production frontend URL
-- [ ] TRUST_PROXY=true for HTTPS support
-- [ ] `.env` file NOT committed to Git
-- [ ] `.env.example` updated with correct variable names
-- [ ] Backend successfully reads environment variables
-- [ ] JWT tokens are being created and verified correctly
-
----
-
-## 🧪 Testing Security
-
-To verify your security setup:
-
-1. **Check that environment variables are loaded:**
-   ```bash
-   cd /app/backend
-   python -c "from dotenv import load_dotenv; import os; load_dotenv(); print('JWT_SECRET_KEY loaded:', bool(os.getenv('JWT_SECRET_KEY')))"
-   ```
-
-2. **Test admin login:**
-   ```bash
-   curl -X POST http://localhost:8001/api/admin/auth/login \
-     -H "Content-Type: application/json" \
-     -d '{"username":"admin","password":"admin123"}'
-   ```
-
-3. **Verify token expiration:**
-   - Log in and get a JWT token
-   - Wait 7 days (or modify expiration time for testing)
-   - Try using the expired token - should fail
-
----
-
-## 📚 Additional Resources
-
-- [OWASP JWT Security Best Practices](https://cheatsheetseries.owasp.org/cheatsheets/JSON_Web_Token_for_Java_Cheat_Sheet.html)
-- [Python Secrets Module Documentation](https://docs.python.org/3/library/secrets.html)
-- [FastAPI Security Documentation](https://fastapi.tiangolo.com/tutorial/security/)
-
----
-
-## 📞 Support
-
-If you have questions about security implementation:
-- Review this documentation
-- Check `.env.example` for required variables
-- Ensure all secrets are in environment variables, not code
-
----
-
-**Last Updated:** December 31, 2025  
-**Status:** ✅ Production-Ready Security Configuration
+# Run client portal isolation tests
+python tests/backend/client_management_test.py
+```

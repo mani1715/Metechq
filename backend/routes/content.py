@@ -1,7 +1,8 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Depends
 from schemas.content import ContentUpdate, ContentResponse
 from database import content_collection
 from utils import serialize_document
+from auth.admin_auth import get_current_admin
 from models.content import WebsiteContent
 from datetime import datetime
 
@@ -9,7 +10,7 @@ router = APIRouter(prefix="/content", tags=["content"])
 
 @router.get("/", response_model=ContentResponse)
 async def get_content():
-    """Get website content"""
+    """Get website content (public endpoint)"""
     content = await content_collection.find_one({"id": "website_content"})
     
     if not content:
@@ -23,8 +24,8 @@ async def get_content():
     return serialize_document(content)
 
 @router.put("/", response_model=ContentResponse)
-async def update_content(content_data: ContentUpdate):
-    """Update website content"""
+async def update_content(content_data: ContentUpdate, admin: dict = Depends(get_current_admin)):
+    """Update website content (admin only)"""
     # Check if content exists
     existing = await content_collection.find_one({"id": "website_content"})
     

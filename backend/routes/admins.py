@@ -1,25 +1,64 @@
-from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi import APIRouter, HTTPException, status, Depends, Request
 from typing import List
 from schemas.admin import AdminCreate, AdminUpdate, AdminLogin, AdminResponse, TokenResponse
 from database import admins_collection
 from auth import hash_password, verify_password, create_access_token
 from auth.admin_auth import get_current_admin, require_super_admin
+from auth.password import validate_password_strength
 from models.admin import Admin, AdminPermissions
 from utils import serialize_document
+from utils.rate_limiter import login_rate_limiter
+from config import INIT_SUPERADMIN_PASSWORD, IS_PRODUCTION
+
+from utils.audit_logger import record_audit_log, audit_collection
 
 router = APIRouter(prefix="/admins", tags=["admins"])
 
 @router.post("/login", response_model=TokenResponse)
-async def admin_login(credentials: AdminLogin):
-    """Admin login endpoint - supports both username and email"""
+async def admin_login(credentials: AdminLogin, request: Request):
+    """Admin login endpoint with brute-force rate limiting and audit logging"""
+    client_ip = request.client.host if request.client else "unknown"
+    normalized_user = credentials.username.strip().lower()
+    rate_key = f"admin_login:{client_ip}:{normalized_user}"
+
+    # Check brute force limit: 5 attempts per 5 minutes
+    allowed, retry_after = login_rate_limiter.check_rate_limit(rate_key, max_attempts=5, window_seconds=300)
+    if not allowed:
+        await record_audit_log(
+            actor_id="anonymous",
+            actor_name=normalized_user,
+            actor_role="unknown",
+            action="admin_login_rate_limited",
+            resource_type="auth",
+            resource_id="admins",
+            ip_address=client_ip,
+            status="rate_limited"
+        )
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail=f"Too many failed login attempts. Please try again in {retry_after} seconds."
+        )
+
     # Find admin by username or email
     admin_doc = await admins_collection.find_one({
         "$or": [
-            {"username": credentials.username},
-            {"email": credentials.username}  # Allow login with email too
+            {"username": {"$regex": f"^{normalized_user}$", "$options": "i"}},
+            {"email": {"$regex": f"^{normalized_user}$", "$options": "i"}}
         ]
     })
     if not admin_doc:
+        login_rate_limiter.record_attempt(rate_key)
+        await record_audit_log(
+            actor_id="anonymous",
+            actor_name=normalized_user,
+            actor_role="unknown",
+            action="admin_login_failed",
+            resource_type="auth",
+            resource_id="admins",
+            details={"reason": "user_not_found"},
+            ip_address=client_ip,
+            status="failed"
+        )
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid credentials"
@@ -28,15 +67,42 @@ async def admin_login(credentials: AdminLogin):
     # Verify password - handle both password and password_hash fields
     password_hash = admin_doc.get('password_hash', admin_doc.get('password'))
     if not password_hash or not verify_password(credentials.password, password_hash):
+        login_rate_limiter.record_attempt(rate_key)
+        await record_audit_log(
+            actor_id=admin_doc['id'],
+            actor_name=admin_doc.get('username', 'admin'),
+            actor_role=admin_doc.get('role', 'admin'),
+            action="admin_login_failed",
+            resource_type="auth",
+            resource_id="admins",
+            details={"reason": "invalid_password"},
+            ip_address=client_ip,
+            status="failed"
+        )
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid credentials"
         )
     
+    # Successful login: reset rate limit attempts
+    login_rate_limiter.reset(rate_key)
+
     # Determine role - handle both role and is_super_admin fields
     role = admin_doc.get("role")
     if not role:
         role = "super_admin" if admin_doc.get("is_super_admin", False) else "admin"
+    
+    # Log successful authentication
+    await record_audit_log(
+        actor_id=admin_doc['id'],
+        actor_name=admin_doc.get('username', 'admin'),
+        actor_role=role,
+        action="admin_login_success",
+        resource_type="auth",
+        resource_id="admins",
+        ip_address=client_ip,
+        status="success"
+    )
     
     # Create access token
     token_data = {
@@ -72,10 +138,13 @@ async def initialize_super_admin():
             detail="Super admin already exists"
         )
     
+    # Secure bootstrap password: from environment or default dev credentials
+    bootstrap_password = INIT_SUPERADMIN_PASSWORD if INIT_SUPERADMIN_PASSWORD else "admin123"
+    
     # Create default super admin with all permissions
     admin = Admin(
         username="admin",
-        password_hash=hash_password("admin123"),
+        password_hash=hash_password(bootstrap_password),
         role="super_admin",
         permissions=AdminPermissions(
             canManageAdmins=True,
@@ -97,7 +166,9 @@ async def initialize_super_admin():
             canAccessStorage=True,
             canManageNotes=True,
             canManageSettings=True,
-            canViewPrivateProjects=True
+            canViewPrivateProjects=True,
+            canViewCredentials=True,
+            canEditCredentials=True
         ),
         created_by="system"
     )
@@ -150,6 +221,14 @@ async def create_admin(
     current_admin: dict = Depends(require_super_admin)
 ):
     """Create new admin (super admin only)"""
+    # Validate password
+    valid_pw, pw_err = validate_password_strength(admin_data.password)
+    if not valid_pw:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=pw_err
+        )
+
     # Check if username exists
     existing = await admins_collection.find_one({"username": admin_data.username})
     if existing:
@@ -180,7 +259,9 @@ async def create_admin(
             canAccessStorage=True,
             canManageNotes=True,
             canManageSettings=True,
-            canViewPrivateProjects=True
+            canViewPrivateProjects=True,
+            canViewCredentials=True,
+            canEditCredentials=True
         )
     else:
         permissions = admin_data.permissions or AdminPermissions()
@@ -238,6 +319,12 @@ async def update_admin(
         update_data['username'] = admin_data.username
     
     if admin_data.password:
+        valid_pw, pw_err = validate_password_strength(admin_data.password)
+        if not valid_pw:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=pw_err
+            )
         update_data['password_hash'] = hash_password(admin_data.password)
     
     if admin_data.permissions:
@@ -281,3 +368,18 @@ async def delete_admin(
     
     await admins_collection.delete_one({"id": admin_id})
     return {"message": "Admin deleted successfully"}
+
+@router.get("/audit-logs")
+async def get_audit_logs(
+    limit: int = 50,
+    skip: int = 0,
+    current_admin: dict = Depends(require_super_admin)
+):
+    """Retrieve immutable security audit trail (super admin only)"""
+    limit_clamped = max(1, min(limit, 200))
+    cursor = audit_collection.find().sort("timestamp", -1).skip(skip).limit(limit_clamped)
+    logs = []
+    async for entry in cursor:
+        entry.pop('_id', None)
+        logs.append(entry)
+    return {"audit_logs": logs, "count": len(logs)}

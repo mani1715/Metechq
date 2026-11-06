@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, status, Depends, UploadFile, File
+from fastapi.responses import FileResponse
 from typing import List
 from schemas.storage import StorageItemCreate, StorageItemUpdate
 from database import storage_collection
@@ -6,23 +7,21 @@ from auth.admin_auth import get_current_admin, check_permission
 from models.storage import StorageItem
 from datetime import datetime
 import os
-import shutil
 from pathlib import Path
+from config import UPLOAD_DIR
+from utils.file_security import validate_file_security, generate_secure_path, MAX_FILE_SIZE_BYTES, sanitize_filename
 
 router = APIRouter(prefix="/storage", tags=["storage"])
 
-# Create uploads directory if it doesn't exist
-UPLOAD_DIR = Path("/app/public/uploads")
+# Ensure uploads directory exists
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 @router.get("/items")
 async def get_storage_items(current_admin: dict = Depends(get_current_admin)):
     """Get all storage items visible to current admin"""
-    # Super admin can see all, others need canAccessStorage permission
     if current_admin['role'] == 'super_admin':
         query = {}
     else:
-        # Check if admin has storage access permission
         if not check_permission(current_admin, 'canAccessStorage'):
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
@@ -94,7 +93,6 @@ async def update_storage_item(
     current_admin: dict = Depends(get_current_admin)
 ):
     """Update storage item"""
-    # Find item
     item = await storage_collection.find_one({"id": item_id})
     if not item:
         raise HTTPException(
@@ -102,14 +100,12 @@ async def update_storage_item(
             detail="Storage item not found"
         )
     
-    # Check access
     if current_admin['role'] != 'super_admin' and item['created_by'] != current_admin['username']:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Access denied"
         )
     
-    # Prepare update data
     update_data = {"updated_at": datetime.utcnow().isoformat()}
     if item_data.title is not None:
         update_data['title'] = item_data.title
@@ -138,8 +134,7 @@ async def delete_storage_item(
     item_id: str,
     current_admin: dict = Depends(get_current_admin)
 ):
-    """Delete storage item"""
-    # Find item
+    """Delete storage item and unlinks corresponding file on disk"""
     item = await storage_collection.find_one({"id": item_id})
     if not item:
         raise HTTPException(
@@ -147,45 +142,87 @@ async def delete_storage_item(
             detail="Storage item not found"
         )
     
-    # Check access
     if current_admin['role'] != 'super_admin' and item['created_by'] != current_admin['username']:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Access denied"
         )
     
+    # Securely delete physical file on disk if stored locally
+    file_url = item.get("fileUrl", "")
+    if file_url and "/files/" in file_url:
+        stored_fname = file_url.split("/files/")[-1]
+        phys_path = UPLOAD_DIR / stored_fname
+        if phys_path.exists() and str(phys_path.resolve()).startswith(str(UPLOAD_DIR.resolve())):
+            try:
+                os.remove(phys_path)
+            except Exception:
+                pass
+    
     await storage_collection.delete_one({"id": item_id})
-    return {"message": "Storage item deleted successfully"}
+    return {"message": "Storage item and associated file deleted successfully"}
 
 @router.post("/upload")
 async def upload_file(
     file: UploadFile = File(...),
     current_admin: dict = Depends(get_current_admin)
 ):
-    """Upload file for storage"""
+    """Upload file for storage with strict validation and size bounds"""
     if not check_permission(current_admin, 'canAccessPrivateStorage') and current_admin['role'] != 'super_admin':
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Access denied"
         )
     
-    try:
-        # Generate unique filename
-        import uuid
-        file_extension = os.path.splitext(file.filename)[1]
-        unique_filename = f"{uuid.uuid4()}{file_extension}"
-        file_path = UPLOAD_DIR / unique_filename
-        
-        # Save file
-        with open(file_path, "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
-        
-        # Return URL
-        file_url = f"/uploads/{unique_filename}"
-        return {"url": file_url, "filename": file.filename}
+    # Validate extension, magic bytes, and safe name
+    ext, safe_name = validate_file_security(file)
+    file_id, file_path = generate_secure_path(UPLOAD_DIR, ext)
     
+    # Save file in streaming chunks to enforce size limit safely
+    total_size = 0
+    try:
+        with open(file_path, "wb") as buffer:
+            while chunk := file.file.read(65536):
+                total_size += len(chunk)
+                if total_size > MAX_FILE_SIZE_BYTES:
+                    buffer.close()
+                    if file_path.exists():
+                        os.remove(file_path)
+                    raise HTTPException(
+                        status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+                        detail="File exceeds maximum allowed size of 15MB."
+                    )
+                buffer.write(chunk)
+        
+        file_url = f"/api/storage/files/{file_id}{ext}"
+        return {
+            "url": file_url,
+            "filename": safe_name,
+            "size": total_size
+        }
+    except HTTPException:
+        raise
     except Exception as e:
+        if file_path.exists():
+            os.remove(file_path)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"File upload failed: {str(e)}"
         )
+
+@router.get("/files/{filename}")
+async def get_storage_file(
+    filename: str,
+    current_admin: dict = Depends(get_current_admin)
+):
+    """Authenticated file retrieval for storage items"""
+    clean_name = sanitize_filename(filename)
+    target_path = (UPLOAD_DIR / clean_name).resolve()
+    
+    if not str(target_path).startswith(str(UPLOAD_DIR.resolve())):
+        raise HTTPException(status_code=400, detail="Invalid path")
+    
+    if not target_path.exists():
+        raise HTTPException(status_code=404, detail="File not found")
+    
+    return FileResponse(path=str(target_path), filename=clean_name)

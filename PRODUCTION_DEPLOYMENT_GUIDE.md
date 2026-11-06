@@ -1,12 +1,55 @@
-# 🚀 PRODUCTION DEPLOYMENT GUIDE
+# 🚀 METECHQ PRODUCTION DEPLOYMENT GUIDE
 
-## Backend Deployment
-
-### Requirements
+## System Architecture & Prerequisites
 - Python 3.10+
-- MongoDB Atlas or self-hosted MongoDB
-- 1GB RAM minimum (2GB recommended)
-- SSL certificate (handled by hosting platform)
+- Node.js 18+ (LTS)
+- MongoDB 6.0+ (Atlas or self-hosted)
+- Minimum 1GB RAM (2GB+ recommended)
+- SSL/TLS Termination (Cloudflare, Nginx, or AWS ALB)
+
+---
+
+## Unified Docker Deployment (Recommended)
+
+The Metechq stack includes full containerization via `docker-compose.yml`:
+
+```bash
+# 1. Clone repository
+git clone https://github.com/mani1715/Metechq.git
+cd Metechq
+
+# 2. Configure production secrets in .env
+cp .env.example .env
+# Edit .env and supply strong JWT_SECRET, CLIENT_JWT_SECRET, and MONGO_ROOT_PASSWORD
+
+# 3. Launch the full stack
+docker-compose up -d --build
+
+# 4. Verify running health status
+docker-compose ps
+```
+
+---
+
+## Rollback Procedures
+
+If an issue occurs during a production deployment:
+
+### 1. Container Rollback
+```bash
+# Revert to previous git release tag
+git checkout tags/v1.0.0-stable
+
+# Rebuild and restart containers
+docker-compose up -d --build
+```
+
+### 2. Database Snapshot Restore
+```bash
+# In MongoDB Atlas: Select cluster -> Backup -> Restore to point-in-time
+# For self-hosted:
+mongorestore --uri="$MONGO_URL" --drop /backups/backup_YYYYMMDD_HHMMSS/metechq
+```
 
 ### Deployment Platforms
 

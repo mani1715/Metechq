@@ -21,8 +21,11 @@ import shutil
 
 router = APIRouter(prefix="/admin/client-projects", tags=["admin-client-projects"])
 
-# Directory for storing project files
-UPLOAD_DIR = "/app/backend/uploads/client_projects"
+from config import UPLOAD_DIR as BASE_UPLOAD_DIR
+from utils.file_security import validate_file_security, generate_secure_path, MAX_FILE_SIZE_BYTES
+
+# Directory for storing project files safely cross-platform
+UPLOAD_DIR = str(BASE_UPLOAD_DIR / "client_projects")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 def log_activity(project_id: str, action: str, description: str, user_id: str, user_name: str, metadata=None):
@@ -771,24 +774,37 @@ async def upload_project_file(
             detail="Project not found"
         )
     
+    # Validate file extension and magic signature
+    ext, safe_orig_name = validate_file_security(file)
+
     # Create project-specific directory
-    project_dir = os.path.join(UPLOAD_DIR, project_id)
-    os.makedirs(project_dir, exist_ok=True)
+    project_dir = Path(UPLOAD_DIR) / project_id
+    project_dir.mkdir(parents=True, exist_ok=True)
     
-    # Generate unique filename
-    file_id = str(uuid.uuid4())
-    file_extension = os.path.splitext(file.filename)[1]
-    safe_filename = f"{file_id}{file_extension}"
-    file_path = os.path.join(project_dir, safe_filename)
+    # Generate unique filename safely
+    file_id, safe_target_path = generate_secure_path(project_dir, ext)
+    file_path = str(safe_target_path)
     
-    # Save file
+    # Save file in streaming chunks to enforce size limit safely
+    file_size = 0
     try:
-        with open(file_path, "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
-        
-        # Get file size
-        file_size = os.path.getsize(file_path)
+        with open(safe_target_path, "wb") as buffer:
+            while chunk := file.file.read(65536):
+                file_size += len(chunk)
+                if file_size > MAX_FILE_SIZE_BYTES:
+                    buffer.close()
+                    if safe_target_path.exists():
+                        os.remove(safe_target_path)
+                    raise HTTPException(
+                        status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+                        detail="File exceeds maximum allowed size of 15MB."
+                    )
+                buffer.write(chunk)
+    except HTTPException:
+        raise
     except Exception as e:
+        if safe_target_path.exists():
+            os.remove(safe_target_path)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to save file: {str(e)}"
@@ -797,7 +813,7 @@ async def upload_project_file(
     # Create file metadata
     project_file = ProjectFile(
         id=file_id,
-        filename=file.filename,
+        filename=safe_orig_name,
         file_path=file_path,
         uploaded_by=admin["id"],
         file_size=file_size,

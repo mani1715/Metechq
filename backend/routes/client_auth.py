@@ -1,21 +1,35 @@
-from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi import APIRouter, HTTPException, status, Depends, Request
 from schemas.client import ClientLogin, ClientTokenResponse, ClientResponse
 from database import clients_collection
 from auth.password import verify_password
 from auth.jwt import create_access_token
 from auth.client_auth import get_current_client
+from utils.rate_limiter import login_rate_limiter
 from datetime import datetime
 
 router = APIRouter(tags=["client-auth"])
 
 @router.post("/client/auth/login", response_model=ClientTokenResponse)
 @router.post("/client/login", response_model=ClientTokenResponse)
-async def client_login(credentials: ClientLogin):
-    """Client login endpoint"""
-    # Find client by email
-    client_doc = await clients_collection.find_one({"email": credentials.email})
+async def client_login(credentials: ClientLogin, request: Request):
+    """Client login endpoint with brute-force rate limiting"""
+    client_ip = request.client.host if request.client else "unknown"
+    normalized_email = credentials.email.strip().lower()
+    rate_key = f"client_login:{client_ip}:{normalized_email}"
+
+    # Check brute force limit: 5 attempts per 5 minutes
+    allowed, retry_after = login_rate_limiter.check_rate_limit(rate_key, max_attempts=5, window_seconds=300)
+    if not allowed:
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail=f"Too many failed login attempts. Please try again in {retry_after} seconds."
+        )
+
+    # Find client by email (case-insensitive)
+    client_doc = await clients_collection.find_one({"email": {"$regex": f"^{normalized_email}$", "$options": "i"}})
     
     if not client_doc:
+        login_rate_limiter.record_attempt(rate_key)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password"
@@ -30,11 +44,15 @@ async def client_login(credentials: ClientLogin):
     
     # Verify password
     if not verify_password(credentials.password, client_doc['password_hash']):
+        login_rate_limiter.record_attempt(rate_key)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password"
         )
     
+    # Reset attempts on success
+    login_rate_limiter.reset(rate_key)
+
     # Create access token with client type
     access_token = create_access_token(
         data={
@@ -82,5 +100,5 @@ async def get_client_profile(client = Depends(get_current_client)):
 @router.post("/client/auth/logout")
 @router.post("/client/logout")
 async def client_logout():
-    """Client logout endpoint (token invalidation handled on client side)"""
+    """Client logout endpoint"""
     return {"message": "Logged out successfully"}

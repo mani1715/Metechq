@@ -17,8 +17,8 @@ if hasattr(sys.stderr, 'reconfigure'):
     sys.stderr.reconfigure(encoding='utf-8', errors='replace')
 
 class MSPNAdminAPITester:
-    def __init__(self, base_url="http://localhost:8001/api"):
-        self.base_url = base_url
+    def __init__(self, base_url=None):
+        self.base_url = base_url or os.environ.get("BACKEND_URL", "http://127.0.0.1:8002/api")
         self.token = None
         self.tests_run = 0
         self.tests_passed = 0
@@ -90,9 +90,11 @@ class MSPNAdminAPITester:
 
     def test_admin_login(self):
         """Test admin login and get JWT token"""
+        admin_user = os.environ.get("ADMIN_USERNAME", "admin")
+        admin_pass = os.environ.get("ADMIN_PASSWORD", "admin123")
         login_data = {
-            "username": "admin",
-            "password": "admin123"
+            "username": admin_user,
+            "password": admin_pass
         }
         
         success, response = self.run_test(
@@ -102,6 +104,16 @@ class MSPNAdminAPITester:
             200,
             data=login_data
         )
+        if not success:
+            # fallback to legacy default if initialized with old password
+            login_data["password"] = "admin123"
+            success, response = self.run_test(
+                "Admin Login (fallback)",
+                "POST",
+                "/admins/login",
+                200,
+                data=login_data
+            )
         
         if success and 'token' in response:
             self.token = response['token']

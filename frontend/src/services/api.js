@@ -38,29 +38,27 @@ const RETRY_DELAY = 2000; // 2 seconds
 // Helper function to delay
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-// Attach token automatically
+// Attach token intelligently based on request context
 api.interceptors.request.use(
   (config) => {
-    const token =
-      localStorage.getItem('admin_token') ||
-      localStorage.getItem('client_token');
+    const isClientTarget = config.url?.startsWith('/client') || config.url?.includes('/client/');
+    const adminToken = localStorage.getItem('admin_token') || localStorage.getItem('adminToken');
+    const clientToken = localStorage.getItem('client_token');
 
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    if (isClientTarget && clientToken) {
+      config.headers.Authorization = `Bearer ${clientToken}`;
+    } else if (adminToken) {
+      config.headers.Authorization = `Bearer ${adminToken}`;
+    } else if (clientToken) {
+      config.headers.Authorization = `Bearer ${clientToken}`;
     }
-
-    console.log(
-      '[API Request]',
-      config.method?.toUpperCase(),
-      `${config.baseURL}${config.url}`
-    );
 
     return config;
   },
   (error) => Promise.reject(error)
 );
 
-// Global error handling with retry logic
+// Global error handling with retry logic and scoped session expiry
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -68,7 +66,7 @@ api.interceptors.response.use(
     
     // Log the error with more details
     if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
-      console.error(' API Error: timeout of', API_TIMEOUT + 'ms exceeded');
+      console.error('API Error: timeout of', API_TIMEOUT + 'ms exceeded');
       
       // Retry logic for timeout errors on GET requests
       if (config && config.method === 'get' && !config._retry) {
@@ -77,12 +75,11 @@ api.interceptors.response.use(
         
         if (config._retryCount < MAX_RETRIES) {
           config._retryCount++;
-          console.log(` Retrying request (${config._retryCount}/${MAX_RETRIES})...`);
+          console.log(`Retrying request (${config._retryCount}/${MAX_RETRIES})...`);
           await delay(RETRY_DELAY);
           return api(config);
         } else {
           console.error('❌ Max retries reached. Backend might be sleeping or unavailable.');
-          console.log('💡 Tip: On Render free tier, backends sleep after 15 minutes of inactivity.');
         }
       }
     } else {
@@ -90,8 +87,16 @@ api.interceptors.response.use(
     }
 
     if (error.response?.status === 401) {
-      localStorage.clear();
-      window.location.href = '/admin/login';
+      const currentPath = window.location.pathname;
+      if (currentPath.startsWith('/client')) {
+        localStorage.removeItem('client_token');
+        localStorage.removeItem('client_data');
+        window.location.href = '/client/login';
+      } else if (currentPath.startsWith('/admin')) {
+        localStorage.removeItem('admin_token');
+        localStorage.removeItem('admin_user');
+        window.location.href = '/admin/login';
+      }
     }
 
     return Promise.reject(error);

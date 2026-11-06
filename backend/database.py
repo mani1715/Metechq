@@ -89,6 +89,46 @@ client_projects_collection = db["client_projects"]
 bookings_collection = db["bookings"]
 booking_settings_collection = db["booking_settings"]
 
+# ---------------- DATABASE INDEX INITIALIZATION ----------------
+async def init_db_indexes():
+    """Create essential MongoDB indexes asynchronously on startup"""
+    try:
+        logger.info("⚡ Initializing MongoDB indexes...")
+        # Admins
+        await admins_collection.create_index("id", unique=True)
+        await admins_collection.create_index("username", unique=True)
+        
+        # Clients
+        await clients_collection.create_index("id", unique=True)
+        await clients_collection.create_index("email", unique=True)
+        
+        # Client Projects
+        await client_projects_collection.create_index("id", unique=True)
+        await client_projects_collection.create_index("client_id")
+        
+        # Public Projects & Blogs
+        await projects_collection.create_index("id", unique=True)
+        await projects_collection.create_index("slug", unique=True)
+        await blogs_collection.create_index("id", unique=True)
+        await blogs_collection.create_index("slug", unique=True)
+        
+        # Contacts & Conversations
+        await contacts_collection.create_index("id", unique=True)
+        await contacts_collection.create_index("created_at")
+        await conversations_collection.create_index("id", unique=True)
+        await conversations_collection.create_index("customer_email")
+        
+        # Newsletter, Testimonials & Bookings
+        await newsletter_collection.create_index("email", unique=True)
+        await testimonials_collection.create_index("id", unique=True)
+        await bookings_collection.create_index("id", unique=True)
+        await storage_collection.create_index("id", unique=True)
+        await notes_collection.create_index("id", unique=True)
+        
+        logger.info("✅ MongoDB indexes verified successfully")
+    except Exception as e:
+        logger.warning(f"⚠️ Index initialization warning (non-fatal): {e}")
+
 # ---------------- CLEAN SHUTDOWN ----------------
 async def close_db_connection():
     logger.info("🔌 Closing MongoDB connection...")

@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: metechq-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:-change_in_production}
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - metechq-net
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: metechq-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGO_URL=mongodb://${MONGO_ROOT_USER:-admin}:${MONGO_ROOT_PASSWORD:-change_in_production}@mongodb:27017/metechq?authSource=admin
+      - DB_NAME=metechq
+      - JWT_SECRET=${JWT_SECRET}
+      - CLIENT_JWT_SECRET=${CLIENT_JWT_SECRET}
+      - ENVIRONMENT=production
+      - ALLOWED_ORIGINS=http://localhost,http://localhost:3000,http://localhost:80
+      - UPLOAD_DIR=/app/uploads
+      - INIT_SUPERADMIN_PASSWORD=${INIT_SUPERADMIN_PASSWORD}
+    volumes:
+      - backend_uploads:/app/uploads
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - metechq-net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: metechq-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - metechq-net
+
+networks:
+  metechq-net:
+    driver: bridge
+
+volumes:
+  mongo_data:
+  backend_uploads:

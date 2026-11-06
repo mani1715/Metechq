@@ -1,11 +1,12 @@
-from fastapi import APIRouter, HTTPException, status, Depends
-from typing import List
+from fastapi import APIRouter, HTTPException, status, Depends, Header
+from typing import List, Optional
 from schemas.project import ProjectCreate, ProjectUpdate, ProjectResponse
 from database import projects_collection
 from utils import serialize_document, create_slug
 from models import Project
 from datetime import datetime
 from auth.admin_auth import get_current_admin
+from auth.jwt import decode_access_token
 
 router = APIRouter(prefix="/projects", tags=["projects"])
 
@@ -24,19 +25,35 @@ async def get_all_projects(current_admin: dict = Depends(get_current_admin)):
     return [serialize_document(project) for project in projects]
 
 @router.get("/{project_id}", response_model=ProjectResponse)
-async def get_project(project_id: str):
-    """Get a specific project by ID"""
+async def get_project(project_id: str, authorization: Optional[str] = Header(None)):
+    """Get a specific project by ID (private projects require admin authorization)"""
     project = await projects_collection.find_one({"id": project_id})
     if not project:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Project not found"
         )
+    
+    # Check if project is private
+    if project.get("is_private", False):
+        is_admin = False
+        if authorization and authorization.startswith("Bearer "):
+            token = authorization.split()[1]
+            payload = decode_access_token(token)
+            if payload and payload.get("role") in ["admin", "super_admin"]:
+                is_admin = True
+        
+        if not is_admin:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Project not found"
+            )
+            
     return serialize_document(project)
 
 @router.post("/", response_model=ProjectResponse)
-async def create_project(project_data: ProjectCreate):
-    """Create a new project"""
+async def create_project(project_data: ProjectCreate, current_admin: dict = Depends(get_current_admin)):
+    """Create a new project (admin only)"""
     # Auto-generate slug if not provided
     if not project_data.slug:
         project_data.slug = create_slug(project_data.title)
@@ -50,8 +67,12 @@ async def create_project(project_data: ProjectCreate):
     return serialize_document(doc)
 
 @router.put("/{project_id}", response_model=ProjectResponse)
-async def update_project(project_id: str, project_data: ProjectUpdate):
-    """Update a project"""
+async def update_project(
+    project_id: str,
+    project_data: ProjectUpdate,
+    current_admin: dict = Depends(get_current_admin)
+):
+    """Update a project (admin only)"""
     # Check if project exists
     existing = await projects_collection.find_one({"id": project_id})
     if not existing:
@@ -78,8 +99,8 @@ async def update_project(project_id: str, project_data: ProjectUpdate):
     return serialize_document(updated_project)
 
 @router.delete("/{project_id}")
-async def delete_project(project_id: str):
-    """Delete a project"""
+async def delete_project(project_id: str, current_admin: dict = Depends(get_current_admin)):
+    """Delete a project (admin only)"""
     result = await projects_collection.delete_one({"id": project_id})
     if result.deleted_count == 0:
         raise HTTPException(

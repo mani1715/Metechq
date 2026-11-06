@@ -1,7 +1,16 @@
 # Environment files
 .env
+.env.*
 *.env
+**/.env
+**/.env.*
+**/*.env
 !.env.example
+!**/.env.example
+
+# Uploads and temporary files
+backend/uploads/
+uploads/
 
 # Python
 __pycache__/

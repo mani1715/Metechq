@@ -11,24 +11,30 @@ router = APIRouter(prefix="/notes", tags=["notes"])
 # Notes collection
 notes_collection = db['notes']
 
+import re
+
 @router.get("/", response_model=List[NoteResponse])
 async def get_all_notes(
     search: str = None,
+    limit: int = 100,
+    skip: int = 0,
     current_admin: dict = Depends(get_current_admin)
 ):
-    """Get all notes with optional search"""
+    """Get all notes with sanitized search and pagination"""
     query = {}
     
-    # Add search filter if provided
-    if search:
+    # Add sanitized search filter if provided
+    if search and search.strip():
+        safe_search = re.escape(search.strip())
         query["$or"] = [
-            {"name": {"$regex": search, "$options": "i"}},
-            {"content": {"$regex": search, "$options": "i"}},
-            {"tags": {"$regex": search, "$options": "i"}}
+            {"name": {"$regex": safe_search, "$options": "i"}},
+            {"content": {"$regex": safe_search, "$options": "i"}},
+            {"tags": {"$regex": safe_search, "$options": "i"}}
         ]
     
-    # Fetch notes sorted by updated_at
-    notes = await notes_collection.find(query).sort("updated_at", -1).to_list(1000)
+    # Fetch notes sorted by updated_at with limit protection
+    limit_clamped = max(1, min(limit, 500))
+    notes = await notes_collection.find(query).sort("updated_at", -1).skip(skip).to_list(limit_clamped)
     
     result = []
     for note in notes:

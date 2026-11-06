@@ -93,20 +93,34 @@ async def create_message(message_data: ChatMessageCreate):
             detail="Failed to send message. Please try again."
         )
 
+from utils.rate_limiter import public_api_limiter
+from fastapi import Request
+
 @router.get("/user-conversation")
-async def get_user_conversation(email: str, phone: Optional[str] = None):
-    """Get user's conversation by email and phone (public endpoint)"""
+async def get_user_conversation(email: str, request: Request, phone: Optional[str] = None):
+    """Get user's conversation by email and phone with rate limiting"""
     try:
-        if not email:
+        client_ip = request.client.host if request.client else "unknown"
+        allowed, retry_after = public_api_limiter.check_rate_limit(f"chat_fetch:{client_ip}", max_attempts=20, window_seconds=60)
+        if not allowed:
+            raise HTTPException(
+                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                detail=f"Rate limit exceeded. Please wait {retry_after} seconds."
+            )
+
+        if not email or not email.strip():
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Email is required"
             )
         
+        normalized_email = email.strip().lower()
+        public_api_limiter.record_attempt(f"chat_fetch:{client_ip}")
+
         # Find conversation by email
-        query = {"customer_email": email}
-        if phone:
-            query["customer_phone"] = phone
+        query = {"customer_email": {"$regex": f"^{normalized_email}$", "$options": "i"}}
+        if phone and phone.strip():
+            query["customer_phone"] = phone.strip()
         
         conversation = await conversations_collection.find_one(query)
         

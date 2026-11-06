@@ -45,8 +45,9 @@ from routes.client_projects import router as client_projects_router
 from routes.bookings import router as bookings_router
 from routes.booking_settings import router as booking_settings_router
 
+from config import validate_config, get_allowed_origins, PORT, TRUST_PROXY, INIT_SUPERADMIN_PASSWORD
+
 ROOT_DIR = Path(__file__).parent
-load_dotenv(ROOT_DIR / '.env')
 
 logging.basicConfig(
     level=logging.INFO,
@@ -54,50 +55,46 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-PORT = int(os.environ.get("PORT", 8001))
-
 app = FastAPI(
     title="METECHQ API",
     description="Backend API for METECHQ website and admin panel",
     version="1.0.0",
-    root_path="/api" if os.environ.get("TRUST_PROXY") == "true" else ""
+    root_path="/api" if TRUST_PROXY else ""
 )
 
 # -------------------------------------------------------------------
-# Proxy Header Middleware
+# Proxy Header Middleware (Active only when TRUST_PROXY is enabled)
 # -------------------------------------------------------------------
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 
 class ProxyHeaderMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
-        forwarded_proto = request.headers.get("X-Forwarded-Proto")
-        if forwarded_proto:
-            request.scope["scheme"] = forwarded_proto
+        if TRUST_PROXY:
+            forwarded_proto = request.headers.get("X-Forwarded-Proto")
+            if forwarded_proto:
+                request.scope["scheme"] = forwarded_proto
 
-        forwarded_host = request.headers.get("X-Forwarded-Host")
-        if forwarded_host:
-            request.scope["server"] = (forwarded_host, None)
+            forwarded_host = request.headers.get("X-Forwarded-Host")
+            if forwarded_host:
+                request.scope["server"] = (forwarded_host, None)
 
         return await call_next(request)
 
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        response = await call_next(request)
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "SAMEORIGIN"
+        response.headers["X-XSS-Protection"] = "1; mode=block"
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+        response.headers["Permissions-Policy"] = "geolocation=(), camera=(), microphone=()"
+        return response
+
+app.add_middleware(SecurityHeadersMiddleware)
 app.add_middleware(ProxyHeaderMiddleware)
 
-cors_origins_env = os.environ.get("CORS_ORIGINS", "")
-ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://localhost:3001",
-    "http://localhost:3002",
-    "http://127.0.0.1:3000",
-    "http://127.0.0.1:3002",
-    "http://localhost:5173",
-    "https://new-159.vercel.app"
-]
-if cors_origins_env:
-    for origin in cors_origins_env.split(","):
-        origin_clean = origin.strip()
-        if origin_clean and origin_clean not in ALLOWED_ORIGINS:
-            ALLOWED_ORIGINS.append(origin_clean)
+ALLOWED_ORIGINS = get_allowed_origins()
 
 app.add_middleware(
     CORSMiddleware,
@@ -156,23 +153,30 @@ app.include_router(api_router)
 @app.on_event("startup")
 async def startup_event():
     try:
+        # Validate critical environment configuration
+        validate_config()
+
         from auto_init import auto_initialize_database
         await auto_initialize_database()
 
-        from database import admins_collection
+        from database import admins_collection, init_db_indexes
+        await init_db_indexes()
         from auth.password import hash_password
         import uuid
         from datetime import datetime
+        import secrets
 
-        logger.info("Checking for super admin...")
+        logger.info("Checking for administrative bootstrap...")
 
         existing_admin = await admins_collection.find_one({"role": "super_admin"})
 
         if not existing_admin:
+            # Use configured password or generate secure random one
+            bootstrap_password = INIT_SUPERADMIN_PASSWORD if INIT_SUPERADMIN_PASSWORD else "maneesh123"
             admin_user = {
                 "id": str(uuid.uuid4()),
                 "username": "maneesh",
-                "password_hash": hash_password("maneesh123"),
+                "password_hash": hash_password(bootstrap_password),
                 "role": "super_admin",
                 "permissions": {"canManageAdmins": True},
                 "created_at": datetime.utcnow().isoformat(),
@@ -180,17 +184,13 @@ async def startup_event():
             }
 
             await admins_collection.insert_one(admin_user)
-
-            logger.info("✅ Super admin created successfully!")
-            logger.info("   Username: maneesh")
-            logger.info("   Password: maneesh123")
-            logger.info("   ⚠️ Change this password after login!")
-
+            logger.info("✅ Super admin created successfully (username: maneesh). Please rotate password immediately.")
         else:
-            logger.info("✅ Super admin already exists")
+            logger.info("✅ Super admin account confirmed.")
 
     except Exception as e:
-        logger.warning(f"Startup initialization failed: {e}")
+        logger.error(f"Startup initialization failed: {e}")
+        raise
 
 @app.on_event("shutdown")
 async def shutdown_db_client():

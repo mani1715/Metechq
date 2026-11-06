@@ -1,8 +1,8 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 from typing import List
 from schemas.client import ClientCreate, ClientUpdate, ClientResponse
-from database import clients_collection
-from auth.password import hash_password
+from database import clients_collection, client_projects_collection
+from auth.password import hash_password, validate_password_strength
 from auth.admin_auth import get_current_admin
 from models.client import Client
 from datetime import datetime
@@ -20,7 +20,7 @@ async def get_all_clients(admin = Depends(get_current_admin)):
             email=client_doc['email'],
             company=client_doc.get('company'),
             phone=client_doc.get('phone'),
-            is_active=client_doc.get('is_active', True),  # Default to True if not set
+            is_active=client_doc.get('is_active', True),
             created_at=client_doc['created_at'] if isinstance(client_doc['created_at'], str) else client_doc['created_at'].isoformat()
         ))
     return clients
@@ -42,15 +42,33 @@ async def get_client(client_id: str, admin = Depends(get_current_admin)):
         email=client_doc['email'],
         company=client_doc.get('company'),
         phone=client_doc.get('phone'),
-        is_active=client_doc.get('is_active', True),  # Default to True if not set
+        is_active=client_doc.get('is_active', True),
         created_at=client_doc['created_at'] if isinstance(client_doc['created_at'], str) else client_doc['created_at'].isoformat()
     )
 
+@router.get("/{client_id}/projects")
+async def get_client_projects_for_admin(client_id: str, admin = Depends(get_current_admin)):
+    """Get all projects for a specific client (Admin only)"""
+    projects = []
+    async for p in client_projects_collection.find({"client_id": client_id}):
+        p.pop('_id', None)
+        projects.append(p)
+    return projects
+
 @router.post("/", response_model=ClientResponse)
 async def create_client(client_data: ClientCreate, admin = Depends(get_current_admin)):
-    """Create a new client (Admin only)"""
+    """Create a new client with password validation (Admin only)"""
+    # Validate password strength
+    valid_pw, pw_err = validate_password_strength(client_data.password)
+    if not valid_pw:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=pw_err
+        )
+
     # Check if email already exists
-    existing_client = await clients_collection.find_one({"email": client_data.email})
+    normalized_email = client_data.email.strip().lower()
+    existing_client = await clients_collection.find_one({"email": normalized_email})
     if existing_client:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -59,11 +77,11 @@ async def create_client(client_data: ClientCreate, admin = Depends(get_current_a
     
     # Create client
     client = Client(
-        name=client_data.name,
-        email=client_data.email,
+        name=client_data.name.strip(),
+        email=normalized_email,
         password_hash=hash_password(client_data.password),
-        company=client_data.company,
-        phone=client_data.phone,
+        company=client_data.company.strip() if client_data.company else None,
+        phone=client_data.phone.strip() if client_data.phone else None,
         is_active=client_data.is_active,
         created_by=admin["id"]
     )
@@ -97,22 +115,28 @@ async def update_client(client_id: str, client_data: ClientUpdate, admin = Depen
     # Prepare update data
     update_data = {}
     if client_data.name is not None:
-        update_data['name'] = client_data.name
+        update_data['name'] = client_data.name.strip()
     if client_data.email is not None:
-        # Check if new email already exists
-        existing = await clients_collection.find_one({"email": client_data.email, "id": {"$ne": client_id}})
+        normalized_email = client_data.email.strip().lower()
+        existing = await clients_collection.find_one({"email": normalized_email, "id": {"$ne": client_id}})
         if existing:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Email already in use"
             )
-        update_data['email'] = client_data.email
+        update_data['email'] = normalized_email
     if client_data.password is not None:
+        valid_pw, pw_err = validate_password_strength(client_data.password)
+        if not valid_pw:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=pw_err
+            )
         update_data['password_hash'] = hash_password(client_data.password)
     if client_data.company is not None:
-        update_data['company'] = client_data.company
+        update_data['company'] = client_data.company.strip()
     if client_data.phone is not None:
-        update_data['phone'] = client_data.phone
+        update_data['phone'] = client_data.phone.strip()
     if client_data.is_active is not None:
         update_data['is_active'] = client_data.is_active
     
@@ -132,7 +156,7 @@ async def update_client(client_id: str, client_data: ClientUpdate, admin = Depen
         email=updated_client['email'],
         company=updated_client.get('company'),
         phone=updated_client.get('phone'),
-        is_active=updated_client.get('is_active', True),  # Default to True if not set
+        is_active=updated_client.get('is_active', True),
         created_at=updated_client['created_at'] if isinstance(updated_client['created_at'], str) else updated_client['created_at'].isoformat()
     )
 
