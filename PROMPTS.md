@@ -2023,3 +2023,10 @@ ERROR: Could not open requirements file: [Errno 2] No such file or directory: 'r
 python -m uvicorn server:app --host 127.0.0.1 --port 8002 --reload
 No module named uvicorn
 ```
+
+
+### C36 — Clarify exact workspace and project directories
+
+```text
+can you please give me the path of these project
+```
