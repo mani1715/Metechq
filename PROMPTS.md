@@ -1935,3 +1935,10 @@ main.e8ea29fa.js:2 API Error: Network Error
 main.e8ea29fa.js:2 Error fetching projects: AxiosError: Network Error
 these are the errors that i was getting in the console and when i try to open our work then there is no any works
 ```
+
+
+### C26 — Provide local run commands and populate complete portfolio catalog
+
+```text
+give me the commands for running the project and also in portifolio all projects are not coming
+```
