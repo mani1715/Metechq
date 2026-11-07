@@ -264,9 +264,9 @@ export const adminData = {
       github: 'https://github.com/metechq'
     },
     theme: {
-      primaryColor: '#7C5CFF',
-      secondaryColor: '#D4AF37',
-      darkColor: '#1C2A3A'
+      primaryColor: '#a34e1d',
+      secondaryColor: '#c5792c',
+      darkColor: '#352a21'
     }
   }
 };

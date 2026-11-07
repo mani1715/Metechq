@@ -23,8 +23,8 @@ import { Progress } from '../../components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
 import { Checkbox } from '../../components/ui/checkbox';
 import { toast } from 'sonner';
-import { 
-  Plus, Edit, Trash2, Upload, Download, FileText, X, Target, ListChecks, 
+import {
+  Plus, Edit, Trash2, Upload, Download, FileText, X, Target, ListChecks,
   Users, DollarSign, Activity, MessageCircle, Send, Calendar, CheckCircle2,
   User, Clock, Search, Filter, Download as DownloadIcon, BarChart3, Bell,
   RefreshCw, Archive, Copy, Eye, TrendingUp, AlertCircle
@@ -129,7 +129,7 @@ export default function EnhancedClientProjectsManager() {
 
   const fetchChatMessages = async () => {
     if (!selectedProject) return;
-    
+
     try {
       const messages = await clientService.getAdminChatMessages(selectedProject.id);
       setChatMessages(messages);
@@ -179,7 +179,7 @@ export default function EnhancedClientProjectsManager() {
         await clientService.createClientProject(formData);
         toast.success('Project created successfully');
       }
-      
+
       fetchProjects();
       handleCloseDialog();
     } catch (error) {
@@ -235,7 +235,7 @@ export default function EnhancedClientProjectsManager() {
     }
 
     try {
-      await Promise.all(selectedProjects.map(id => 
+      await Promise.all(selectedProjects.map(id =>
         clientService.updateClientProject(id, { status: newStatus })
       ));
       toast.success(`${selectedProjects.length} project(s) updated successfully`);
@@ -393,7 +393,7 @@ export default function EnhancedClientProjectsManager() {
 
   const handleDeleteMilestone = async (milestoneId) => {
     if (!window.confirm('Are you sure you want to delete this milestone?')) return;
-    
+
     try {
       await clientService.deleteMilestone(selectedProject.id, milestoneId);
       toast.success('Milestone deleted successfully');
@@ -431,7 +431,7 @@ export default function EnhancedClientProjectsManager() {
 
   const handleDeleteTask = async (taskId) => {
     if (!window.confirm('Are you sure you want to delete this task?')) return;
-    
+
     try {
       await clientService.deleteTask(selectedProject.id, taskId);
       toast.success('Task deleted successfully');
@@ -457,7 +457,7 @@ export default function EnhancedClientProjectsManager() {
 
   const handleRemoveTeamMember = async (adminId) => {
     if (!window.confirm('Are you sure you want to remove this team member?')) return;
-    
+
     try {
       await clientService.removeTeamMember(selectedProject.id, adminId);
       toast.success('Team member removed successfully');
@@ -484,8 +484,8 @@ export default function EnhancedClientProjectsManager() {
   const getStatusColor = (status) => {
     const colors = {
       pending: 'bg-yellow-100 text-yellow-800',
-      in_progress: 'bg-blue-100 text-blue-800',
-      review: 'bg-purple-100 text-purple-800',
+      in_progress: 'bg-brand-100 text-brand-800',
+      review: 'bg-brand-100 text-brand-800',
       completed: 'bg-green-100 text-green-800'
     };
     return colors[status] || 'bg-gray-100 text-gray-800';
@@ -504,7 +504,7 @@ export default function EnhancedClientProjectsManager() {
   const getPriorityColor = (priority) => {
     const colors = {
       low: 'bg-gray-100 text-gray-700',
-      medium: 'bg-blue-100 text-blue-700',
+      medium: 'bg-brand-100 text-brand-700',
       high: 'bg-orange-100 text-orange-700',
       urgent: 'bg-red-100 text-red-700'
     };
@@ -517,8 +517,8 @@ export default function EnhancedClientProjectsManager() {
   };
 
   const toggleProjectSelection = (projectId) => {
-    setSelectedProjects(prev => 
-      prev.includes(projectId) 
+    setSelectedProjects(prev =>
+      prev.includes(projectId)
         ? prev.filter(id => id !== projectId)
         : [...prev, projectId]
     );
@@ -539,7 +539,7 @@ export default function EnhancedClientProjectsManager() {
     const matchesStatus = statusFilter === 'all' || project.status === statusFilter;
     const matchesPriority = priorityFilter === 'all' || project.priority === priorityFilter;
     const matchesClient = clientFilter === 'all' || project.client_id === clientFilter;
-    
+
     return matchesSearch && matchesStatus && matchesPriority && matchesClient;
   });
 
@@ -556,7 +556,7 @@ export default function EnhancedClientProjectsManager() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-600"></div>
       </div>
     );
   }
@@ -618,21 +618,21 @@ export default function EnhancedClientProjectsManager() {
             <p className="text-xs text-yellow-700 mb-1">Pending</p>
             <p className="text-2xl font-bold text-yellow-700">{stats.pending}</p>
           </div>
-          <div className="bg-blue-50 border border-blue-200 rounded-lg shadow p-4">
-            <p className="text-xs text-blue-700 mb-1">In Progress</p>
-            <p className="text-2xl font-bold text-blue-700">{stats.in_progress}</p>
+          <div className="bg-brand-50 border border-brand-200 rounded-lg shadow p-4">
+            <p className="text-xs text-brand-700 mb-1">In Progress</p>
+            <p className="text-2xl font-bold text-brand-700">{stats.in_progress}</p>
           </div>
           <div className="bg-green-50 border border-green-200 rounded-lg shadow p-4">
             <p className="text-xs text-green-700 mb-1">Completed</p>
             <p className="text-2xl font-bold text-green-700">{stats.completed}</p>
           </div>
-          <div className="bg-purple-50 border border-purple-200 rounded-lg shadow p-4">
-            <p className="text-xs text-purple-700 mb-1">Avg Progress</p>
-            <p className="text-2xl font-bold text-purple-700">{stats.avgProgress}%</p>
+          <div className="bg-brand-50 border border-brand-200 rounded-lg shadow p-4">
+            <p className="text-xs text-brand-700 mb-1">Avg Progress</p>
+            <p className="text-2xl font-bold text-brand-700">{stats.avgProgress}%</p>
           </div>
-          <div className="bg-indigo-50 border border-indigo-200 rounded-lg shadow p-4">
-            <p className="text-xs text-indigo-700 mb-1">Unread Msgs</p>
-            <p className="text-2xl font-bold text-indigo-700">{stats.unreadMessages}</p>
+          <div className="bg-brand-50 border border-brand-200 rounded-lg shadow p-4">
+            <p className="text-xs text-brand-700 mb-1">Unread Msgs</p>
+            <p className="text-2xl font-bold text-brand-700">{stats.unreadMessages}</p>
           </div>
         </div>
       )}
@@ -691,10 +691,10 @@ export default function EnhancedClientProjectsManager() {
 
       {/* Bulk Actions */}
       {selectedProjects.length > 0 && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 flex items-center justify-between">
+        <div className="bg-brand-50 border border-brand-200 rounded-lg p-4 mb-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <CheckCircle2 className="w-5 h-5 text-blue-600" />
-            <span className="text-blue-900 font-semibold">
+            <CheckCircle2 className="w-5 h-5 text-brand-600" />
+            <span className="text-brand-900 font-semibold">
               {selectedProjects.length} project(s) selected
             </span>
           </div>
@@ -738,7 +738,7 @@ export default function EnhancedClientProjectsManager() {
                   <div
                     key={project.id}
                     className={`p-4 cursor-pointer hover:bg-gray-50 transition-colors ${
-                      selectedProject?.id === project.id ? 'bg-blue-50 border-l-4 border-blue-600' : ''
+                      selectedProject?.id === project.id ? 'bg-brand-50 border-l-4 border-brand-600' : ''
                     }`}
                     data-testid={`project-item-${project.id}`}
                   >
@@ -748,7 +748,7 @@ export default function EnhancedClientProjectsManager() {
                         onCheckedChange={() => toggleProjectSelection(project.id)}
                         onClick={(e) => e.stopPropagation()}
                       />
-                      <div 
+                      <div
                         className="flex-1 min-w-0"
                         onClick={() => {
                           setSelectedProject(project);

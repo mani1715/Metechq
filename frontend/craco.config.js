@@ -15,6 +15,17 @@ const config = {
 const cracoConfig = {
   reactScriptsVersion: "react-scripts",
 
+  jest: {
+    configure: (jestConfig) => ({
+      ...jestConfig,
+      moduleNameMapper: {
+        ...jestConfig.moduleNameMapper,
+        '^@/(.*)$': '<rootDir>/src/$1',
+        '^axios$': '<rootDir>/node_modules/axios/dist/browser/axios.cjs',
+      },
+    }),
+  },
+
   webpack: {
     alias: {
       "@": path.resolve(__dirname, "src"),

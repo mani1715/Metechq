@@ -12,7 +12,7 @@ const AboutManager = () => {
 
   // Icon options for values and achievements
   const iconOptions = ['Award', 'Target', 'Zap', 'Shield', 'Briefcase', 'Users', 'TrendingUp', 'Layers'];
-  
+
   const iconMap = {
     Award: Award,
     Target: Target,
@@ -44,7 +44,7 @@ const AboutManager = () => {
   const saveContent = async () => {
     try {
       setSaving(true);
-      
+
       // Ensure all values and achievements have IDs (backend will generate UUIDs for missing ones)
       const contentToSave = {
         ...aboutContent,
@@ -57,16 +57,16 @@ const AboutManager = () => {
           id: a.id || null  // Backend will generate UUID if null
         }))
       };
-      
+
       const response = await aboutService.updateAboutContent(contentToSave);
-      
+
       // Update local state with server response (includes generated UUIDs)
       setAboutContent(response);
       toast.success('Content saved successfully! Changes will appear on both About and Home pages.');
     } catch (error) {
       console.error('Error saving content:', error);
       const errorMessage = error.response?.data?.detail || error.message || 'Unknown error occurred';
-      
+
       // Check if it's an auth error
       if (error.response?.status === 401) {
         toast.error('Authentication failed. Your session may have expired. Please login again.');
@@ -179,25 +179,25 @@ const AboutManager = () => {
   if (!aboutContent) {
     return (
       <div className="max-w-2xl mx-auto" style={{ padding: '60px 20px', textAlign: 'center' }}>
-        <div style={{ 
-          background: 'white', 
-          padding: '48px', 
-          borderRadius: '16px', 
-          boxShadow: '0 4px 6px rgba(0,0,0,0.07)' 
+        <div style={{
+          background: 'white',
+          padding: '48px',
+          borderRadius: '16px',
+          boxShadow: '0 4px 6px rgba(0,0,0,0.07)'
         }}>
-          <div style={{ 
-            width: '80px', 
-            height: '80px', 
-            background: '#F3F4F6', 
-            borderRadius: '50%', 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center', 
-            margin: '0 auto 24px' 
+          <div style={{
+            width: '80px',
+            height: '80px',
+            background: '#F3F4F6',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto 24px'
           }}>
-            <Award size={40} color="#7C5CFF" />
+            <Award size={40} color="#a34e1d" />
           </div>
-          <h2 style={{ fontSize: '24px', fontWeight: '600', color: '#1C2A3A', marginBottom: '12px' }}>
+          <h2 style={{ fontSize: '24px', fontWeight: '600', color: '#352a21', marginBottom: '12px' }}>
             No About Content Found
           </h2>
           <p style={{ fontSize: '16px', color: '#6B7280', marginBottom: '32px', lineHeight: '1.6' }}>
@@ -218,8 +218,8 @@ const AboutManager = () => {
               }
             }}
             className="admin-btn admin-btn-primary"
-            style={{ 
-              padding: '14px 32px', 
+            style={{
+              padding: '14px 32px',
               fontSize: '16px',
               fontWeight: '500',
               display: 'inline-flex',
@@ -238,8 +238,8 @@ const AboutManager = () => {
   return (
     <div className="admin-page">
       {/* Header with Gradient Background */}
-      <div style={{ 
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      <div style={{
+        background: 'linear-gradient(135deg, #5b4632 0%, #a34e1d 100%)',
         color: 'white',
         padding: '32px',
         borderRadius: '16px',
@@ -251,8 +251,8 @@ const AboutManager = () => {
         gap: '16px'
       }}>
         <div style={{ flex: '1', minWidth: '280px' }}>
-          <h1 style={{ 
-            fontSize: '32px', 
+          <h1 style={{
+            fontSize: '32px',
             fontWeight: '700',
             margin: '0 0 8px 0',
             letterSpacing: '-0.02em'
@@ -263,19 +263,19 @@ const AboutManager = () => {
             Manage all About page content - Hero, Story, Values, Tech Stack, Numbers, Founder
           </p>
         </div>
-        <button 
-          onClick={saveContent} 
+        <button
+          onClick={saveContent}
           disabled={saving}
           className="admin-btn admin-btn-primary"
-          style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
+          style={{
+            display: 'flex',
+            alignItems: 'center',
             gap: '8px',
             padding: '14px 28px',
             fontSize: '16px',
             fontWeight: '600',
             background: 'white',
-            color: '#667eea',
+            color: '#5b4632',
             border: 'none',
             borderRadius: '10px',
             boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
@@ -291,15 +291,15 @@ const AboutManager = () => {
       </div>
 
       {/* Tabs */}
-      <div style={{ 
+      <div style={{
         background: 'white',
         borderRadius: '12px 12px 0 0',
         boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
         overflow: 'hidden',
         marginBottom: '0'
       }}>
-        <div style={{ 
-          display: 'flex', 
+        <div style={{
+          display: 'flex',
           gap: '0',
           overflowX: 'auto',
           WebkitOverflowScrolling: 'touch',
@@ -311,7 +311,7 @@ const AboutManager = () => {
               onClick={() => setActiveTab(tab)}
               style={{
                 padding: '16px 24px',
-                background: activeTab === tab ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' : 'white',
+                background: activeTab === tab ? 'linear-gradient(135deg, #5b4632 0%, #a34e1d 100%)' : 'white',
                 border: 'none',
                 borderBottom: activeTab === tab ? 'none' : '2px solid transparent',
                 color: activeTab === tab ? 'white' : '#6B7280',
@@ -342,25 +342,25 @@ const AboutManager = () => {
       </div>
 
       {/* Content Sections */}
-      <div style={{ 
-        background: 'white', 
-        padding: '32px', 
-        borderRadius: '0 0 12px 12px', 
+      <div style={{
+        background: 'white',
+        padding: '32px',
+        borderRadius: '0 0 12px 12px',
         boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
         minHeight: '400px'
       }}>
-        
+
         {/* Hero Section */}
         {activeTab === 'hero' && (
           <div>
-            <div style={{ 
-              marginBottom: '32px', 
-              paddingBottom: '20px', 
-              borderBottom: '2px solid #F3F4F6' 
+            <div style={{
+              marginBottom: '32px',
+              paddingBottom: '20px',
+              borderBottom: '2px solid #F3F4F6'
             }}>
-              <h2 style={{ 
-                fontSize: '24px', 
-                fontWeight: '700', 
+              <h2 style={{
+                fontSize: '24px',
+                fontWeight: '700',
                 color: '#1F2937',
                 margin: '0 0 8px 0'
               }}>
@@ -370,12 +370,12 @@ const AboutManager = () => {
                 The main banner area that appears at the top of the About page
               </p>
             </div>
-            
+
             <div style={{ display: 'grid', gap: '24px', maxWidth: '800px' }}>
               <div>
-                <label style={{ 
-                  display: 'block', 
-                  marginBottom: '8px', 
+                <label style={{
+                  display: 'block',
+                  marginBottom: '8px',
                   fontWeight: '600',
                   color: '#374151',
                   fontSize: '14px'
@@ -400,9 +400,9 @@ const AboutManager = () => {
               </div>
 
               <div>
-                <label style={{ 
-                  display: 'block', 
-                  marginBottom: '8px', 
+                <label style={{
+                  display: 'block',
+                  marginBottom: '8px',
                   fontWeight: '600',
                   color: '#374151',
                   fontSize: '14px'
@@ -427,9 +427,9 @@ const AboutManager = () => {
               </div>
 
               <div>
-                <label style={{ 
-                  display: 'block', 
-                  marginBottom: '8px', 
+                <label style={{
+                  display: 'block',
+                  marginBottom: '8px',
                   fontWeight: '600',
                   color: '#374151',
                   fontSize: '14px'
@@ -454,9 +454,9 @@ const AboutManager = () => {
               </div>
 
               <div>
-                <label style={{ 
-                  display: 'block', 
-                  marginBottom: '8px', 
+                <label style={{
+                  display: 'block',
+                  marginBottom: '8px',
                   fontWeight: '600',
                   color: '#374151',
                   fontSize: '14px'
@@ -489,7 +489,7 @@ const AboutManager = () => {
         {activeTab === 'story' && (
           <div>
             <h2 style={{ fontSize: '24px', fontWeight: '600', marginBottom: '24px' }}>Story Section</h2>
-            
+
             <div style={{ marginBottom: '20px' }}>
               <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Story Title</label>
               <input
@@ -561,7 +561,7 @@ const AboutManager = () => {
         {activeTab === 'values' && (
           <div>
             <h2 style={{ fontSize: '24px', fontWeight: '600', marginBottom: '24px' }}>Principles That Drive Us</h2>
-            
+
             <div style={{ marginBottom: '20px' }}>
               <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Section Badge</label>
               <input
@@ -597,16 +597,16 @@ const AboutManager = () => {
               {aboutContent.values?.map((value, index) => {
                 const IconComponent = iconMap[value.icon] || Award;
                 return (
-                  <div key={value.id || `value-${index}`} style={{ 
-                    border: '1px solid #E5E7EB', 
-                    borderRadius: '8px', 
-                    padding: '20px', 
+                  <div key={value.id || `value-${index}`} style={{
+                    border: '1px solid #E5E7EB',
+                    borderRadius: '8px',
+                    padding: '20px',
                     marginBottom: '16px',
                     background: '#F9FAFB'
                   }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <IconComponent size={24} color="#7C5CFF" />
+                        <IconComponent size={24} color="#a34e1d" />
                         <h4 style={{ margin: 0, fontSize: '16px', fontWeight: '600' }}>{value.title}</h4>
                       </div>
                       <button
@@ -668,7 +668,7 @@ const AboutManager = () => {
           <div>
             <h2 style={{ fontSize: '24px', fontWeight: '600', marginBottom: '24px' }}>Technology Stack</h2>
             <p style={{ color: '#6B7280', marginBottom: '24px' }}>This section displays your core expertise list from the Story section.</p>
-            <p style={{ fontStyle: 'italic', color: '#7C5CFF' }}>✓ Automatically displays technologies from "Core Expertise" in Story tab</p>
+            <p style={{ fontStyle: 'italic', color: '#a34e1d' }}>✓ Automatically displays technologies from "Core Expertise" in Story tab</p>
           </div>
         )}
 
@@ -676,7 +676,7 @@ const AboutManager = () => {
         {activeTab === 'numbers' && (
           <div>
             <h2 style={{ fontSize: '24px', fontWeight: '600', marginBottom: '24px' }}>Numbers That Speak</h2>
-            
+
             <div style={{ marginBottom: '20px' }}>
               <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Section Badge</label>
               <input
@@ -702,16 +702,16 @@ const AboutManager = () => {
               {aboutContent.achievements?.map((achievement, index) => {
                 const IconComponent = iconMap[achievement.icon] || Award;
                 return (
-                  <div key={achievement.id || `achievement-${index}`} style={{ 
-                    border: '1px solid #E5E7EB', 
-                    borderRadius: '8px', 
-                    padding: '20px', 
+                  <div key={achievement.id || `achievement-${index}`} style={{
+                    border: '1px solid #E5E7EB',
+                    borderRadius: '8px',
+                    padding: '20px',
                     marginBottom: '16px',
                     background: '#F9FAFB'
                   }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <IconComponent size={24} color="#7C5CFF" />
+                        <IconComponent size={24} color="#a34e1d" />
                         <h4 style={{ margin: 0, fontSize: '16px', fontWeight: '600' }}>{achievement.value} - {achievement.label}</h4>
                       </div>
                       <button
@@ -773,7 +773,7 @@ const AboutManager = () => {
         {activeTab === 'founder' && (
           <div>
             <h2 style={{ fontSize: '24px', fontWeight: '600', marginBottom: '24px' }}>The Mind Behind METECHQ</h2>
-            
+
             <div style={{ marginBottom: '20px' }}>
               <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>Section Badge</label>
               <input
@@ -851,10 +851,10 @@ const AboutManager = () => {
               </button>
             </div>
 
-            <div style={{ 
-              padding: '20px', 
-              background: '#F0FDF4', 
-              borderRadius: '8px', 
+            <div style={{
+              padding: '20px',
+              background: '#F0FDF4',
+              borderRadius: '8px',
               border: '1px solid #86EFAC',
               marginTop: '24px'
             }}>
@@ -872,7 +872,7 @@ const AboutManager = () => {
         {activeTab === 'cta' && (
           <div>
             <h2 style={{ fontSize: '24px', fontWeight: '600', marginBottom: '24px' }}>Call to Action Section</h2>
-            
+
             <div style={{ marginBottom: '20px' }}>
               <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>CTA Title</label>
               <input
@@ -919,8 +919,8 @@ const AboutManager = () => {
 
       {/* Save Button (Bottom) */}
       <div style={{ marginTop: '32px', textAlign: 'right' }}>
-        <button 
-          onClick={saveContent} 
+        <button
+          onClick={saveContent}
           disabled={saving}
           className="admin-btn admin-btn-primary"
           style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 24px' }}

@@ -1,3 +1,4 @@
+from auth.admin_auth import require_permission
 from fastapi import APIRouter, HTTPException, status, Depends
 from typing import Optional
 from schemas.about import AboutContentUpdate, AboutContentResponse
@@ -29,7 +30,7 @@ async def get_about_content():
 @router.put("/", response_model=AboutContentResponse)
 async def update_about_content(
     content: AboutContentUpdate,
-    current_admin: dict = Depends(get_current_admin)
+    current_admin: dict = Depends(require_permission("canManageAbout"))
 ):
     """Update About page content (admin only)"""
     
@@ -88,7 +89,7 @@ async def update_about_content(
         )
 
 @router.post("/init")
-async def initialize_about_content(current_admin: dict = Depends(get_current_admin)):
+async def initialize_about_content(current_admin: dict = Depends(require_permission("canManageAbout"))):
     """Initialize About content with defaults (admin only)"""
     existing = await about_collection.find_one({})
     if existing:

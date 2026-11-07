@@ -1,3 +1,4 @@
+from auth.admin_auth import require_permission
 from fastapi import APIRouter, HTTPException, status, Depends
 from schemas.settings import SettingsUpdate, SettingsResponse
 from database import settings_collection
@@ -28,7 +29,7 @@ async def get_settings():
     return serialize_document(settings)
 
 @router.put("/", response_model=SettingsResponse)
-async def update_settings(settings_data: SettingsUpdate, admin: dict = Depends(get_current_admin)):
+async def update_settings(settings_data: SettingsUpdate, admin: dict = Depends(require_permission("canManageSettings"))):
     """Update global settings (admin only)"""
     existing = await settings_collection.find_one({"id": "global_settings"})
     

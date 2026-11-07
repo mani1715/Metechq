@@ -24,28 +24,28 @@ export const services = [
     title: 'Custom Website Development',
     description: 'Tailored web solutions built with modern technologies to meet your unique business needs.',
     icon: 'Code',
-    color: '#e9d5ff'
+    color: '#f4d9a0'
   },
   {
     id: 2,
     title: 'E-commerce Solutions',
     description: 'Complete online store development with secure payment integration and inventory management.',
     icon: 'ShoppingCart',
-    color: '#ddd6fe'
+    color: '#efdab8'
   },
   {
     id: 3,
     title: 'Full-Stack Development',
     description: 'End-to-end application development using cutting-edge frontend and backend technologies.',
     icon: 'Layers',
-    color: '#e9d5ff'
+    color: '#f4d9a0'
   },
   {
     id: 4,
     title: 'UI/UX Design',
     description: 'Beautiful, intuitive interfaces designed to enhance user experience and drive engagement.',
     icon: 'Palette',
-    color: '#ddd6fe'
+    color: '#efdab8'
   }
 ];
 
@@ -199,7 +199,7 @@ export const projects = [
     category: 'E-commerce',
     image: 'https://images.unsplash.com/photo-1557821552-17105176677c?w=800&h=600&fit=crop',
     technologies: ['React', 'Node.js', 'MongoDB', 'Stripe'],
-    color: '#e9d5ff',
+    color: '#f4d9a0',
     featured: true
   },
   {
@@ -209,7 +209,7 @@ export const projects = [
     category: 'Website Development',
     image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop',
     technologies: ['React', 'FastAPI', 'PostgreSQL'],
-    color: '#ddd6fe',
+    color: '#efdab8',
     featured: true
   },
   {
@@ -219,7 +219,7 @@ export const projects = [
     category: 'Full-Stack',
     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop',
     technologies: ['React', 'Python', 'MongoDB', 'D3.js'],
-    color: '#e9d5ff',
+    color: '#f4d9a0',
     featured: false
   },
   {
@@ -229,7 +229,7 @@ export const projects = [
     category: 'UI/UX Design',
     image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&h=600&fit=crop',
     technologies: ['Figma', 'React Native', 'TypeScript'],
-    color: '#ddd6fe',
+    color: '#efdab8',
     featured: false
   }
 ];
@@ -285,7 +285,7 @@ export const contactConfig = {
       { label: 'Contact', path: '/contact' }
     ]
   },
-  
+
   form: {
     title: 'Send Us a Message',
     subtitle: 'Fill out the form below and we\'ll get back to you within 24 hours',
@@ -366,7 +366,7 @@ export const contactConfig = {
       }
     }
   },
-  
+
   contactInfo: {
     title: 'Contact Information',
     subtitle: 'Feel free to reach out through any of these channels. We\'re here to help!',
@@ -403,7 +403,7 @@ export const contactConfig = {
       }
     ]
   },
-  
+
   businessHours: {
     title: 'Business Hours',
     schedule: [
@@ -414,7 +414,7 @@ export const contactConfig = {
     timezone: 'IST (Indian Standard Time)',
     note: 'We respond to all inquiries within 24 business hours'
   },
-  
+
   faq: {
     title: 'Frequently Asked Questions',
     subtitle: 'Quick answers to common questions about working with us',
@@ -446,7 +446,7 @@ export const contactConfig = {
       }
     ]
   },
-  
+
   cta: {
     title: 'Ready to Start Your Project?',
     subtitle: 'Let\'s turn your vision into reality',

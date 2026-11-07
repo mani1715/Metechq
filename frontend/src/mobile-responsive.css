@@ -200,8 +200,8 @@ textarea {
     padding: 14px 0;
     font-size: 16px;
     font-weight: 500;
-    color: #1e293b;
-    border-bottom: 1px solid #e2e8f0;
+    color: #403126;
+    border-bottom: 1px solid #e4d8c8;
     transition: all 0.2s ease;
   }
 
@@ -210,7 +210,7 @@ textarea {
   }
 
   .mobile-nav-link.active {
-    color: #8b5cf6;
+    color: #a34e1d;
     font-weight: 600;
   }
 

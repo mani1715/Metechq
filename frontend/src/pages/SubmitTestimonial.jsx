@@ -11,7 +11,7 @@ const SubmitTestimonial = () => {
     message: '',
     rating: 5
   });
-  
+
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
@@ -92,19 +92,19 @@ const SubmitTestimonial = () => {
           </div>
           <h2 className="text-3xl font-bold text-white mb-4">Thank You!</h2>
           <p className="text-gray-300 mb-6">
-            Your testimonial has been submitted successfully and is now pending review. 
+            Your testimonial has been submitted successfully and is now pending review.
             We appreciate you taking the time to share your experience!
           </p>
           <button
             onClick={() => setSubmitted(false)}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
+            className="bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
           >
             Submit Another Testimonial
           </button>
           <div className="mt-4">
             <a
               href="/"
-              className="text-blue-400 hover:text-blue-300 transition-colors duration-200"
+              className="text-brand-400 hover:text-brand-300 transition-colors duration-200"
             >
               Back to Home
             </a>
@@ -142,7 +142,7 @@ const SubmitTestimonial = () => {
                 value={formData.name}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
                 placeholder="John Doe"
               />
             </div>
@@ -159,7 +159,7 @@ const SubmitTestimonial = () => {
                   name="role"
                   value={formData.role}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
                   placeholder="CEO, Marketing Director, etc."
                 />
               </div>
@@ -174,7 +174,7 @@ const SubmitTestimonial = () => {
                   name="company"
                   value={formData.company}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
                   placeholder="Your Company"
                 />
               </div>
@@ -191,7 +191,7 @@ const SubmitTestimonial = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
                 placeholder="john@example.com"
               />
               <p className="text-xs text-gray-500 mt-1">
@@ -241,7 +241,7 @@ const SubmitTestimonial = () => {
                 onChange={handleChange}
                 required
                 rows="6"
-                className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
+                className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all resize-none"
                 placeholder="Share your experience working with us... (minimum 10 characters)"
               />
               <p className="text-xs text-gray-500 mt-1">
@@ -263,7 +263,7 @@ const SubmitTestimonial = () => {
               className={`w-full flex items-center justify-center space-x-2 py-4 px-6 rounded-lg font-semibold text-lg transition-all duration-200 ${
                 loading
                   ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'
+                  : 'bg-gradient-to-r from-brand-600 to-brand-600 hover:from-brand-700 hover:to-brand-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'
               }`}
             >
               {loading ? (
@@ -289,7 +289,7 @@ const SubmitTestimonial = () => {
         <div className="text-center mt-8">
           <a
             href="/"
-            className="text-blue-400 hover:text-blue-300 transition-colors duration-200"
+            className="text-brand-400 hover:text-brand-300 transition-colors duration-200"
           >
             ← Back to Home
           </a>

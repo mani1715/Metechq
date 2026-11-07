@@ -9,7 +9,7 @@ MAX_FILE_SIZE_BYTES = 15 * 1024 * 1024  # 15 MB
 
 ALLOWED_EXTENSIONS: Set[str] = {
     # Images
-    ".jpg", ".jpeg", ".png", ".webp", ".gif", ".ico", ".svg",
+    ".jpg", ".jpeg", ".png", ".webp", ".gif", ".ico",
     # Documents
     ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".txt", ".csv",
     # Archives
@@ -67,6 +67,15 @@ def validate_file_security(file: UploadFile, max_size: int = MAX_FILE_SIZE_BYTES
             detail=f"File extension '{ext}' is not permitted. Allowed: {', '.join(sorted(ALLOWED_EXTENSIONS))}"
         )
 
+    # Bound the whole upload, not only the signature sample.
+    file.file.seek(0, os.SEEK_END)
+    size = file.file.tell()
+    file.file.seek(0)
+    if size > max_size:
+        raise HTTPException(status_code=413, detail="File exceeds the upload size limit.")
+    if size == 0:
+        raise HTTPException(status_code=400, detail="Empty files are not permitted.")
+
     # Read header sample for magic number check
     try:
         header_sample = file.file.read(512)
@@ -77,23 +86,16 @@ def validate_file_security(file: UploadFile, max_size: int = MAX_FILE_SIZE_BYTES
             detail=f"Unable to read file content: {str(e)}"
         )
 
-    # Validate SVG separately to check for script tags
-    if ext == ".svg":
-        content_sample = header_sample.decode('utf-8', errors='ignore').lower()
-        if "<script" in content_sample or "javascript:" in content_sample or "onload=" in content_sample:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="SVG file contains forbidden script or active content."
-            )
-
-    # Magic byte verification for common binary formats
-    for magic, matched_exts in MAGIC_SIGNATURES.items():
-        if ext in matched_exts and not header_sample.startswith(magic):
-            # Header does not match declared extension signature
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"File signature does not match declared extension '{ext}'."
-            )
+    # Accept any valid signature for an extension (GIF has two valid headers).
+    signatures = [magic for magic, extensions in MAGIC_SIGNATURES.items() if ext in extensions]
+    if signatures and not any(header_sample.startswith(magic) for magic in signatures):
+        raise HTTPException(status_code=400, detail="File signature does not match the declared extension.")
+    if ext == ".webp" and not (header_sample.startswith(b"RIFF") and header_sample[8:12] == b"WEBP"):
+        raise HTTPException(status_code=400, detail="Invalid WebP signature.")
+    if ext == ".ico" and not header_sample.startswith(b"\x00\x00\x01\x00"):
+        raise HTTPException(status_code=400, detail="Invalid icon signature.")
+    if ext in {".doc", ".xls"} and not header_sample.startswith(b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1"):
+        raise HTTPException(status_code=400, detail="Invalid Office document signature.")
 
     return ext, safe_name
 
@@ -108,7 +110,7 @@ def generate_secure_path(base_dir: Path, file_extension: str) -> Tuple[str, Path
     base_resolved = base_dir.resolve()
 
     # Guard against directory traversal
-    if not str(target_path).startswith(str(base_resolved)):
+    if not target_path.is_relative_to(base_resolved):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Illegal storage path detected."

@@ -1,3 +1,4 @@
+from auth.admin_auth import require_permission
 from fastapi import APIRouter, HTTPException, status, Depends
 from typing import List
 from schemas.contact import ContactCreate, ContactResponse, ContactUpdate
@@ -20,14 +21,14 @@ async def create_contact(contact_data: ContactCreate):
     return serialize_document(doc)
 
 @router.get("/admin/all", response_model=List[ContactResponse])
-async def get_all_contacts(admin: dict = Depends(get_current_admin)):
+async def get_all_contacts(admin: dict = Depends(require_permission("canViewContacts"))):
     """Get all contact submissions (admin only)"""
     cursor = contacts_collection.find().sort("created_at", -1)
     contacts = await cursor.to_list(length=1000)
     return [serialize_document(contact) for contact in contacts]
 
 @router.get("/{contact_id}", response_model=ContactResponse)
-async def get_contact(contact_id: str, admin: dict = Depends(get_current_admin)):
+async def get_contact(contact_id: str, admin: dict = Depends(require_permission("canViewContacts"))):
     """Get a specific contact submission (admin only)"""
     contact = await contacts_collection.find_one({"id": contact_id})
     if not contact:
@@ -38,7 +39,7 @@ async def get_contact(contact_id: str, admin: dict = Depends(get_current_admin))
     return serialize_document(contact)
 
 @router.patch("/{contact_id}/read", response_model=ContactResponse)
-async def mark_contact_read(contact_id: str, update_data: ContactUpdate, admin: dict = Depends(get_current_admin)):
+async def mark_contact_read(contact_id: str, update_data: ContactUpdate, admin: dict = Depends(require_permission("canViewContacts"))):
     """Mark a contact as read/unread (admin only)"""
     existing = await contacts_collection.find_one({"id": contact_id})
     if not existing:
@@ -56,7 +57,7 @@ async def mark_contact_read(contact_id: str, update_data: ContactUpdate, admin: 
     return serialize_document(updated_contact)
 
 @router.put("/{contact_id}", response_model=ContactResponse)
-async def update_contact(contact_id: str, contact_data: ContactCreate, admin: dict = Depends(get_current_admin)):
+async def update_contact(contact_id: str, contact_data: ContactCreate, admin: dict = Depends(require_permission("canViewContacts"))):
     """Update a contact submission (admin only)"""
     existing = await contacts_collection.find_one({"id": contact_id})
     if not existing:
@@ -76,7 +77,7 @@ async def update_contact(contact_id: str, contact_data: ContactCreate, admin: di
     return serialize_document(updated_contact)
 
 @router.delete("/{contact_id}")
-async def delete_contact(contact_id: str, admin: dict = Depends(get_current_admin)):
+async def delete_contact(contact_id: str, admin: dict = Depends(require_permission("canViewContacts"))):
     """Delete a contact submission (admin only)"""
     result = await contacts_collection.delete_one({"id": contact_id})
     if result.deleted_count == 0:

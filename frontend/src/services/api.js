@@ -17,7 +17,7 @@ if (!BACKEND_URL) {
   console.error('❌ Backend URL not defined');
 }
 
-console.log('🔗 API Base URL:', BACKEND_URL);
+
 
 // Increased timeout for cold starts on Render (free tier can take 30-50 seconds to wake up)
 const API_TIMEOUT = process.env.NODE_ENV === 'development' ? 15000 : 60000;
@@ -45,12 +45,10 @@ api.interceptors.request.use(
     const adminToken = localStorage.getItem('admin_token') || localStorage.getItem('adminToken');
     const clientToken = localStorage.getItem('client_token');
 
-    if (isClientTarget && clientToken) {
-      config.headers.Authorization = `Bearer ${clientToken}`;
-    } else if (adminToken) {
+    if (isClientTarget) {
+      if (clientToken) config.headers.Authorization = `Bearer ${clientToken}`;
+    } else if (adminToken && !config.headers.Authorization) {
       config.headers.Authorization = `Bearer ${adminToken}`;
-    } else if (clientToken) {
-      config.headers.Authorization = `Bearer ${clientToken}`;
     }
 
     return config;
@@ -69,8 +67,7 @@ api.interceptors.response.use(
       console.error('API Error: timeout of', API_TIMEOUT + 'ms exceeded');
       
       // Retry logic for timeout errors on GET requests
-      if (config && config.method === 'get' && !config._retry) {
-        config._retry = true;
+      if (config && config.method === 'get') {
         config._retryCount = config._retryCount || 0;
         
         if (config._retryCount < MAX_RETRIES) {
@@ -86,9 +83,9 @@ api.interceptors.response.use(
       console.error('API Error:', error?.response?.data || error.message);
     }
 
-    if (error.response?.status === 401) {
+    if (error.response?.status === 401 && config?.headers?.Authorization && !config.url?.includes('/auth/login')) {
       const currentPath = window.location.pathname;
-      if (currentPath.startsWith('/client')) {
+      if (currentPath.startsWith('/client') && (config.url?.startsWith('/client') || config.url?.includes('/client/'))) {
         localStorage.removeItem('client_token');
         localStorage.removeItem('client_data');
         window.location.href = '/client/login';

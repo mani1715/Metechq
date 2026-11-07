@@ -3,82 +3,82 @@
 :root {
   /* === PRIMARY BRAND COLORS === */
   /* Main accent color for buttons, links, and key actions */
-  --admin-primary: #6366F1;           /* Indigo - Professional & Modern */
-  --admin-primary-hover: #4F46E5;     /* Darker Indigo on hover */
-  --admin-primary-light: #818CF8;     /* Light Indigo for subtle accents */
-  --admin-primary-lighter: #C7D2FE;   /* Very light for backgrounds */
-  
+  --admin-primary: #a34e1d;           /* Indigo - Professional & Modern */
+  --admin-primary-hover: #87401c;     /* Darker Indigo on hover */
+  --admin-primary-light: #c5792c;     /* Light Indigo for subtle accents */
+  --admin-primary-lighter: #f4d9a0;   /* Very light for backgrounds */
+
   /* Secondary accent color */
-  --admin-secondary: #8B5CF6;         /* Purple - Elegant & Sophisticated */
-  --admin-secondary-hover: #7C3AED;   /* Darker Purple on hover */
-  --admin-secondary-light: #A78BFA;   /* Light Purple */
-  
+  --admin-secondary: #a34e1d;         /* Purple - Elegant & Sophisticated */
+  --admin-secondary-hover: #87401c;   /* Darker Purple on hover */
+  --admin-secondary-light: #d7a875;   /* Light Purple */
+
   /* Premium accent colors */
-  --admin-purple: #7C5CFF;            /* Rich Purple for highlights */
+  --admin-purple: #a34e1d;            /* Rich Purple for highlights */
   --admin-gold: #F59E0B;              /* Warm Amber for premium elements */
   --admin-gold-hover: #D97706;        /* Darker Amber on hover */
-  --admin-navy: #1E293B;              /* Dark Slate for text & sidebar */
-  
+  --admin-navy: #403126;              /* Dark Slate for text & sidebar */
+
   /* Elegant gradients */
-  --admin-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --admin-gradient-subtle: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+  --admin-gradient: linear-gradient(135deg, #5b4632 0%, #a34e1d 100%);
+  --admin-gradient-subtle: linear-gradient(135deg, #a34e1d 0%, #a34e1d 100%);
   --admin-gradient-premium: linear-gradient(135deg, #F59E0B 0%, #EF4444 100%);
-  
+
   /* === BACKGROUND COLORS === */
   /* Main backgrounds for visual hierarchy */
-  --admin-bg: #F8FAFC;                /* Soft Gray - Main background */
-  --admin-bg-secondary: #F1F5F9;      /* Slightly darker for sections */
-  --admin-bg-tertiary: #E2E8F0;       /* Even darker for contrast */
+  --admin-bg: #fbf7ef;                /* Soft Gray - Main background */
+  --admin-bg-secondary: #f3ebdf;      /* Slightly darker for sections */
+  --admin-bg-tertiary: #e4d8c8;       /* Even darker for contrast */
   --admin-card-bg: #FFFFFF;           /* Pure White for cards/containers */
-  --admin-sidebar-bg: #1E293B;        /* Dark Slate for sidebar */
-  --admin-hover-bg: #F1F5F9;          /* Subtle hover background */
-  --admin-hover-bg-dark: #334155;     /* Dark hover for sidebar */
-  
+  --admin-sidebar-bg: #403126;        /* Dark Slate for sidebar */
+  --admin-hover-bg: #f3ebdf;          /* Subtle hover background */
+  --admin-hover-bg-dark: #5b4632;     /* Dark hover for sidebar */
+
   /* === TEXT COLORS === */
   /* Text hierarchy for readability */
-  --admin-text: #0F172A;              /* Dark Slate - Primary text */
-  --admin-text-secondary: #475569;    /* Medium Gray - Secondary text */
-  --admin-text-muted: #94A3B8;        /* Light Gray - Muted text */
-  --admin-text-light: #64748B;        /* Gray for labels */
+  --admin-text: #2c231c;              /* Dark Slate - Primary text */
+  --admin-text-secondary: #6b5746;    /* Medium Gray - Secondary text */
+  --admin-text-muted: #b4a594;        /* Light Gray - Muted text */
+  --admin-text-light: #796958;        /* Gray for labels */
   --admin-text-white: #FFFFFF;        /* White text */
   --admin-text-sidebar: rgba(255, 255, 255, 0.9); /* Sidebar text */
-  
+
   /* === STATUS COLORS === */
   /* Clear status indicators with good contrast */
   --admin-success: #10B981;           /* Emerald Green */
   --admin-success-bg: #D1FAE5;        /* Light green background */
   --admin-success-text: #065F46;      /* Dark green text */
-  
+
   --admin-warning: #F59E0B;           /* Amber */
   --admin-warning-bg: #FEF3C7;        /* Light amber background */
   --admin-warning-text: #92400E;      /* Dark amber text */
-  
+
   --admin-error: #EF4444;             /* Red */
   --admin-error-bg: #FEE2E2;          /* Light red background */
   --admin-error-text: #991B1B;        /* Dark red text */
-  
+
   --admin-info: #3B82F6;              /* Blue */
   --admin-info-bg: #DBEAFE;           /* Light blue background */
   --admin-info-text: #1E40AF;         /* Dark blue text */
-  
+
   /* === BORDER COLORS === */
   /* Subtle borders for clean separation */
-  --admin-border: #E2E8F0;            /* Light gray border */
+  --admin-border: #e4d8c8;            /* Light gray border */
   --admin-border-hover: #CBD5E1;      /* Slightly darker on hover */
-  --admin-border-focus: #6366F1;      /* Primary color on focus */
-  --admin-border-dark: #334155;       /* Dark border for sidebar */
-  
+  --admin-border-focus: #a34e1d;      /* Primary color on focus */
+  --admin-border-dark: #5b4632;       /* Dark border for sidebar */
+
   /* === UI ELEMENT COLORS === */
   /* Additional UI states */
   --admin-disabled: #CBD5E1;          /* Disabled state */
-  --admin-disabled-text: #94A3B8;     /* Disabled text */
-  
+  --admin-disabled-text: #b4a594;     /* Disabled text */
+
   /* Shadows for depth */
   --admin-shadow: rgba(15, 23, 42, 0.08);      /* Subtle shadow */
   --admin-shadow-md: rgba(15, 23, 42, 0.12);   /* Medium shadow */
   --admin-shadow-lg: rgba(15, 23, 42, 0.15);   /* Large shadow */
   --admin-shadow-xl: rgba(15, 23, 42, 0.25);   /* Extra large shadow */
-  
+
   /* Overlays */
   --admin-overlay: rgba(0, 0, 0, 0.5);         /* Modal overlay */
   --admin-overlay-light: rgba(0, 0, 0, 0.3);   /* Light overlay */
@@ -168,7 +168,7 @@
 .content-field textarea:focus {
   outline: none;
   border-color: var(--admin-primary);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 0 0 3px rgba(163, 78, 29, 0.1);
 }
 
 .content-field-row {
@@ -262,7 +262,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 4px 12px rgba(163, 78, 29, 0.3);
 }
 
 .admin-nav {
@@ -293,11 +293,11 @@
 }
 
 .admin-nav-item.active {
-  background: rgba(99, 102, 241, 0.15);
+  background: rgba(163, 78, 29, 0.15);
   color: white;
   border-left-color: var(--admin-primary);
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
+  box-shadow: 0 2px 8px rgba(163, 78, 29, 0.2);
 }
 
 .admin-nav-icon {
@@ -377,7 +377,7 @@
   color: white;
   font-weight: 600;
   font-size: 16px;
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 2px 8px rgba(163, 78, 29, 0.3);
 }
 
 .admin-profile-info h4 {
@@ -464,7 +464,7 @@
 }
 
 .admin-stat-icon.purple {
-  background: linear-gradient(135deg, #A78BFA 0%, #8B5CF6 100%);
+  background: linear-gradient(135deg, #d7a875 0%, #a34e1d 100%);
   color: white;
 }
 
@@ -474,12 +474,12 @@
 }
 
 .admin-stat-icon.navy {
-  background: linear-gradient(135deg, #475569 0%, #1E293B 100%);
+  background: linear-gradient(135deg, #6b5746 0%, #403126 100%);
   color: white;
 }
 
 .admin-stat-icon.blue {
-  background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%);
+  background: linear-gradient(135deg, #d2a16d 0%, #3B82F6 100%);
   color: white;
 }
 
@@ -513,7 +513,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: linear-gradient(to right, rgba(99, 102, 241, 0.03), rgba(139, 92, 246, 0.03));
+  background: linear-gradient(to right, rgba(163, 78, 29, 0.03), rgba(163, 78, 29, 0.03));
 }
 
 .admin-table-title {
@@ -602,7 +602,7 @@ table.admin-table-main td {
 .admin-form-select:focus {
   outline: none;
   border-color: var(--admin-primary);
-  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 0 0 4px rgba(163, 78, 29, 0.1);
   background: white;
 }
 
@@ -654,12 +654,12 @@ table.admin-table-main td {
 .admin-btn-primary {
   background: var(--admin-gradient-subtle);
   color: white;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 4px 12px rgba(163, 78, 29, 0.3);
 }
 
 .admin-btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 8px 20px rgba(163, 78, 29, 0.4);
 }
 
 .admin-btn-secondary {
@@ -756,7 +756,7 @@ table.admin-table-main td {
 }
 
 .admin-badge-primary {
-  background: rgba(99, 102, 241, 0.1);
+  background: rgba(163, 78, 29, 0.1);
   color: var(--admin-primary);
   border: 1px solid var(--admin-primary-light);
 }
@@ -812,7 +812,7 @@ table.admin-table-main td {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: linear-gradient(to right, rgba(99, 102, 241, 0.03), rgba(139, 92, 246, 0.03));
+  background: linear-gradient(to right, rgba(163, 78, 29, 0.03), rgba(163, 78, 29, 0.03));
 }
 
 .admin-modal-title {
@@ -1195,7 +1195,7 @@ table.admin-table-main td {
   align-items: center;
   justify-content: center;
   color: white;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 4px 12px rgba(163, 78, 29, 0.3);
 }
 
 .admin-credential-actions {
@@ -1287,7 +1287,7 @@ table.admin-table-main td {
 
 .admin-quick-select-btn:hover {
   border-color: var(--admin-purple);
-  background: rgba(124, 92, 255, 0.05);
+  background: rgba(163, 78, 29, 0.05);
   color: var(--admin-purple);
 }
 
@@ -1317,7 +1317,7 @@ table.admin-table-main td {
   .admin-credentials-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .admin-quick-select-grid {
     grid-template-columns: 1fr;
   }

@@ -1,3 +1,4 @@
+from auth.admin_auth import require_permission
 from fastapi import APIRouter, HTTPException, status, Depends
 from typing import List
 from schemas.blog import BlogCreate, BlogUpdate, BlogResponse
@@ -36,14 +37,14 @@ async def get_blog_by_slug(slug: str):
 # ====================================
 
 @router.get("/admin/all", response_model=List[BlogResponse])
-async def get_all_blogs(current_admin: dict = Depends(get_current_admin)):
+async def get_all_blogs(current_admin: dict = Depends(require_permission("canManageBlogs"))):
     """Get all blogs including drafts (admin only)"""
     cursor = blogs_collection.find().sort("created_at", -1)
     blogs = await cursor.to_list(length=100)
     return [serialize_document(blog) for blog in blogs]
 
 @router.post("/admin/create", response_model=BlogResponse)
-async def create_blog(blog_data: BlogCreate, current_admin: dict = Depends(get_current_admin)):
+async def create_blog(blog_data: BlogCreate, current_admin: dict = Depends(require_permission("canManageBlogs"))):
     """Create a new blog (admin only)"""
     # Auto-generate slug if not provided
     if not blog_data.slug:
@@ -66,7 +67,7 @@ async def create_blog(blog_data: BlogCreate, current_admin: dict = Depends(get_c
     return serialize_document(doc)
 
 @router.put("/admin/{blog_id}", response_model=BlogResponse)
-async def update_blog(blog_id: str, blog_data: BlogUpdate, current_admin: dict = Depends(get_current_admin)):
+async def update_blog(blog_id: str, blog_data: BlogUpdate, current_admin: dict = Depends(require_permission("canManageBlogs"))):
     """Update a blog (admin only)"""
     # Check if blog exists
     existing = await blogs_collection.find_one({"id": blog_id})
@@ -106,7 +107,7 @@ async def update_blog(blog_id: str, blog_data: BlogUpdate, current_admin: dict =
     return serialize_document(updated_blog)
 
 @router.delete("/admin/{blog_id}")
-async def delete_blog(blog_id: str, current_admin: dict = Depends(get_current_admin)):
+async def delete_blog(blog_id: str, current_admin: dict = Depends(require_permission("canManageBlogs"))):
     """Delete a blog (admin only)"""
     result = await blogs_collection.delete_one({"id": blog_id})
     if result.deleted_count == 0:

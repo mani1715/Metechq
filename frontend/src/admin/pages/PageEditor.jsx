@@ -277,7 +277,7 @@ const PageEditor = () => {
       {/* Header */}
       <div style={{ marginBottom: '32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h1 style={{ fontSize: '32px', fontWeight: '700', color: '#1C2A3A', margin: '0 0 8px 0' }}>
+          <h1 style={{ fontSize: '32px', fontWeight: '700', color: '#352a21', margin: '0 0 8px 0' }}>
             Page Editor
           </h1>
           <p style={{ color: '#6B7280', margin: 0 }}>
@@ -312,8 +312,8 @@ const PageEditor = () => {
               padding: '12px 24px',
               background: 'transparent',
               border: 'none',
-              borderBottom: selectedPage === page.id ? '2px solid #7C5CFF' : '2px solid transparent',
-              color: selectedPage === page.id ? '#7C5CFF' : '#6B7280',
+              borderBottom: selectedPage === page.id ? '2px solid #a34e1d' : '2px solid transparent',
+              color: selectedPage === page.id ? '#a34e1d' : '#6B7280',
               fontWeight: selectedPage === page.id ? '600' : '400',
               cursor: 'pointer',
               marginBottom: '-2px',

@@ -59,7 +59,7 @@ const Login = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #1C2A3A 0%, #2D3E50 100%)',
+      background: 'linear-gradient(135deg, #352a21 0%, #2D3E50 100%)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -78,7 +78,7 @@ const Login = () => {
           <img
             src="/favicon.svg"
             alt="METECHQ Logo"
-            style={{ height: '64px', width: '64px', margin: '0 auto 16px auto', display: 'block', borderRadius: '16px', boxShadow: '0 8px 24px rgba(139, 92, 246, 0.35)' }}
+            style={{ height: '64px', width: '64px', margin: '0 auto 16px auto', display: 'block', borderRadius: '16px', boxShadow: '0 8px 24px rgba(163, 78, 29, 0.35)' }}
           />
           <h1 style={{ fontSize: '28px', fontWeight: '700' }}>
             METECHQ Admin
@@ -138,7 +138,7 @@ const Login = () => {
         </form>
 
         <div style={{ marginTop: '20px', textAlign: 'center' }}>
-          <a href="/" style={{ color: '#7C5CFF' }}>
+          <a href="/" style={{ color: '#a34e1d' }}>
             ← Back to Website
           </a>
         </div>

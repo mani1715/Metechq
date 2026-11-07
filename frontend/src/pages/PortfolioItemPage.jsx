@@ -14,10 +14,6 @@ import {
   DollarSign, 
   CheckCircle,
   Clock,
-  Monitor,
-  Code,
-  Zap,
-  Shield,
   Target
 } from 'lucide-react';
 import projectService from '../services/projectService';
@@ -35,6 +31,8 @@ const PortfolioItemPage = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [project, setProject] = useState(null);
   const [relatedProjects, setRelatedProjects] = useState([]);
+  const [loadError, setLoadError] = useState(false);
+  const [attempt, setAttempt] = useState(0);
   const [loading, setLoading] = useState(true);
   const [shareEnabled, setShareEnabled] = useState(true);
   
@@ -43,12 +41,15 @@ const PortfolioItemPage = () => {
     const fetchProjectData = async () => {
       try {
         setLoading(true);
+        setLoadError(false);
+        setProject(null);
+        setCurrentImageIndex(0);
         // Fetch all public projects
         const allProjects = await projectService.getPublicProjects();
         
         // Find current project by slug or id
         const currentProject = allProjects.find(p => 
-          p.slug === id || p.id === id
+          p.slug === id || String(p.id) === id
         );
         
         if (currentProject) {
@@ -61,17 +62,20 @@ const PortfolioItemPage = () => {
             description: currentProject.description,
             shortDesc: currentProject.description,
             longDesc: currentProject.case_study_content || currentProject.description,
-            image: currentProject.image_url || currentProject.image || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=60',
-            images: (currentProject.images && currentProject.images.length > 0) ? currentProject.images : [currentProject.image_url || currentProject.image || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=60'],
+            image: currentProject.image_url || currentProject.image || '',
+            images: (currentProject.images && currentProject.images.length > 0) ? currentProject.images : [currentProject.image_url || currentProject.image || ''],
             technologies: currentProject.tech_stack || currentProject.technologies || [],
             techStack: currentProject.tech_stack || currentProject.technologies || [],
             featured: currentProject.featured,
             liveLink: currentProject.live_demo_url || currentProject.liveUrl,
             githubLink: currentProject.github_url || currentProject.githubUrl,
             status: currentProject.status,
-            date: currentProject.completion_date || currentProject.created_at,
+            date: currentProject.completion_date,
             clientName: currentProject.client_name,
-            metrics: currentProject.metrics
+            metrics: currentProject.metrics,
+            features: currentProject.key_features || [],
+            duration: currentProject.project_duration,
+            teamSize: currentProject.team_size
           };
           setProject(transformedProject);
           
@@ -86,13 +90,14 @@ const PortfolioItemPage = () => {
               category: p.category,
               description: p.description,
               shortDesc: p.description,
-              image: p.image_url || p.image || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=60',
+              image: p.image_url || p.image || '',
               technologies: p.tech_stack || p.technologies || [],
               featured: p.featured
             }));
           setRelatedProjects(related);
         }
       } catch (error) {
+        setLoadError(true);
         console.error('Error fetching project:', error);
       } finally {
         setLoading(false);
@@ -113,7 +118,7 @@ const PortfolioItemPage = () => {
     fetchProjectData();
     fetchSettings();
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [id]);
+  }, [id, attempt]);
 
   // Show loading state
   if (loading) {
@@ -127,6 +132,7 @@ const PortfolioItemPage = () => {
     );
   }
 
+  if (loadError) return <section className="work-status"><SEO title="Load project - METECHQ"/><h1>We couldn’t load this project</h1><p>Please check the connection and try again.</p><button className="studio-button" onClick={() => setAttempt(n => n + 1)}>Try again</button><Link className="studio-text-link" to="/portfolio">Back to our work</Link></section>;
   if (!project) {
     return (
       <>
@@ -163,14 +169,6 @@ const PortfolioItemPage = () => {
     "datePublished": project.date,
     "keywords": project.technologies.join(', ')
   };
-
-  // Default features if not provided
-  const defaultFeatures = [
-    { icon: Monitor, title: 'Responsive Design', description: 'Flawless experience across all devices and screen sizes' },
-    { icon: Zap, title: 'Fast Performance', description: 'Optimized for lightning-fast loading times' },
-    { icon: Shield, title: 'Secure & Reliable', description: 'Built with industry-standard security practices' },
-    { icon: Code, title: 'Clean Code', description: 'Maintainable, scalable code following best practices' },
-  ];
 
   return (
     <>
@@ -252,14 +250,14 @@ const PortfolioItemPage = () => {
                       <Link to={project.liveLink}>
                         <Button className="project-action-btn btn-primary" data-testid="live-demo-btn">
                           <ExternalLink className="h-5 w-5" />
-                          <span>View Live Demo</span>
+                          <span>{project.liveLink.startsWith('/demo/') ? 'View live demo' : 'Visit deployed website'}</span>
                         </Button>
                       </Link>
                     ) : (
                       <a href={project.liveLink} target="_blank" rel="noopener noreferrer">
                         <Button className="project-action-btn btn-primary" data-testid="live-demo-btn">
                           <ExternalLink className="h-5 w-5" />
-                          <span>View Live Demo</span>
+                          <span>{project.liveLink.startsWith('/demo/') ? 'View live demo' : 'Visit deployed website'}</span>
                         </Button>
                       </a>
                     )}
@@ -315,51 +313,16 @@ const PortfolioItemPage = () => {
                 {/* Overview Section */}
                 <div className="content-block" data-admin-editable={`project-overview-${project.id}`}>
                   <h2 className="content-block-title">Project Overview</h2>
-                  <div className="overview-two-column">
-                    <div className="overview-left">
-                      <h3 className="overview-subtitle">The Challenge</h3>
-                      <p className="content-block-text">
-                        {project.longDesc || project.description}
-                      </p>
-                    </div>
-                    <div className="overview-right">
-                      <h3 className="overview-subtitle">Our Solution</h3>
-                      <p className="content-block-text">
-                        We delivered a comprehensive solution that exceeded expectations, combining modern technology with intuitive design to create an exceptional user experience.
-                      </p>
-                    </div>
-                  </div>
+                  <p className="content-block-text" style={{ whiteSpace: 'pre-line' }}>{project.longDesc || project.description}</p>
                 </div>
-
-                {/* 4. FEATURES & FUNCTIONALITY */}
-                <div className="content-block features-block" data-admin-editable={`project-features-${project.id}`}>
-                  <h2 className="content-block-title">Key Features & Functionality</h2>
-                  {project.features && project.features.length > 0 ? (
+                {project.features.length > 0 && (
+                  <div className="content-block features-block">
+                    <h2 className="content-block-title">Key Features & Functionality</h2>
                     <ul className="features-list-premium">
-                      {project.features.map((feature, idx) => (
-                        <li key={idx} className="feature-item-premium" data-testid={`feature-${idx}`}>
-                          <CheckCircle className="feature-check" />
-                          <span>{feature}</span>
-                        </li>
-                      ))}
+                      {project.features.map((feature, idx) => <li key={idx} className="feature-item-premium"><CheckCircle className="feature-check" /><span>{feature}</span></li>)}
                     </ul>
-                  ) : (
-                    <div className="features-grid-cards">
-                      {defaultFeatures.map((feature, idx) => {
-                        const IconComponent = feature.icon;
-                        return (
-                          <div key={idx} className="feature-card" data-testid={`feature-card-${idx}`}>
-                            <div className="feature-card-icon">
-                              <IconComponent className="h-6 w-6" />
-                            </div>
-                            <h3 className="feature-card-title">{feature.title}</h3>
-                            <p className="feature-card-desc">{feature.description}</p>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
+                  </div>
+                )}
 
                 {/* 5. DEVELOPMENT PROCESS */}
                 <DevelopmentProcess />
@@ -568,7 +531,7 @@ const PortfolioItemPage = () => {
                         loading="lazy"
                         onError={(e) => {
                           e.target.onerror = null;
-                          e.target.src = 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=60';
+                          e.target.src = '';
                         }}
                       />
                       {relatedProject.featured && (

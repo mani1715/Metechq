@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Card } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
-import { 
-  BarChart3, 
-  TrendingUp, 
-  Users, 
-  MessageSquare, 
+import {
+  BarChart3,
+  TrendingUp,
+  Users,
+  MessageSquare,
   Calculator,
   Eye,
   FileText,
@@ -61,8 +61,8 @@ const Analytics = () => {
     return (
       <div className="flex flex-col items-center justify-center h-64">
         <div className="relative">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-purple-600"></div>
-          <div className="absolute top-0 left-0 animate-ping rounded-full h-16 w-16 border-4 border-blue-400 opacity-20"></div>
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-brand-600"></div>
+          <div className="absolute top-0 left-0 animate-ping rounded-full h-16 w-16 border-4 border-brand-400 opacity-20"></div>
         </div>
         <p className="mt-4 text-gray-600 font-medium animate-pulse">Loading analytics data...</p>
       </div>
@@ -71,7 +71,7 @@ const Analytics = () => {
 
   return (
     <div className="space-y-6 p-6" data-testid="analytics-dashboard" style={{
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      background: 'linear-gradient(135deg, #5b4632 0%, #a34e1d 100%)',
       minHeight: '100vh',
       margin: '-24px',
       padding: '32px'
@@ -89,7 +89,7 @@ const Analytics = () => {
           </div>
           <p className="text-white/90 font-medium ml-14">Track website activity and visitor engagement</p>
         </div>
-        <Button 
+        <Button
           onClick={handleRefresh}
           disabled={refreshing}
           className="bg-white/20 hover:bg-white/30 text-white backdrop-blur-md border border-white/30 shadow-xl transition-all duration-300 hover:scale-105"
@@ -108,8 +108,8 @@ const Analytics = () => {
         </div>
         <Button
           onClick={() => setPeriod('today')}
-          className={period === 'today' 
-            ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-lg shadow-pink-500/50 hover:shadow-xl hover:shadow-pink-500/60 border-0' 
+          className={period === 'today'
+            ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-lg shadow-pink-500/50 hover:shadow-xl hover:shadow-pink-500/60 border-0'
             : 'bg-white/20 text-white hover:bg-white/30 backdrop-blur-md border border-white/30'
           }
           size="sm"
@@ -119,8 +119,8 @@ const Analytics = () => {
         </Button>
         <Button
           onClick={() => setPeriod('7days')}
-          className={period === '7days' 
-            ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/50 hover:shadow-xl hover:shadow-blue-500/60 border-0' 
+          className={period === '7days'
+            ? 'bg-gradient-to-r from-brand-500 to-cyan-500 text-white shadow-lg shadow-brand-500/50 hover:shadow-xl hover:shadow-brand-500/60 border-0'
             : 'bg-white/20 text-white hover:bg-white/30 backdrop-blur-md border border-white/30'
           }
           size="sm"
@@ -130,8 +130,8 @@ const Analytics = () => {
         </Button>
         <Button
           onClick={() => setPeriod('30days')}
-          className={period === '30days' 
-            ? 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white shadow-lg shadow-purple-500/50 hover:shadow-xl hover:shadow-purple-500/60 border-0' 
+          className={period === '30days'
+            ? 'bg-gradient-to-r from-brand-500 to-brand-500 text-white shadow-lg shadow-brand-500/50 hover:shadow-xl hover:shadow-brand-500/60 border-0'
             : 'bg-white/20 text-white hover:bg-white/30 backdrop-blur-md border border-white/30'
           }
           size="sm"
@@ -144,10 +144,10 @@ const Analytics = () => {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Total Page Views */}
-        <div 
+        <div
           className="relative overflow-hidden rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105 cursor-pointer group"
           style={{
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+            background: 'linear-gradient(135deg, #5b4632 0%, #a34e1d 100%)'
           }}
           data-testid="stat-page-views"
         >
@@ -172,7 +172,7 @@ const Analytics = () => {
         </div>
 
         {/* Contact Submissions */}
-        <div 
+        <div
           className="relative overflow-hidden rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105 cursor-pointer group"
           style={{
             background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
@@ -200,7 +200,7 @@ const Analytics = () => {
         </div>
 
         {/* Calculator Usage */}
-        <div 
+        <div
           className="relative overflow-hidden rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105 cursor-pointer group"
           style={{
             background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
@@ -227,7 +227,7 @@ const Analytics = () => {
         </div>
 
         {/* Blog Engagement */}
-        <div 
+        <div
           className="relative overflow-hidden rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105 cursor-pointer group"
           style={{
             background: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)'
@@ -256,12 +256,12 @@ const Analytics = () => {
       </div>
 
       {/* Page Views Breakdown */}
-      <div 
+      <div
         className="backdrop-blur-lg bg-white/95 p-8 rounded-2xl border border-white/20 shadow-2xl"
         data-testid="page-views-breakdown"
       >
-        <h2 className="text-2xl font-black mb-6 flex items-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-          <BarChart3 className="h-6 w-6 mr-3 text-blue-600" />
+        <h2 className="text-2xl font-black mb-6 flex items-center bg-gradient-to-r from-brand-600 to-brand-600 bg-clip-text text-transparent">
+          <BarChart3 className="h-6 w-6 mr-3 text-brand-600" />
           Page Views by Page
         </h2>
         {analyticsData?.page_views_by_page && analyticsData.page_views_by_page.length > 0 ? (
@@ -269,14 +269,14 @@ const Analytics = () => {
             {analyticsData.page_views_by_page.map((page, index) => {
               const colors = [
                 { bg: 'from-pink-500 to-rose-500', badge: 'bg-gradient-to-r from-pink-500 to-rose-500' },
-                { bg: 'from-purple-500 to-indigo-500', badge: 'bg-gradient-to-r from-purple-500 to-indigo-500' },
-                { bg: 'from-blue-500 to-cyan-500', badge: 'bg-gradient-to-r from-blue-500 to-cyan-500' },
+                { bg: 'from-brand-500 to-brand-500', badge: 'bg-gradient-to-r from-brand-500 to-brand-500' },
+                { bg: 'from-brand-500 to-cyan-500', badge: 'bg-gradient-to-r from-brand-500 to-cyan-500' },
                 { bg: 'from-green-500 to-emerald-500', badge: 'bg-gradient-to-r from-green-500 to-emerald-500' },
                 { bg: 'from-orange-500 to-amber-500', badge: 'bg-gradient-to-r from-orange-500 to-amber-500' },
                 { bg: 'from-red-500 to-pink-500', badge: 'bg-gradient-to-r from-red-500 to-pink-500' },
               ];
               const colorScheme = colors[index % colors.length];
-              
+
               return (
                 <div key={index} className="group hover:scale-[1.02] transition-transform duration-300">
                   <div className="flex items-center justify-between p-5 bg-gradient-to-r from-gray-50 to-white rounded-xl shadow-lg hover:shadow-xl border border-gray-100">
@@ -296,10 +296,10 @@ const Analytics = () => {
                     <div className="flex items-center gap-6">
                       <div className="flex-1 max-w-xs min-w-[200px]">
                         <div className="h-3 bg-gray-200 rounded-full overflow-hidden shadow-inner">
-                          <div 
+                          <div
                             className={`h-full bg-gradient-to-r ${colorScheme.bg} rounded-full shadow-lg transition-all duration-1000 ease-out`}
-                            style={{ 
-                              width: `${(page.count / analyticsData.total_page_views) * 100}%` 
+                            style={{
+                              width: `${(page.count / analyticsData.total_page_views) * 100}%`
                             }}
                           ></div>
                         </div>
@@ -325,7 +325,7 @@ const Analytics = () => {
 
       {/* Most Viewed Blogs */}
       {analyticsData?.blog_views && analyticsData.blog_views.length > 0 && (
-        <div 
+        <div
           className="backdrop-blur-lg bg-white/95 p-8 rounded-2xl border border-white/20 shadow-2xl"
           data-testid="most-viewed-blogs"
         >
@@ -337,13 +337,13 @@ const Analytics = () => {
             {analyticsData.blog_views.slice(0, 5).map((blog, index) => {
               const blogColors = [
                 'from-red-500 to-pink-500',
-                'from-purple-500 to-pink-500',
-                'from-blue-500 to-purple-500',
-                'from-cyan-500 to-blue-500',
+                'from-brand-500 to-pink-500',
+                'from-brand-500 to-brand-500',
+                'from-cyan-500 to-brand-500',
                 'from-green-500 to-cyan-500',
               ];
               const gradient = blogColors[index % blogColors.length];
-              
+
               return (
                 <div key={blog.blog_id} className="group hover:scale-[1.02] transition-transform duration-300">
                   <div className="flex items-center justify-between p-5 bg-gradient-to-r from-gray-50 to-white rounded-xl shadow-lg hover:shadow-xl border border-gray-100">
@@ -373,8 +373,8 @@ const Analytics = () => {
       )}
 
       {/* Privacy Notice */}
-      <div 
-        className="backdrop-blur-lg bg-gradient-to-r from-blue-500/90 to-purple-500/90 p-6 rounded-2xl border border-white/30 shadow-2xl"
+      <div
+        className="backdrop-blur-lg bg-gradient-to-r from-brand-500/90 to-brand-500/90 p-6 rounded-2xl border border-white/30 shadow-2xl"
       >
         <div className="flex items-start gap-4">
           <div className="p-3 bg-white/20 backdrop-blur-md rounded-xl">

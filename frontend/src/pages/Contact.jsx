@@ -45,11 +45,11 @@ const Contact = () => {
       setContactConfig(data);
     } catch (error) {
       console.error('Error fetching contact page content:', error);
-      
+
       // PERMANENT FIX: Use fallback default content if API fails
       const fallbackContent = getDefaultContactContent();
       setContactConfig(fallbackContent);
-      
+
       toast.error('Using default contact page content');
     } finally {
       setLoading(false);
@@ -306,7 +306,7 @@ const Contact = () => {
     try {
       // Append pricing estimate to message if available
       let finalMessage = formData.message;
-      
+
       if (priceEstimate) {
         finalMessage += `\n\n--- Project Estimate ---\n`;
         finalMessage += `Website Type: ${priceEstimate.websiteType || 'Not selected'}\n`;
@@ -329,7 +329,7 @@ const Contact = () => {
       trackContactSubmission();
 
       setIsSuccess(true);
-      
+
       toast.success(contactConfig.form.messages.success.title, {
         description: contactConfig.form.messages.success.description
       });
@@ -368,7 +368,7 @@ const Contact = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-600"></div>
       </div>
     );
   }
@@ -400,8 +400,8 @@ const Contact = () => {
             {contactConfig.hero.breadcrumbs.map((crumb, index) => (
               <React.Fragment key={index}>
                 {index > 0 && <ChevronRight className="breadcrumb-separator" />}
-                <Link 
-                  to={crumb.path} 
+                <Link
+                  to={crumb.path}
                   className="breadcrumb-link"
                   aria-current={index === contactConfig.hero.breadcrumbs.length - 1 ? 'page' : undefined}
                 >
@@ -428,10 +428,10 @@ const Contact = () => {
       {/* Main Content */}
       <section className="contact-main-section">
         <div className="contact-content-wrapper">
-          
+
           {/* Two Column Layout: Form (Left) + Business Hours (Right) */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
-            
+
             {/* Contact Form - Left Side (50% width) */}
             <div className="lg:col-span-1" id="contact-form">
               <Card className="contact-form-card-premium" data-testid="contact-form-card">
@@ -592,7 +592,7 @@ const Contact = () => {
                       id="consent"
                       name="consent"
                       checked={formData.consent}
-                      onCheckedChange={(checked) => 
+                      onCheckedChange={(checked) =>
                         handleChange({ target: { name: 'consent', type: 'checkbox', checked } })
                       }
                       className={errors.consent ? 'checkbox-error' : ''}
@@ -647,8 +647,8 @@ const Contact = () => {
               <h3 className="business-hours-title">{contactConfig.businessHours.title}</h3>
               <div className="business-hours-list">
                 {contactConfig.businessHours.schedule.map((schedule, index) => (
-                  <div 
-                    key={index} 
+                  <div
+                    key={index}
                     className={`business-hours-item ${schedule.available ? 'available' : 'unavailable'}`}
                   >
                     <span className="day">{schedule.day}</span>
@@ -660,7 +660,7 @@ const Contact = () => {
                 <Clock className="note-icon" />
                 <span>{contactConfig.businessHours.note}</span>
               </div>
-              
+
               {/* Contact Info in sidebar */}
               <div className="mt-4 pt-4 border-t border-gray-200 space-y-3">
                 <h4 className="text-lg font-semibold text-gray-900">Contact Information</h4>
@@ -674,13 +674,13 @@ const Contact = () => {
 
                   return (
                     <div key={card.id} className="flex items-start gap-3" data-testid={`contact-info-${card.id}`}>
-                      <div className="flex-shrink-0 w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                        <IconComponent className="w-5 h-5 text-purple-600" />
+                      <div className="flex-shrink-0 w-10 h-10 bg-brand-100 rounded-lg flex items-center justify-center">
+                        <IconComponent className="w-5 h-5 text-brand-600" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-900">{card.label}</p>
                         {card.href ? (
-                          <a href={card.href} className="text-sm text-purple-600 hover:text-purple-700 break-words">
+                          <a href={card.href} className="text-sm text-brand-600 hover:text-brand-700 break-words">
                             {card.value}
                           </a>
                         ) : (
@@ -724,8 +724,8 @@ const Contact = () => {
 
           <div className="faq-list">
             {contactConfig.faq.questions.map((faq) => (
-              <Card 
-                key={faq.id} 
+              <Card
+                key={faq.id}
                 className={`faq-item ${openFaqId === faq.id ? 'open' : ''}`}
                 data-testid={`faq-item-${faq.id}`}
               >
@@ -740,8 +740,8 @@ const Contact = () => {
                   <ChevronDown className={`faq-icon ${openFaqId === faq.id ? 'rotate' : ''}`} />
                 </button>
                 {openFaqId === faq.id && (
-                  <div 
-                    className="faq-answer" 
+                  <div
+                    className="faq-answer"
                     id={`faq-answer-${faq.id}`}
                     data-testid={`faq-answer-${faq.id}`}
                   >

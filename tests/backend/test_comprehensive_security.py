@@ -16,18 +16,13 @@ BASE_URL = os.environ.get("BACKEND_URL", "http://127.0.0.1:8002/api")
 @pytest.fixture(scope="module")
 def admin_token():
     """Authenticates as super admin and yields JWT bearer token"""
-    for creds in [
-        {"username": "maneesh", "password": "maneesh123"},
-        {"username": "admin", "password": "admin123"},
-        {"username": "admin", "password": "Admin@123456"}
-    ]:
-        res = requests.post(f"{BASE_URL}/admins/login", json=creds)
-        if res.status_code == 200:
-            data = res.json()
-            token = data.get("token") or data.get("access_token")
-            if token:
-                return token
-    raise AssertionError("Super admin login failed for all test credentials")
+    username = os.environ.get("ADMIN_USERNAME")
+    password = os.environ.get("ADMIN_PASSWORD")
+    if not username or not password:
+        pytest.skip("Use scripts/run_evaluation_tests.py to provision an isolated test admin")
+    res = requests.post(f"{BASE_URL}/admins/login", json={"username": username, "password": password}, timeout=15)
+    assert res.status_code == 200, "Isolated test admin login failed"
+    return res.json().get("token") or res.json()["access_token"]
 
 # ==============================================================================
 # 1. ROOT & PUBLIC ACCESS TESTS
@@ -177,7 +172,7 @@ def test_upload_script_svg_rejected(admin_token):
     files = {"file": ("xss.svg", svg_payload, "image/svg+xml")}
     res = requests.post(f"{BASE_URL}/storage/upload", headers=headers, files=files)
     assert res.status_code == 400
-    assert "forbidden script" in res.json().get("detail", "")
+    assert "not permitted" in res.json().get("detail", "")
 
 def test_admin_audit_chain_integrity(admin_token):
     headers = {"Authorization": f"Bearer {admin_token}"}

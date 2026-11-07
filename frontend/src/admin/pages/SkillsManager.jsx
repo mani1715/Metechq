@@ -33,7 +33,7 @@ const SkillsManager = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('admin_token') || localStorage.getItem('adminToken');
-    
+
     try {
       if (editingSkill) {
         await axios.put(
@@ -48,7 +48,7 @@ const SkillsManager = () => {
           { headers: { Authorization: `Bearer ${token}` } }
         );
       }
-      
+
       fetchSkills();
       closeModal();
     } catch (error) {
@@ -59,7 +59,7 @@ const SkillsManager = () => {
 
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this skill?')) return;
-    
+
     try {
       const token = localStorage.getItem('admin_token') || localStorage.getItem('adminToken');
       await axios.delete(`${BACKEND_URL}/skills/${id}`, {
@@ -111,8 +111,8 @@ const SkillsManager = () => {
           <h1 data-testid="skills-manager-heading">Skills Management</h1>
           <p>Manage your technical skills and expertise</p>
         </div>
-        <button 
-          className="admin-btn admin-btn-primary" 
+        <button
+          className="admin-btn admin-btn-primary"
           onClick={() => openModal()}
           data-testid="add-skill-btn"
         >
@@ -201,7 +201,7 @@ const SkillsManager = () => {
                       style={{
                         fontSize: '24px',
                         padding: '8px',
-                        border: formData.icon === emoji ? '2px solid #7C5CFF' : '1px solid #ddd',
+                        border: formData.icon === emoji ? '2px solid #a34e1d' : '1px solid #ddd',
                         borderRadius: '4px',
                         background: 'white',
                         cursor: 'pointer'

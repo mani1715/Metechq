@@ -31,8 +31,8 @@ const BlogList = () => {
   };
 
   const categories = ['all', ...new Set(blogs.map(blog => blog.category))];
-  const filteredBlogs = selectedCategory === 'all' 
-    ? blogs 
+  const filteredBlogs = selectedCategory === 'all'
+    ? blogs
     : blogs.filter(blog => blog.category === selectedCategory);
 
   const formatDate = (dateString) => {
@@ -58,11 +58,11 @@ const BlogList = () => {
       <div style={{ minHeight: '100vh', background: '#0A0F1E', paddingTop: '80px' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '60px 24px', textAlign: 'center' }}>
           <div style={{ color: '#EF4444', fontSize: '18px', marginBottom: '16px' }}>{error}</div>
-          <button 
+          <button
             onClick={fetchBlogs}
             style={{
               padding: '12px 32px',
-              background: '#8B5CF6',
+              background: '#a34e1d',
               color: '#fff',
               border: 'none',
               borderRadius: '8px',
@@ -81,23 +81,23 @@ const BlogList = () => {
   return (
     <div style={{ minHeight: '100vh', background: '#0A0F1E', paddingTop: '80px' }}>
       {/* Hero Section */}
-      <section style={{ 
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      <section style={{
+        background: 'linear-gradient(135deg, #5b4632 0%, #a34e1d 100%)',
         padding: '80px 24px',
         textAlign: 'center'
       }}>
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <h1 style={{ 
-            fontSize: '48px', 
-            fontWeight: '700', 
+          <h1 style={{
+            fontSize: '48px',
+            fontWeight: '700',
             color: '#fff',
             marginBottom: '16px',
             lineHeight: '1.2'
           }}>
             Blog & Insights
           </h1>
-          <p style={{ 
-            fontSize: '20px', 
+          <p style={{
+            fontSize: '20px',
             color: 'rgba(255, 255, 255, 0.9)',
             maxWidth: '600px',
             margin: '0 auto'
@@ -109,13 +109,13 @@ const BlogList = () => {
 
       {/* Category Filter */}
       {categories.length > 1 && (
-        <section style={{ 
+        <section style={{
           background: '#0F1629',
           padding: '24px',
           borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
         }}>
-          <div style={{ 
-            maxWidth: '1200px', 
+          <div style={{
+            maxWidth: '1200px',
             margin: '0 auto',
             display: 'flex',
             gap: '12px',
@@ -128,7 +128,7 @@ const BlogList = () => {
                 onClick={() => setSelectedCategory(category)}
                 style={{
                   padding: '8px 20px',
-                  background: selectedCategory === category ? '#8B5CF6' : 'rgba(255, 255, 255, 0.05)',
+                  background: selectedCategory === category ? '#a34e1d' : 'rgba(255, 255, 255, 0.05)',
                   color: selectedCategory === category ? '#fff' : 'rgba(255, 255, 255, 0.7)',
                   border: selectedCategory === category ? 'none' : '1px solid rgba(255, 255, 255, 0.1)',
                   borderRadius: '20px',
@@ -147,14 +147,14 @@ const BlogList = () => {
       )}
 
       {/* Blog Grid */}
-      <section style={{ 
-        maxWidth: '1200px', 
+      <section style={{
+        maxWidth: '1200px',
         margin: '0 auto',
         padding: '60px 24px'
       }}>
         {filteredBlogs.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '60px 24px' }}>
-            <p style={{ 
+            <p style={{
               color: 'rgba(255, 255, 255, 0.6)',
               fontSize: '18px'
             }}>
@@ -162,7 +162,7 @@ const BlogList = () => {
             </p>
           </div>
         ) : (
-          <div style={{ 
+          <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
             gap: '32px'
@@ -171,7 +171,7 @@ const BlogList = () => {
               <Link
                 key={blog.id}
                 to={`/blogs/${blog.slug}`}
-                style={{ 
+                style={{
                   textDecoration: 'none',
                   display: 'block',
                   background: '#0F1629',
@@ -183,8 +183,8 @@ const BlogList = () => {
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-8px)';
-                  e.currentTarget.style.borderColor = '#8B5CF6';
-                  e.currentTarget.style.boxShadow = '0 20px 40px rgba(139, 92, 246, 0.2)';
+                  e.currentTarget.style.borderColor = '#a34e1d';
+                  e.currentTarget.style.boxShadow = '0 20px 40px rgba(163, 78, 29, 0.2)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'translateY(0)';
@@ -194,7 +194,7 @@ const BlogList = () => {
               >
                 {/* Cover Image */}
                 {blog.cover_image && (
-                  <div style={{ 
+                  <div style={{
                     width: '100%',
                     height: '220px',
                     background: `url(${blog.cover_image}) center/cover`,
@@ -205,7 +205,7 @@ const BlogList = () => {
                       top: '16px',
                       left: '16px',
                       padding: '6px 12px',
-                      background: 'rgba(139, 92, 246, 0.9)',
+                      background: 'rgba(163, 78, 29, 0.9)',
                       color: '#fff',
                       borderRadius: '6px',
                       fontSize: '12px',
@@ -218,7 +218,7 @@ const BlogList = () => {
 
                 {/* Content */}
                 <div style={{ padding: '24px' }}>
-                  <h3 style={{ 
+                  <h3 style={{
                     fontSize: '22px',
                     fontWeight: '600',
                     color: '#fff',
@@ -228,7 +228,7 @@ const BlogList = () => {
                     {blog.title}
                   </h3>
 
-                  <p style={{ 
+                  <p style={{
                     color: 'rgba(255, 255, 255, 0.7)',
                     fontSize: '15px',
                     lineHeight: '1.6',
@@ -238,7 +238,7 @@ const BlogList = () => {
                   </p>
 
                   {/* Meta Info */}
-                  <div style={{ 
+                  <div style={{
                     display: 'flex',
                     flexWrap: 'wrap',
                     gap: '16px',
@@ -258,7 +258,7 @@ const BlogList = () => {
 
                   {/* Tags */}
                   {blog.tags && blog.tags.length > 0 && (
-                    <div style={{ 
+                    <div style={{
                       display: 'flex',
                       flexWrap: 'wrap',
                       gap: '8px',
@@ -272,8 +272,8 @@ const BlogList = () => {
                             alignItems: 'center',
                             gap: '4px',
                             padding: '4px 10px',
-                            background: 'rgba(139, 92, 246, 0.1)',
-                            color: '#A78BFA',
+                            background: 'rgba(163, 78, 29, 0.1)',
+                            color: '#d7a875',
                             borderRadius: '6px',
                             fontSize: '12px',
                             fontWeight: '500'
@@ -287,11 +287,11 @@ const BlogList = () => {
                   )}
 
                   {/* Read More */}
-                  <div style={{ 
+                  <div style={{
                     display: 'flex',
                     alignItems: 'center',
                     gap: '8px',
-                    color: '#8B5CF6',
+                    color: '#a34e1d',
                     fontSize: '15px',
                     fontWeight: '500'
                   }}>

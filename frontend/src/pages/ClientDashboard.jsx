@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
+import SEO from '../components/SEO';
 import clientService from '../services/clientService';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
@@ -19,10 +20,10 @@ import {
   DialogTitle,
 } from '../components/ui/dialog';
 import { toast } from 'sonner';
-import { 
-  LogOut, Download, Calendar, FileText, Briefcase, TrendingUp, Clock, 
-  CheckCircle2, AlertCircle, Sparkles, Users, Building2, Star, MessageSquare, 
-  Send, Target, ListChecks, DollarSign, Activity, MessageCircle, User, 
+import {
+  LogOut, Download, Calendar, FileText, Briefcase, TrendingUp, Clock,
+  CheckCircle2, AlertCircle, Sparkles, Users, Building2, Star, MessageSquare,
+  Send, Target, ListChecks, DollarSign, Activity, MessageCircle, User,
   Search, Filter, Download as DownloadIcon, Tag, AlertTriangle, RefreshCw
 } from 'lucide-react';
 
@@ -30,6 +31,9 @@ export default function ClientDashboard() {
   const navigate = useNavigate();
   const [client, setClient] = useState(null);
   const [projects, setProjects] = useState([]);
+  const [loadError, setLoadError] = useState('');
+  const [refreshing, setRefreshing] = useState(false);
+  const requestPending = useRef(false);
   const [loading, setLoading] = useState(true);
   const [selectedProject, setSelectedProject] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
@@ -64,26 +68,35 @@ export default function ClientDashboard() {
       return;
     }
 
-    setClient(JSON.parse(clientData));
+    try {
+      const parsed = JSON.parse(clientData);
+      if (!parsed || typeof parsed !== 'object') throw new Error('Invalid session');
+      setClient(parsed);
+    } catch {
+      localStorage.removeItem('client_token');
+      localStorage.removeItem('client_data');
+      navigate('/client/login', { replace: true });
+      return;
+    }
     fetchProjects(token);
-    
+
     // Auto-refresh projects every 30 seconds
     const refreshInterval = setInterval(() => {
       fetchProjects(token);
     }, 30000); // 30 seconds
-    
+
     return () => clearInterval(refreshInterval);
   }, [navigate]);
 
   useEffect(() => {
     if (selectedProject && activeTab === 'chat') {
       fetchChatMessages();
-      
+
       // Auto-refresh chat messages every 10 seconds when on chat tab
       const chatRefreshInterval = setInterval(() => {
         fetchChatMessages();
       }, 10000); // 10 seconds
-      
+
       return () => clearInterval(chatRefreshInterval);
     }
   }, [selectedProject, activeTab]);
@@ -97,40 +110,31 @@ export default function ClientDashboard() {
   };
 
   const fetchProjects = async (token) => {
+    if (requestPending.current) return;
+    requestPending.current = true;
+    setRefreshing(true);
     try {
-      const response = await api.get('/client/projects', {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+      const response = await api.get('/client/projects', { headers: { Authorization: `Bearer ${token}` } });
+      if (!Array.isArray(response.data)) throw new Error('Invalid project response');
       setProjects(response.data);
-      
-      // If we have a selected project, update it with latest data
-      if (selectedProject) {
-        const updatedSelectedProject = response.data.find(p => p.id === selectedProject.id);
-        if (updatedSelectedProject) {
-          setSelectedProject(updatedSelectedProject);
-        }
-      } else if (response.data.length > 0) {
-        // No project selected yet, select the first one
-        setSelectedProject(response.data[0]);
-      }
+      setSelectedProject(previous => response.data.find(project => project.id === previous?.id) || response.data[0] || null);
+      setLoadError('');
     } catch (error) {
-      console.error('Error fetching projects:', error);
       if (error.response?.status === 401) {
-        toast.error('Session expired. Please login again.');
         handleLogout();
       } else {
-        toast.error('Failed to fetch projects');
+        setLoadError('We couldn’t refresh your projects. Your last loaded information is kept below. Please try again.');
       }
     } finally {
+      requestPending.current = false;
+      setRefreshing(false);
       setLoading(false);
     }
   };
 
   const fetchChatMessages = async () => {
     if (!selectedProject) return;
-    
+
     const token = localStorage.getItem('client_token');
     try {
       const messages = await clientService.getClientChatMessages(selectedProject.id, token);
@@ -224,7 +228,7 @@ export default function ClientDashboard() {
 
   const handleSubmitTestimonial = async (e) => {
     e.preventDefault();
-    
+
     if (!testimonialData.message.trim() || testimonialData.message.length < 10) {
       toast.error('Please write at least 10 characters for your testimonial');
       return;
@@ -234,7 +238,7 @@ export default function ClientDashboard() {
     const token = localStorage.getItem('client_token');
 
     try {
-      await api.post('/testimonials/client/submit', 
+      await api.post('/testimonials/client/submit',
         {
           role: testimonialData.role || '',
           message: testimonialData.message,
@@ -246,7 +250,7 @@ export default function ClientDashboard() {
           }
         }
       );
-      
+
       toast.success('🎉 Thank you! Your testimonial has been submitted for review.');
       setShowTestimonialDialog(false);
       setTestimonialData({ role: '', message: '', rating: 5 });
@@ -262,8 +266,8 @@ export default function ClientDashboard() {
   const getStatusColor = (status) => {
     const colors = {
       pending: 'bg-gradient-to-r from-yellow-100 to-orange-100 text-yellow-800 border border-yellow-300',
-      in_progress: 'bg-gradient-to-r from-blue-100 to-cyan-100 text-blue-800 border border-blue-300',
-      review: 'bg-gradient-to-r from-purple-100 to-pink-100 text-purple-800 border border-purple-300',
+      in_progress: 'bg-gradient-to-r from-brand-100 to-cyan-100 text-brand-800 border border-brand-300',
+      review: 'bg-gradient-to-r from-brand-100 to-pink-100 text-brand-800 border border-brand-300',
       completed: 'bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 border border-green-300'
     };
     return colors[status] || 'bg-gray-100 text-gray-800';
@@ -291,14 +295,14 @@ export default function ClientDashboard() {
 
   const getProgressColor = (progress) => {
     if (progress < 30) return 'bg-gradient-to-r from-red-500 to-orange-500';
-    if (progress < 70) return 'bg-gradient-to-r from-blue-500 to-cyan-500';
+    if (progress < 70) return 'bg-gradient-to-r from-brand-500 to-brand-700';
     return 'bg-gradient-to-r from-green-500 to-emerald-500';
   };
 
   const getPriorityColor = (priority) => {
     const colors = {
       low: 'bg-green-100 text-green-800 border border-green-300',
-      medium: 'bg-blue-100 text-blue-800 border border-blue-300',
+      medium: 'bg-brand-100 text-brand-800 border border-brand-300',
       high: 'bg-orange-100 text-orange-800 border border-orange-300',
       urgent: 'bg-red-100 text-red-800 border border-red-300'
     };
@@ -314,7 +318,7 @@ export default function ClientDashboard() {
 
   // Filter projects based on search and filters
   const filteredProjects = projects.filter(project => {
-    const matchesSearch = project.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    const matchesSearch = (project.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
                          (project.description || '').toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = statusFilter === 'all' || project.status === statusFilter;
     const matchesPriority = priorityFilter === 'all' || project.priority === priorityFilter;
@@ -339,7 +343,11 @@ export default function ClientDashboard() {
 
     const csv = [
       Object.keys(data).join(','),
-      Object.values(data).join(',')
+      Object.values(data).map(value => {
+        let text = String(value ?? '');
+        if (/^[=+@\-\t\r]/.test(text)) text = "'" + text;
+        return '"' + text.replace(/"/g, '""') + '"';
+      }).join(',')
     ].join('\n');
 
     const blob = new Blob([csv], { type: 'text/csv' });
@@ -357,7 +365,7 @@ export default function ClientDashboard() {
   const getMilestoneStatus = (status) => {
     const colors = {
       pending: 'bg-yellow-100 text-yellow-800',
-      in_progress: 'bg-blue-100 text-blue-800',
+      in_progress: 'bg-brand-100 text-brand-800',
       completed: 'bg-green-100 text-green-800'
     };
     return colors[status] || 'bg-gray-100 text-gray-800';
@@ -366,7 +374,7 @@ export default function ClientDashboard() {
   const getTaskStatus = (status) => {
     const colors = {
       todo: 'bg-gray-100 text-gray-800',
-      in_progress: 'bg-blue-100 text-blue-800',
+      in_progress: 'bg-brand-100 text-brand-800',
       completed: 'bg-green-100 text-green-800'
     };
     return colors[status] || 'bg-gray-100 text-gray-800';
@@ -374,11 +382,11 @@ export default function ClientDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-brand-50 via-brand-50 to-brand-100">
         <div className="text-center">
           <div className="relative">
-            <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-t-4 border-purple-600 mx-auto"></div>
-            <Sparkles className="w-6 h-6 text-purple-600 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 animate-pulse" />
+            <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-t-4 border-brand-600 mx-auto"></div>
+            <Sparkles className="w-6 h-6 text-brand-600 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 animate-pulse" />
           </div>
           <p className="mt-6 text-gray-700 font-medium text-lg">Loading your projects...</p>
         </div>
@@ -387,16 +395,16 @@ export default function ClientDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100" data-testid="client-dashboard">
+    <div className="client-workspace" data-testid="client-dashboard"><SEO title="Your Workspace | METECHQ"/>
       {/* Header */}
-      <header className="bg-white shadow-lg border-b-4 border-purple-200">
+      <header className="bg-white shadow-lg border-b-4 border-brand-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg p-2">
-                <img 
-                  src="/favicon.svg" 
-                  alt="METECHQ Logo" 
+              <div className="w-14 h-14 bg-gradient-to-br from-brand-500 to-brand-600 rounded-xl flex items-center justify-center shadow-lg p-2">
+                <img
+                  src="/favicon.svg"
+                  alt="METECHQ Logo"
                   style={{
                     width: '100%',
                     height: '100%',
@@ -406,8 +414,8 @@ export default function ClientDashboard() {
                 />
               </div>
               <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent" data-testid="client-name">
-                  Welcome back, {client?.name}! 👋
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-brand-600 to-brand-600 bg-clip-text text-transparent" data-testid="client-name">
+                  Welcome back, {client?.name}.
                 </h1>
                 <div className="flex items-center gap-3 mt-1">
                   <p className="text-sm text-gray-600 flex items-center gap-1">
@@ -428,11 +436,11 @@ export default function ClientDashboard() {
                 onClick={() => {
                   const token = localStorage.getItem('client_token');
                   fetchProjects(token);
-                  toast.success('Projects refreshed');
+
                 }}
                 variant="outline"
                 className="flex items-center gap-2 border-2 border-gray-200 hover:border-gray-400 hover:bg-gray-50 transition-all"
-                data-testid="refresh-projects-btn"
+                data-testid="refresh-projects-btn" aria-label="Refresh projects" disabled={refreshing}
               >
                 <RefreshCw className="w-4 h-4" />
                 <span className="hidden md:inline">Refresh</span>
@@ -440,7 +448,7 @@ export default function ClientDashboard() {
               <Button
                 onClick={() => setShowTestimonialDialog(true)}
                 className="flex items-center gap-2 bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-600 hover:to-amber-700 text-white shadow-md hover:shadow-lg transition-all"
-                data-testid="submit-testimonial-btn"
+                data-testid="submit-testimonial-btn" aria-label="Submit testimonial"
               >
                 <Star className="w-4 h-4 fill-current" />
                 <span className="hidden md:inline">Submit Testimonial</span>
@@ -448,8 +456,8 @@ export default function ClientDashboard() {
               <Button
                 variant="outline"
                 onClick={handleLogout}
-                className="flex items-center gap-2 border-2 border-purple-200 hover:border-purple-400 hover:bg-purple-50 transition-all"
-                data-testid="client-logout-btn"
+                className="flex items-center gap-2 border-2 border-brand-200 hover:border-brand-400 hover:bg-brand-50 transition-all"
+                data-testid="client-logout-btn" aria-label="Sign out"
               >
                 <LogOut className="w-4 h-4" />
                 <span className="hidden md:inline">Logout</span>
@@ -460,33 +468,34 @@ export default function ClientDashboard() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="client-workspace-content max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {loadError && <div className="client-load-error" role="alert"><p>{loadError}</p><button className="studio-button" disabled={refreshing} onClick={() => fetchProjects(localStorage.getItem('client_token'))}>{refreshing ? 'Refreshing…' : 'Try again'}</button></div>}
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <Card className="border-2 border-blue-200 shadow-lg hover:shadow-xl transition-shadow bg-gradient-to-br from-white to-blue-50">
+          <Card className="border-2 border-brand-200 shadow-lg hover:shadow-xl transition-shadow bg-gradient-to-br from-white to-brand-50">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Total Projects</p>
-                  <p className="text-4xl font-bold text-blue-600 mt-2">{projects.length}</p>
+                  <p className="text-4xl font-bold text-brand-600 mt-2">{projects.length}</p>
                 </div>
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center shadow-lg">
+                <div className="w-16 h-16 bg-gradient-to-br from-brand-500 to-brand-700 rounded-2xl flex items-center justify-center shadow-lg">
                   <Briefcase className="w-8 h-8 text-white" />
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="border-2 border-purple-200 shadow-lg hover:shadow-xl transition-shadow bg-gradient-to-br from-white to-purple-50">
+          <Card className="border-2 border-brand-200 shadow-lg hover:shadow-xl transition-shadow bg-gradient-to-br from-white to-brand-50">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">In Progress</p>
-                  <p className="text-4xl font-bold text-purple-600 mt-2">
+                  <p className="text-4xl font-bold text-brand-600 mt-2">
                     {projects.filter(p => p.status === 'in_progress').length}
                   </p>
                 </div>
-                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg relative">
+                <div className="w-16 h-16 bg-gradient-to-br from-brand-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg relative">
                   <TrendingUp className="w-8 h-8 text-white" />
                   <div className="absolute -top-1 -right-1 w-3 h-3 bg-pink-400 rounded-full animate-ping"></div>
                 </div>
@@ -536,7 +545,7 @@ export default function ClientDashboard() {
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                     <Input
-                      placeholder="Search projects..."
+                      placeholder="Search projects..." aria-label="Search projects"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="pl-10"
@@ -545,9 +554,9 @@ export default function ClientDashboard() {
                 </div>
                 <div>
                   <select
-                    value={statusFilter}
+                    aria-label="Filter by status" value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value)}
-                    className="w-full h-10 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full h-10 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500"
                   >
                     <option value="all">All Status</option>
                     <option value="pending">Pending</option>
@@ -558,9 +567,9 @@ export default function ClientDashboard() {
                 </div>
                 <div>
                   <select
-                    value={priorityFilter}
+                    aria-label="Filter by priority" value={priorityFilter}
                     onChange={(e) => setPriorityFilter(e.target.value)}
-                    className="w-full h-10 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full h-10 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500"
                   >
                     <option value="all">All Priority</option>
                     <option value="low">Low</option>
@@ -575,15 +584,15 @@ export default function ClientDashboard() {
         )}
 
         {/* Projects */}
-        {filteredProjects.length === 0 ? (
+        {loadError && projects.length === 0 ? null : filteredProjects.length === 0 ? (
           <Card className="border-2 border-dashed border-gray-300 bg-white">
             <CardContent className="py-16 text-center">
               <div className="w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Briefcase className="w-10 h-10 text-gray-400" />
               </div>
               <p className="text-xl font-semibold text-gray-700 mb-2">
-                {searchQuery || statusFilter !== 'all' || priorityFilter !== 'all' 
-                  ? 'No projects match your filters' 
+                {searchQuery || statusFilter !== 'all' || priorityFilter !== 'all'
+                  ? 'No projects match your filters'
                   : 'No projects assigned yet'}
               </p>
               <p className="text-sm text-gray-500 max-w-md mx-auto">
@@ -597,21 +606,25 @@ export default function ClientDashboard() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             {/* Project List */}
             <div className="lg:col-span-1">
-              <Card className="border-2 border-purple-200 shadow-lg">
-                <CardHeader className="border-b bg-gradient-to-r from-purple-50 to-indigo-50">
+              <Card className="border-2 border-brand-200 shadow-lg">
+                <CardHeader className="border-b bg-gradient-to-r from-brand-50 to-brand-50">
                   <CardTitle className="text-lg">Your Projects ({filteredProjects.length})</CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
                   <div className="divide-y max-h-[600px] overflow-y-auto">
                     {filteredProjects.map((project) => (
                       <div
+                        role="button"
+                        tabIndex={0}
+                        aria-pressed={selectedProject?.id === project.id}
+                        onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setSelectedProject(project); setActiveTab('overview'); } }}
                         key={project.id}
                         onClick={() => {
                           setSelectedProject(project);
                           setActiveTab('overview');
                         }}
-                        className={`p-4 cursor-pointer hover:bg-purple-50 transition-colors ${
-                          selectedProject?.id === project.id ? 'bg-purple-100 border-l-4 border-purple-600' : ''
+                        className={`p-4 cursor-pointer hover:bg-brand-50 transition-colors ${
+                          selectedProject?.id === project.id ? 'bg-brand-100 border-l-4 border-brand-600' : ''
                         }`}
                         data-testid={`project-item-${project.id}`}
                       >
@@ -641,13 +654,13 @@ export default function ClientDashboard() {
             {/* Project Details */}
             <div className="lg:col-span-3">
               {selectedProject ? (
-                <Card className="border-2 border-purple-200 shadow-lg">
-                  <CardHeader className="border-b bg-gradient-to-r from-purple-50 to-indigo-50">
+                <Card className="border-2 border-brand-200 shadow-lg">
+                  <CardHeader className="border-b bg-gradient-to-r from-brand-50 to-brand-50">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <CardTitle className="text-2xl flex items-center gap-2 flex-wrap">
                           {selectedProject.name}
-                          <Sparkles className="w-5 h-5 text-purple-500" />
+                          <Sparkles className="w-5 h-5 text-brand-500" />
                         </CardTitle>
                         <CardDescription className="mt-2">
                           {selectedProject.description || 'No description provided'}
@@ -688,7 +701,7 @@ export default function ClientDashboard() {
 
                   <CardContent className="p-6">
                     <Tabs value={activeTab} onValueChange={setActiveTab}>
-                      <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8 mb-6">
+                      <TabsList className="client-project-tabs">
                         <TabsTrigger value="overview" className="text-xs lg:text-sm">
                           <Briefcase className="w-4 h-4 mr-1" />
                           Overview
@@ -726,9 +739,9 @@ export default function ClientDashboard() {
                       {/* Overview Tab */}
                       <TabsContent value="overview" className="space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                          <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
+                          <div className="bg-brand-50 border-2 border-brand-200 rounded-lg p-4">
                             <p className="text-sm text-gray-600 mb-1">Progress</p>
-                            <p className="text-3xl font-bold text-blue-600">{selectedProject.progress}%</p>
+                            <p className="text-3xl font-bold text-brand-600">{selectedProject.progress}%</p>
                             <Progress value={selectedProject.progress} className="h-2 mt-2" />
                           </div>
                           {selectedProject.start_date && (
@@ -736,23 +749,23 @@ export default function ClientDashboard() {
                               <p className="text-sm text-gray-600 mb-1">Start Date</p>
                               <p className="text-lg font-semibold text-green-700 flex items-center gap-1">
                                 <Calendar className="w-4 h-4" />
-                                {new Date(selectedProject.start_date).toLocaleDateString('en-US', { 
-                                  year: 'numeric', 
-                                  month: 'long', 
-                                  day: 'numeric' 
+                                {new Date(selectedProject.start_date).toLocaleDateString('en-US', {
+                                  year: 'numeric',
+                                  month: 'long',
+                                  day: 'numeric'
                                 })}
                               </p>
                             </div>
                           )}
                           {selectedProject.expected_delivery && (
-                            <div className="bg-purple-50 border-2 border-purple-200 rounded-lg p-4">
+                            <div className="bg-brand-50 border-2 border-brand-200 rounded-lg p-4">
                               <p className="text-sm text-gray-600 mb-1">Expected Delivery</p>
-                              <p className="text-lg font-semibold text-purple-700 flex items-center gap-1">
+                              <p className="text-lg font-semibold text-brand-700 flex items-center gap-1">
                                 <Clock className="w-4 h-4" />
-                                {new Date(selectedProject.expected_delivery).toLocaleDateString('en-US', { 
-                                  year: 'numeric', 
-                                  month: 'long', 
-                                  day: 'numeric' 
+                                {new Date(selectedProject.expected_delivery).toLocaleDateString('en-US', {
+                                  year: 'numeric',
+                                  month: 'long',
+                                  day: 'numeric'
                                 })}
                               </p>
                             </div>
@@ -762,12 +775,12 @@ export default function ClientDashboard() {
                         {/* Quick Stats */}
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                           <div className="bg-white border-2 border-gray-200 rounded-lg p-4 text-center">
-                            <Target className="w-8 h-8 text-purple-500 mx-auto mb-2" />
+                            <Target className="w-8 h-8 text-brand-500 mx-auto mb-2" />
                             <p className="text-2xl font-bold text-gray-900">{selectedProject.milestones?.length || 0}</p>
                             <p className="text-xs text-gray-600">Milestones</p>
                           </div>
                           <div className="bg-white border-2 border-gray-200 rounded-lg p-4 text-center">
-                            <ListChecks className="w-8 h-8 text-blue-500 mx-auto mb-2" />
+                            <ListChecks className="w-8 h-8 text-brand-500 mx-auto mb-2" />
                             <p className="text-2xl font-bold text-gray-900">{selectedProject.tasks?.length || 0}</p>
                             <p className="text-xs text-gray-600">Tasks</p>
                           </div>
@@ -784,9 +797,9 @@ export default function ClientDashboard() {
                         </div>
 
                         {selectedProject.notes && (
-                          <div className="bg-gradient-to-br from-purple-50 to-blue-50 border-2 border-purple-200 rounded-xl p-5">
+                          <div className="bg-gradient-to-br from-brand-50 to-brand-50 border-2 border-brand-200 rounded-xl p-5">
                             <h4 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
-                              <FileText className="w-5 h-5 text-purple-600" />
+                              <FileText className="w-5 h-5 text-brand-600" />
                               Notes from Project Manager
                             </h4>
                             <p className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">
@@ -799,7 +812,7 @@ export default function ClientDashboard() {
                         {selectedProject.comments && selectedProject.comments.length > 0 && (
                           <div className="bg-white border-2 border-gray-200 rounded-xl p-5">
                             <h4 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
-                              <MessageSquare className="w-5 h-5 text-blue-600" />
+                              <MessageSquare className="w-5 h-5 text-brand-600" />
                               Comments ({selectedProject.comments.length})
                             </h4>
                             <div className="space-y-3 max-h-60 overflow-y-auto">
@@ -822,7 +835,7 @@ export default function ClientDashboard() {
                         )}
 
                         {/* Add Comment Form */}
-                        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-5">
+                        <div className="bg-gradient-to-br from-brand-50 to-brand-50 border-2 border-brand-200 rounded-xl p-5">
                           <h4 className="font-bold text-gray-900 mb-3">Add a Comment</h4>
                           <form onSubmit={handleAddComment}>
                             <Textarea
@@ -835,7 +848,7 @@ export default function ClientDashboard() {
                             <Button
                               type="submit"
                               disabled={submittingComment || !commentText.trim()}
-                              className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+                              className="bg-gradient-to-r from-brand-600 to-brand-600 hover:from-brand-700 hover:to-brand-700"
                             >
                               {submittingComment ? 'Adding...' : 'Add Comment'}
                             </Button>
@@ -879,10 +892,10 @@ export default function ClientDashboard() {
                             <div key={task.id} className="bg-white border-2 border-gray-200 rounded-lg p-4">
                               <div className="flex items-start justify-between">
                                 <div className="flex items-start gap-3 flex-1">
-                                  <CheckCircle2 
+                                  <CheckCircle2
                                     className={`w-5 h-5 mt-0.5 ${
                                       task.status === 'completed' ? 'text-green-600' : 'text-gray-400'
-                                    }`} 
+                                    }`}
                                   />
                                   <div className="flex-1">
                                     <h4 className={`font-semibold ${
@@ -917,7 +930,7 @@ export default function ClientDashboard() {
                         {selectedProject.team_members && selectedProject.team_members.length > 0 ? (
                           selectedProject.team_members.map((member, idx) => (
                             <div key={idx} className="bg-white border-2 border-gray-200 rounded-lg p-4 flex items-center gap-4">
-                              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-full flex items-center justify-center">
+                              <div className="w-12 h-12 bg-gradient-to-br from-brand-500 to-brand-500 rounded-full flex items-center justify-center">
                                 <User className="w-6 h-6 text-white" />
                               </div>
                               <div className="flex-1">
@@ -941,9 +954,9 @@ export default function ClientDashboard() {
                         {selectedProject.budget ? (
                           <div className="space-y-4">
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                              <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
+                              <div className="bg-brand-50 border-2 border-brand-200 rounded-lg p-4">
                                 <p className="text-sm text-gray-600 mb-1">Total Budget</p>
-                                <p className="text-2xl font-bold text-blue-600">
+                                <p className="text-2xl font-bold text-brand-600">
                                   {selectedProject.budget.currency} {selectedProject.budget.total_amount.toLocaleString()}
                                 </p>
                               </div>
@@ -980,11 +993,11 @@ export default function ClientDashboard() {
                           selectedProject.files.map((file) => (
                             <div
                               key={file.id}
-                              className="flex items-center justify-between bg-gradient-to-r from-white to-indigo-50 border-2 border-indigo-200 p-4 rounded-xl hover:shadow-lg transition-all"
+                              className="flex items-center justify-between bg-gradient-to-r from-white to-brand-50 border-2 border-brand-200 p-4 rounded-xl hover:shadow-lg transition-all"
                               data-testid={`project-file-${file.id}`}
                             >
                               <div className="flex items-center gap-4 flex-1">
-                                <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center shadow-md">
+                                <div className="w-12 h-12 bg-gradient-to-br from-brand-500 to-brand-500 rounded-lg flex items-center justify-center shadow-md">
                                   <FileText className="w-6 h-6 text-white" />
                                 </div>
                                 <div>
@@ -998,7 +1011,7 @@ export default function ClientDashboard() {
                               <Button
                                 size="sm"
                                 onClick={() => downloadFile(selectedProject.id, file.id, file.filename)}
-                                className="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-md"
+                                className="flex items-center gap-2 bg-gradient-to-r from-brand-600 to-brand-600 hover:from-brand-700 hover:to-brand-700 text-white shadow-md"
                                 data-testid={`download-file-btn-${file.id}`}
                               >
                                 <Download className="w-4 h-4" />
@@ -1015,7 +1028,7 @@ export default function ClientDashboard() {
                       <TabsContent value="activity" className="space-y-3 max-h-[500px] overflow-y-auto">
                         {selectedProject.activity_log && selectedProject.activity_log.length > 0 ? (
                           selectedProject.activity_log.map((activity) => (
-                            <div key={activity.id} className="bg-white border-l-4 border-purple-500 p-4 rounded-r-lg">
+                            <div key={activity.id} className="bg-white border-l-4 border-brand-500 p-4 rounded-r-lg">
                               <div className="flex items-start justify-between">
                                 <div>
                                   <p className="text-sm font-semibold text-gray-900">{activity.description}</p>
@@ -1047,7 +1060,7 @@ export default function ClientDashboard() {
                                     <div
                                       className={`max-w-[70%] rounded-lg p-3 ${
                                         msg.sender_type === 'client'
-                                          ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white'
+                                          ? 'bg-gradient-to-r from-brand-600 to-brand-600 text-white'
                                           : 'bg-gray-100 text-gray-900'
                                       }`}
                                     >
@@ -1083,7 +1096,7 @@ export default function ClientDashboard() {
                             <Button
                               type="submit"
                               disabled={sendingMessage || !chatMessage.trim()}
-                              className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700"
+                              className="bg-gradient-to-r from-brand-600 to-brand-600 hover:from-brand-700 hover:to-brand-700"
                             >
                               <Send className="w-4 h-4" />
                             </Button>
@@ -1104,7 +1117,7 @@ export default function ClientDashboard() {
             </div>
           </div>
         )}
-      </main>
+      </div>
 
       {/* Testimonial Submission Dialog */}
       <Dialog open={showTestimonialDialog} onOpenChange={setShowTestimonialDialog}>
@@ -1118,7 +1131,7 @@ export default function ClientDashboard() {
               Share your experience working with us! Your feedback helps us improve and helps others make informed decisions.
             </DialogDescription>
           </DialogHeader>
-          
+
           <form onSubmit={handleSubmitTestimonial}>
             <div className="space-y-6 py-4">
               {/* Pre-filled Name */}
@@ -1208,8 +1221,8 @@ export default function ClientDashboard() {
                 </p>
               </div>
 
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                <p className="text-xs text-blue-800 flex items-center gap-2">
+              <div className="bg-brand-50 border border-brand-200 rounded-lg p-3">
+                <p className="text-xs text-brand-800 flex items-center gap-2">
                   <AlertCircle className="w-4 h-4" />
                   Your testimonial will be reviewed by our team before being published on the website.
                 </p>

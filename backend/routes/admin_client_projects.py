@@ -1,5 +1,7 @@
+from auth.admin_auth import require_permission
 from fastapi import APIRouter, HTTPException, status, Depends, UploadFile, File
 from typing import List
+from pathlib import Path
 from schemas.client_project import (
     ClientProjectCreate, ClientProjectUpdate, ClientProjectResponse, 
     FileUploadResponse, ProjectFileResponse, MilestoneCreate, MilestoneUpdate,
@@ -144,7 +146,7 @@ def convert_project_to_response(project_doc) -> ClientProjectResponse:
     )
 
 @router.get("/", response_model=List[ClientProjectResponse])
-async def get_all_projects(admin = Depends(get_current_admin)):
+async def get_all_projects(admin = Depends(require_permission("canManageClientProjects"))):
     """Get all client projects (Admin only)"""
     projects = []
     async for project_doc in client_projects_collection.find():
@@ -152,7 +154,7 @@ async def get_all_projects(admin = Depends(get_current_admin)):
     return projects
 
 @router.get("/{project_id}", response_model=ClientProjectResponse)
-async def get_project(project_id: str, admin = Depends(get_current_admin)):
+async def get_project(project_id: str, admin = Depends(require_permission("canManageClientProjects"))):
     """Get a specific client project (Admin only)"""
     project_doc = await client_projects_collection.find_one({"id": project_id})
     
@@ -165,7 +167,7 @@ async def get_project(project_id: str, admin = Depends(get_current_admin)):
     return convert_project_to_response(project_doc)
 
 @router.post("/", response_model=ClientProjectResponse)
-async def create_project(project_data: ClientProjectCreate, admin = Depends(get_current_admin)):
+async def create_project(project_data: ClientProjectCreate, admin = Depends(require_permission("canManageClientProjects"))):
     """Create a new client project (Admin only)"""
     # Verify client exists
     client = await clients_collection.find_one({"id": project_data.client_id})
@@ -220,7 +222,7 @@ async def create_project(project_data: ClientProjectCreate, admin = Depends(get_
     return convert_project_to_response(project_dict)
 
 @router.put("/{project_id}", response_model=ClientProjectResponse)
-async def update_project(project_id: str, project_data: ClientProjectUpdate, admin = Depends(get_current_admin)):
+async def update_project(project_id: str, project_data: ClientProjectUpdate, admin = Depends(require_permission("canManageClientProjects"))):
     """Update a client project (Admin only)"""
     project_doc = await client_projects_collection.find_one({"id": project_id})
     
@@ -312,7 +314,7 @@ async def update_project(project_id: str, project_data: ClientProjectUpdate, adm
     return convert_project_to_response(updated_project)
 
 @router.delete("/{project_id}")
-async def delete_project(project_id: str, admin = Depends(get_current_admin)):
+async def delete_project(project_id: str, admin = Depends(require_permission("canManageClientProjects"))):
     """Delete a client project (Admin only)"""
     project_doc = await client_projects_collection.find_one({"id": project_id})
     
@@ -341,7 +343,7 @@ async def delete_project(project_id: str, admin = Depends(get_current_admin)):
 # ============================================================================
 
 @router.post("/{project_id}/milestones", response_model=MilestoneResponse)
-async def add_milestone(project_id: str, milestone_data: MilestoneCreate, admin = Depends(get_current_admin)):
+async def add_milestone(project_id: str, milestone_data: MilestoneCreate, admin = Depends(require_permission("canManageClientProjects"))):
     """Add a milestone to project"""
     project_doc = await client_projects_collection.find_one({"id": project_id})
     if not project_doc:
@@ -381,7 +383,7 @@ async def update_milestone(
     project_id: str,
     milestone_id: str,
     milestone_data: MilestoneUpdate,
-    admin = Depends(get_current_admin)
+    admin = Depends(require_permission("canManageClientProjects"))
 ):
     """Update a milestone"""
     project_doc = await client_projects_collection.find_one({"id": project_id})
@@ -437,7 +439,7 @@ async def update_milestone(
     return MilestoneResponse(**updated_milestone)
 
 @router.delete("/{project_id}/milestones/{milestone_id}")
-async def delete_milestone(project_id: str, milestone_id: str, admin = Depends(get_current_admin)):
+async def delete_milestone(project_id: str, milestone_id: str, admin = Depends(require_permission("canManageClientProjects"))):
     """Delete a milestone"""
     # Add activity log
     activity = log_activity(
@@ -468,7 +470,7 @@ async def delete_milestone(project_id: str, milestone_id: str, admin = Depends(g
 # ============================================================================
 
 @router.post("/{project_id}/tasks", response_model=TaskResponse)
-async def add_task(project_id: str, task_data: TaskCreate, admin = Depends(get_current_admin)):
+async def add_task(project_id: str, task_data: TaskCreate, admin = Depends(require_permission("canManageClientProjects"))):
     """Add a task to project"""
     project_doc = await client_projects_collection.find_one({"id": project_id})
     if not project_doc:
@@ -508,7 +510,7 @@ async def update_task(
     project_id: str,
     task_id: str,
     task_data: TaskUpdate,
-    admin = Depends(get_current_admin)
+    admin = Depends(require_permission("canManageClientProjects"))
 ):
     """Update a task"""
     project_doc = await client_projects_collection.find_one({"id": project_id})
@@ -566,7 +568,7 @@ async def update_task(
     return TaskResponse(**tasks[idx])
 
 @router.delete("/{project_id}/tasks/{task_id}")
-async def delete_task(project_id: str, task_id: str, admin = Depends(get_current_admin)):
+async def delete_task(project_id: str, task_id: str, admin = Depends(require_permission("canManageClientProjects"))):
     """Delete a task"""
     activity = log_activity(
         project_id,
@@ -596,7 +598,7 @@ async def delete_task(project_id: str, task_id: str, admin = Depends(get_current
 # ============================================================================
 
 @router.post("/{project_id}/comments", response_model=CommentResponse)
-async def add_comment(project_id: str, comment_data: CommentCreate, admin = Depends(get_current_admin)):
+async def add_comment(project_id: str, comment_data: CommentCreate, admin = Depends(require_permission("canManageClientProjects"))):
     """Add a comment to project"""
     project_doc = await client_projects_collection.find_one({"id": project_id})
     if not project_doc:
@@ -636,7 +638,7 @@ async def add_comment(project_id: str, comment_data: CommentCreate, admin = Depe
     return CommentResponse(**comment_dict)
 
 @router.delete("/{project_id}/comments/{comment_id}")
-async def delete_comment(project_id: str, comment_id: str, admin = Depends(get_current_admin)):
+async def delete_comment(project_id: str, comment_id: str, admin = Depends(require_permission("canManageClientProjects"))):
     """Delete a comment"""
     result = await client_projects_collection.update_one(
         {"id": project_id},
@@ -656,7 +658,7 @@ async def delete_comment(project_id: str, comment_id: str, admin = Depends(get_c
 # ============================================================================
 
 @router.post("/{project_id}/team", response_model=TeamMemberResponse)
-async def add_team_member(project_id: str, member_data: TeamMemberAdd, admin = Depends(get_current_admin)):
+async def add_team_member(project_id: str, member_data: TeamMemberAdd, admin = Depends(require_permission("canManageClientProjects"))):
     """Add a team member to project"""
     project_doc = await client_projects_collection.find_one({"id": project_id})
     if not project_doc:
@@ -690,7 +692,7 @@ async def add_team_member(project_id: str, member_data: TeamMemberAdd, admin = D
     return TeamMemberResponse(**member_dict)
 
 @router.delete("/{project_id}/team/{admin_id}")
-async def remove_team_member(project_id: str, admin_id: str, admin = Depends(get_current_admin)):
+async def remove_team_member(project_id: str, admin_id: str, admin = Depends(require_permission("canManageClientProjects"))):
     """Remove a team member from project"""
     result = await client_projects_collection.update_one(
         {"id": project_id},
@@ -710,7 +712,7 @@ async def remove_team_member(project_id: str, admin_id: str, admin = Depends(get
 # ============================================================================
 
 @router.put("/{project_id}/budget", response_model=BudgetResponse)
-async def update_budget(project_id: str, budget_data: BudgetUpdate, admin = Depends(get_current_admin)):
+async def update_budget(project_id: str, budget_data: BudgetUpdate, admin = Depends(require_permission("canManageClientProjects"))):
     """Update project budget"""
     project_doc = await client_projects_collection.find_one({"id": project_id})
     if not project_doc:
@@ -764,7 +766,7 @@ async def update_budget(project_id: str, budget_data: BudgetUpdate, admin = Depe
 async def upload_project_file(
     project_id: str,
     file: UploadFile = File(...),
-    admin = Depends(get_current_admin)
+    admin = Depends(require_permission("canManageClientProjects"))
 ):
     """Upload a file to a project (Admin only)"""
     project_doc = await client_projects_collection.find_one({"id": project_id})
@@ -855,7 +857,7 @@ async def upload_project_file(
 async def delete_project_file(
     project_id: str,
     file_id: str,
-    admin = Depends(get_current_admin)
+    admin = Depends(require_permission("canManageClientProjects"))
 ):
     """Delete a file from a project (Admin only)"""
     project_doc = await client_projects_collection.find_one({"id": project_id})
@@ -916,7 +918,7 @@ async def delete_project_file(
 # ============================================================================
 
 @router.post("/{project_id}/chat", response_model=ChatMessageResponse)
-async def send_chat_message(project_id: str, message_data: ChatMessageCreate, admin = Depends(get_current_admin)):
+async def send_chat_message(project_id: str, message_data: ChatMessageCreate, admin = Depends(require_permission("canManageClientProjects"))):
     """Send a chat message to client (Admin)"""
     project_doc = await client_projects_collection.find_one({"id": project_id})
     if not project_doc:
@@ -957,7 +959,7 @@ async def send_chat_message(project_id: str, message_data: ChatMessageCreate, ad
     return ChatMessageResponse(**message_dict)
 
 @router.get("/{project_id}/chat", response_model=List[ChatMessageResponse])
-async def get_chat_messages(project_id: str, admin = Depends(get_current_admin)):
+async def get_chat_messages(project_id: str, admin = Depends(require_permission("canManageClientProjects"))):
     """Get all chat messages for a project (Admin)"""
     project_doc = await client_projects_collection.find_one({"id": project_id})
     if not project_doc:
@@ -990,7 +992,7 @@ async def get_chat_messages(project_id: str, admin = Depends(get_current_admin))
     ]
 
 @router.get("/{project_id}/unread-count")
-async def get_unread_count(project_id: str, admin = Depends(get_current_admin)):
+async def get_unread_count(project_id: str, admin = Depends(require_permission("canManageClientProjects"))):
     """Get count of unread messages from client (Admin)"""
     project_doc = await client_projects_collection.find_one({"id": project_id})
     if not project_doc:

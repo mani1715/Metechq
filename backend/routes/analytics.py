@@ -1,3 +1,4 @@
+from auth.admin_auth import require_permission
 from fastapi import APIRouter, HTTPException, Depends
 from typing import Optional
 from datetime import datetime, timedelta
@@ -40,7 +41,7 @@ async def track_event(event: AnalyticsEventCreate):
 @router.get("/summary", response_model=AnalyticsSummary)
 async def get_analytics_summary(
     period: str = "7days",
-    current_admin: dict = Depends(get_current_admin)
+    current_admin: dict = Depends(require_permission("canViewAnalytics"))
 ):
     """Get analytics summary - admin only"""
     try:

@@ -1,11 +1,11 @@
 import React from 'react';
-import { 
-  FileSearch, 
-  Palette, 
-  Code, 
-  CheckCircle2, 
-  Rocket, 
-  HeartHandshake 
+import {
+  FileSearch,
+  Palette,
+  Code,
+  CheckCircle2,
+  Rocket,
+  HeartHandshake
 } from 'lucide-react';
 
 const DevelopmentProcess = () => {
@@ -16,7 +16,7 @@ const DevelopmentProcess = () => {
       title: 'Planning & Research',
       description: 'Understanding requirements, defining goals, and creating a comprehensive project roadmap',
       icon: FileSearch,
-      color: '#D4AF37'
+      color: '#c5792c'
     },
     {
       id: 2,
@@ -24,7 +24,7 @@ const DevelopmentProcess = () => {
       title: 'UI/UX Design',
       description: 'Creating wireframes, prototypes, and beautiful interfaces that prioritize user experience',
       icon: Palette,
-      color: '#BFA7FF'
+      color: '#dfba88'
     },
     {
       id: 3,
@@ -32,7 +32,7 @@ const DevelopmentProcess = () => {
       title: 'Development',
       description: 'Building the solution with clean, scalable code and modern best practices',
       icon: Code,
-      color: '#7C5CFF'
+      color: '#a34e1d'
     },
     {
       id: 4,
@@ -40,7 +40,7 @@ const DevelopmentProcess = () => {
       title: 'Testing & QA',
       description: 'Rigorous testing across devices and scenarios to ensure flawless functionality',
       icon: CheckCircle2,
-      color: '#D4AF37'
+      color: '#c5792c'
     },
     {
       id: 5,
@@ -48,7 +48,7 @@ const DevelopmentProcess = () => {
       title: 'Deployment',
       description: 'Launching with optimized configurations and smooth transition to production',
       icon: Rocket,
-      color: '#BFA7FF'
+      color: '#dfba88'
     },
     {
       id: 6,
@@ -56,7 +56,7 @@ const DevelopmentProcess = () => {
       title: 'Support',
       description: 'Ongoing maintenance, updates, and support to keep your solution running perfectly',
       icon: HeartHandshake,
-      color: '#7C5CFF'
+      color: '#a34e1d'
     }
   ];
 
@@ -64,13 +64,13 @@ const DevelopmentProcess = () => {
     <div className="content-block development-process-block" data-admin-editable="development-process">
       <h2 className="content-block-title">Development Process</h2>
       <p className="content-block-subtitle">Our proven methodology for delivering exceptional results</p>
-      
+
       <div className="process-timeline">
         {processSteps.map((step, idx) => {
           const IconComponent = step.icon;
           return (
-            <div 
-              key={step.id} 
+            <div
+              key={step.id}
               className="process-step"
               style={{ '--step-color': step.color }}
               data-testid={`process-step-${step.id}`}

@@ -1,3 +1,4 @@
+from auth.admin_auth import require_permission
 from fastapi import APIRouter, HTTPException, status, Depends
 from typing import List
 from schemas.client import ClientCreate, ClientUpdate, ClientResponse
@@ -10,7 +11,7 @@ from datetime import datetime
 router = APIRouter(prefix="/admin/clients", tags=["admin-clients"])
 
 @router.get("/", response_model=List[ClientResponse])
-async def get_all_clients(admin = Depends(get_current_admin)):
+async def get_all_clients(admin = Depends(require_permission("canManageClients"))):
     """Get all clients (Admin only)"""
     clients = []
     async for client_doc in clients_collection.find():
@@ -26,7 +27,7 @@ async def get_all_clients(admin = Depends(get_current_admin)):
     return clients
 
 @router.get("/{client_id}", response_model=ClientResponse)
-async def get_client(client_id: str, admin = Depends(get_current_admin)):
+async def get_client(client_id: str, admin = Depends(require_permission("canManageClients"))):
     """Get a specific client (Admin only)"""
     client_doc = await clients_collection.find_one({"id": client_id})
     
@@ -47,7 +48,7 @@ async def get_client(client_id: str, admin = Depends(get_current_admin)):
     )
 
 @router.get("/{client_id}/projects")
-async def get_client_projects_for_admin(client_id: str, admin = Depends(get_current_admin)):
+async def get_client_projects_for_admin(client_id: str, admin = Depends(require_permission("canManageClients"))):
     """Get all projects for a specific client (Admin only)"""
     projects = []
     async for p in client_projects_collection.find({"client_id": client_id}):
@@ -56,7 +57,7 @@ async def get_client_projects_for_admin(client_id: str, admin = Depends(get_curr
     return projects
 
 @router.post("/", response_model=ClientResponse)
-async def create_client(client_data: ClientCreate, admin = Depends(get_current_admin)):
+async def create_client(client_data: ClientCreate, admin = Depends(require_permission("canManageClients"))):
     """Create a new client with password validation (Admin only)"""
     # Validate password strength
     valid_pw, pw_err = validate_password_strength(client_data.password)
@@ -102,7 +103,7 @@ async def create_client(client_data: ClientCreate, admin = Depends(get_current_a
     )
 
 @router.put("/{client_id}", response_model=ClientResponse)
-async def update_client(client_id: str, client_data: ClientUpdate, admin = Depends(get_current_admin)):
+async def update_client(client_id: str, client_data: ClientUpdate, admin = Depends(require_permission("canManageClients"))):
     """Update a client (Admin only)"""
     client_doc = await clients_collection.find_one({"id": client_id})
     
@@ -161,7 +162,7 @@ async def update_client(client_id: str, client_data: ClientUpdate, admin = Depen
     )
 
 @router.delete("/{client_id}")
-async def delete_client(client_id: str, admin = Depends(get_current_admin)):
+async def delete_client(client_id: str, admin = Depends(require_permission("canManageClients"))):
     """Delete a client (Admin only)"""
     result = await clients_collection.delete_one({"id": client_id})
     

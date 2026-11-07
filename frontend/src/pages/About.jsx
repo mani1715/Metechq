@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  ArrowRight, Award, Target, Zap, Shield, Sparkles, 
+import {
+  ArrowRight, Award, Target, Zap, Shield, Sparkles,
   CheckCircle, Briefcase, Users, TrendingUp, Layers,
   Code2, Star
 } from 'lucide-react';
@@ -21,7 +21,7 @@ const About = () => {
       try {
         setError(null);
         const data = await aboutService.getAboutContent();
-        
+
         if (data) {
           setAboutData(data);
         } else {
@@ -185,10 +185,10 @@ const About = () => {
               <h2 className="story-title-premium" data-admin-editable="story-title">
                 {aboutData.story_title}
               </h2>
-              
+
               {aboutData.story_paragraphs.map((paragraph, index) => (
-                <p 
-                  key={index} 
+                <p
+                  key={index}
                   className="story-paragraph-premium"
                   data-admin-editable={`story-paragraph-${index + 1}`}
                 >
@@ -201,8 +201,8 @@ const About = () => {
                 <h3 className="expertise-title">Core Expertise:</h3>
                 <div className="expertise-grid">
                   {aboutData.story_expertise.map((item, index) => (
-                    <div 
-                      key={index} 
+                    <div
+                      key={index}
                       className="expertise-item"
                       data-admin-editable={`expertise-${index + 1}`}
                     >
@@ -236,8 +236,8 @@ const About = () => {
             {aboutData.values?.map((value, index) => {
               const IconComponent = iconMap[value.icon] || Award;
               return (
-                <Card 
-                  key={value.id} 
+                <Card
+                  key={value.id}
                   className="value-card-premium"
                   data-admin-editable={`value-${value.id}`}
                   style={{ animationDelay: `${index * 0.1}s` }}
@@ -248,15 +248,15 @@ const About = () => {
                     </div>
                     <div className="value-glow"></div>
                   </div>
-                  
+
                   <h3 className="value-title-premium" data-admin-editable={`value-title-${value.id}`}>
                     {value.title}
                   </h3>
-                  
+
                   <p className="value-description-premium" data-admin-editable={`value-desc-${value.id}`}>
                     {value.description}
                   </p>
-                  
+
                   <div className="value-card-border"></div>
                 </Card>
               );
@@ -283,8 +283,8 @@ const About = () => {
           {/* Simple Skills Cloud from story expertise */}
           <div className="skills-cloud-premium" data-admin-editable="skills-cloud">
             {aboutData.story_expertise?.map((skill, index) => (
-              <span 
-                key={index} 
+              <span
+                key={index}
                 className="skill-tag-premium"
                 data-admin-editable={`skill-${index + 1}`}
                 style={{ animationDelay: `${index * 0.03}s` }}
@@ -312,8 +312,8 @@ const About = () => {
             {aboutData.achievements?.map((achievement, index) => {
               const IconComponent = iconMap[achievement.icon] || Star;
               return (
-                <div 
-                  key={achievement.id} 
+                <div
+                  key={achievement.id}
                   className="achievement-card-premium"
                   data-admin-editable={`achievement-${achievement.id}`}
                   style={{ animationDelay: `${index * 0.1}s` }}
@@ -350,10 +350,10 @@ const About = () => {
           <Card className="founder-card-premium" data-admin-editable="founder-card">
             {/* Founder Info - No Image as per user request */}
             <div style={{ padding: '40px', textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}>
-              <h3 className="founder-name" data-admin-editable="founder-name" style={{ fontSize: '32px', fontWeight: '700', marginBottom: '12px', color: '#1C2A3A' }}>
+              <h3 className="founder-name" data-admin-editable="founder-name" style={{ fontSize: '32px', fontWeight: '700', marginBottom: '12px', color: '#352a21' }}>
                 {aboutData.founder_name}
               </h3>
-              <p className="founder-role" data-admin-editable="founder-role" style={{ fontSize: '18px', color: '#7C5CFF', fontWeight: '500', marginBottom: '24px' }}>
+              <p className="founder-role" data-admin-editable="founder-role" style={{ fontSize: '18px', color: '#a34e1d', fontWeight: '500', marginBottom: '24px' }}>
                 {aboutData.founder_role}
               </p>
               <p className="founder-bio" data-admin-editable="founder-bio" style={{ fontSize: '16px', lineHeight: '1.8', color: '#6B7280', marginBottom: '32px' }}>
@@ -362,18 +362,18 @@ const About = () => {
 
               {/* Founder Skills */}
               <div className="founder-skills" data-admin-editable="founder-skills">
-                <h4 className="founder-skills-title" style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px', color: '#1C2A3A' }}>
+                <h4 className="founder-skills-title" style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px', color: '#352a21' }}>
                   Specializations:
                 </h4>
                 <div className="founder-skills-list" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
                   {aboutData.founder_skills?.map((skill, index) => (
-                    <div 
-                      key={index} 
+                    <div
+                      key={index}
                       className="founder-skill-item"
                       data-admin-editable={`founder-skill-${index + 1}`}
                       style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '15px' }}
                     >
-                      <CheckCircle className="skill-check" style={{ color: '#7C5CFF', width: '18px', height: '18px' }} />
+                      <CheckCircle className="skill-check" style={{ color: '#a34e1d', width: '18px', height: '18px' }} />
                       <span>{skill}</span>
                     </div>
                   ))}
@@ -393,15 +393,15 @@ const About = () => {
             <Sparkles className="cta-sparkle sparkle-2" />
             <Sparkles className="cta-sparkle sparkle-3" />
           </div>
-          
+
           <h2 className="cta-title-premium-about" data-admin-editable="cta-title">
             {aboutData.cta_title}
           </h2>
-          
+
           <p className="cta-description-premium-about" data-admin-editable="cta-description">
             {aboutData.cta_description}
           </p>
-          
+
           <Link to={aboutData.cta_button_link} data-admin-editable="cta-button-link">
             <Button className="cta-gold-large-about">
               <span data-admin-editable="cta-button-text">{aboutData.cta_button_text}</span>

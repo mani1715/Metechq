@@ -47,7 +47,7 @@ const ContactManager = () => {
   const handleMarkAsRead = async (id) => {
     try {
       await contactService.markAsRead(id, true);
-      setContacts(contacts.map(c => 
+      setContacts(contacts.map(c =>
         c.id === id ? { ...c, read: true } : c
       ));
       toast.success('Marked as read');
@@ -105,7 +105,7 @@ const ContactManager = () => {
       if (isEditMode && selectedContact) {
         // Update existing contact
         const updated = await contactService.updateContact(selectedContact.id, formData);
-        setContacts(contacts.map(c => 
+        setContacts(contacts.map(c =>
           c.id === selectedContact.id ? updated : c
         ));
         toast.success('Contact updated successfully');
@@ -118,7 +118,7 @@ const ContactManager = () => {
         toast.success('Contact created successfully');
         setIsCreateMode(false);
       }
-      
+
       // Reset form
       setFormData({
         name: '',
@@ -169,7 +169,7 @@ const ContactManager = () => {
       {/* Header */}
       <div style={{ marginBottom: '32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h1 style={{ fontSize: '32px', fontWeight: '700', color: '#1C2A3A', margin: '0 0 8px 0' }}>
+          <h1 style={{ fontSize: '32px', fontWeight: '700', color: '#352a21', margin: '0 0 8px 0' }}>
             Contact Submissions
           </h1>
           <p style={{ color: '#6B7280', margin: 0 }}>
@@ -206,8 +206,8 @@ const ContactManager = () => {
               padding: '12px 24px',
               background: 'transparent',
               border: 'none',
-              borderBottom: filter === tab.id ? '2px solid #7C5CFF' : '2px solid transparent',
-              color: filter === tab.id ? '#7C5CFF' : '#6B7280',
+              borderBottom: filter === tab.id ? '2px solid #a34e1d' : '2px solid transparent',
+              color: filter === tab.id ? '#a34e1d' : '#6B7280',
               fontWeight: filter === tab.id ? '600' : '400',
               cursor: 'pointer',
               marginBottom: '-2px',
@@ -248,7 +248,7 @@ const ContactManager = () => {
                   <tr
                     key={contact.id}
                     style={{
-                      background: !contact.read ? 'rgba(124, 92, 255, 0.02)' : 'transparent',
+                      background: !contact.read ? 'rgba(163, 78, 29, 0.02)' : 'transparent',
                     }}
                   >
                     <td>
@@ -274,7 +274,7 @@ const ContactManager = () => {
                     <td style={{ color: '#6B7280', fontSize: '14px' }}>
                       {contact.service || '-'}
                     </td>
-                    <td style={{ 
+                    <td style={{
                       maxWidth: '300px',
                       whiteSpace: 'nowrap',
                       overflow: 'hidden',
@@ -338,12 +338,12 @@ const ContactManager = () => {
                 <X size={20} />
               </button>
             </div>
-            
+
             <div className="admin-modal-body">
               <div style={{ marginBottom: '24px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '16px' }}>
                   <div>
-                    <h3 style={{ fontSize: '24px', fontWeight: '600', color: '#1C2A3A', margin: '0 0 4px 0' }}>
+                    <h3 style={{ fontSize: '24px', fontWeight: '600', color: '#352a21', margin: '0 0 4px 0' }}>
                       {selectedContact.name}
                     </h3>
                     <p style={{ color: '#6B7280', margin: 0 }}>
@@ -367,7 +367,7 @@ const ContactManager = () => {
                     <div style={{ fontSize: '13px', color: '#6B7280', marginBottom: '4px' }}>Email</div>
                     <a href={`mailto:${selectedContact.email}`} style={{
                       fontSize: '15px',
-                      color: '#7C5CFF',
+                      color: '#a34e1d',
                       textDecoration: 'none'
                     }}>
                       {selectedContact.email}
@@ -378,7 +378,7 @@ const ContactManager = () => {
                       <div style={{ fontSize: '13px', color: '#6B7280', marginBottom: '4px' }}>Phone</div>
                       <a href={`tel:${selectedContact.phone}`} style={{
                         fontSize: '15px',
-                        color: '#7C5CFF',
+                        color: '#a34e1d',
                         textDecoration: 'none'
                       }}>
                         {selectedContact.phone}
@@ -411,7 +411,7 @@ const ContactManager = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="admin-modal-footer">
               <button
                 onClick={() => handleEdit(selectedContact)}
@@ -447,7 +447,7 @@ const ContactManager = () => {
                 <X size={20} />
               </button>
             </div>
-            
+
             <div className="admin-modal-body">
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <div>
@@ -516,7 +516,7 @@ const ContactManager = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="admin-modal-footer">
               <button
                 onClick={handleSave}

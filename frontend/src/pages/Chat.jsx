@@ -50,7 +50,7 @@ const Chat = () => {
           }
         }
       );
-      
+
       if (response.data.success) {
         setConversation(response.data.conversation);
       }
@@ -85,12 +85,12 @@ const Chat = () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
-      
+
       // Set new interval for 5 seconds
       intervalRef.current = setInterval(() => {
         fetchConversation();
       }, 5000);
-      
+
       return () => {
         if (intervalRef.current) {
           clearInterval(intervalRef.current);
@@ -125,7 +125,7 @@ const Chat = () => {
           timeout: 10000 // 10s timeout
         }
       );
-      
+
       if (response.data.success) {
         setConversation(response.data.conversation);
       }
@@ -151,14 +151,14 @@ const Chat = () => {
       setError('Name and email are required');
       return;
     }
-    
+
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(userInfo.email)) {
       setError('Please enter a valid email address');
       return;
     }
-    
+
     authenticateUser(userInfo);
   };
 
@@ -171,7 +171,7 @@ const Chat = () => {
     setError('');
     const tempMessage = trimmedMessage;
     setMessage(''); // Clear immediately for better UX
-    
+
     try {
       await axios.post(
         `${BACKEND_URL}/chat/messages`,
@@ -222,7 +222,7 @@ const Chat = () => {
 
   const handleTestimonialSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!testimonialData.message.trim() || testimonialData.message.length < 10) {
       setError('Please write a testimonial (at least 10 characters)');
       return;
@@ -272,10 +272,10 @@ const Chat = () => {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-2xl shadow-xl">
           <div className="text-center">
-            <div className="mx-auto h-16 w-16 bg-gradient-to-br from-purple-600 to-blue-600 rounded-full flex items-center justify-center mb-4">
+            <div className="mx-auto h-16 w-16 bg-gradient-to-br from-brand-600 to-brand-600 rounded-full flex items-center justify-center mb-4">
               <MessageCircle className="h-8 w-8 text-white" />
             </div>
             <h2 className="text-3xl font-bold text-gray-900 mb-2">Start Chatting</h2>
@@ -301,7 +301,7 @@ const Chat = () => {
                   required
                   value={userInfo.name}
                   onChange={(e) => setUserInfo({ ...userInfo, name: e.target.value })}
-                  className="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+                  className="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition"
                   placeholder="John Doe"
                   disabled={loading}
                 />
@@ -318,7 +318,7 @@ const Chat = () => {
                   required
                   value={userInfo.email}
                   onChange={(e) => setUserInfo({ ...userInfo, email: e.target.value })}
-                  className="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+                  className="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition"
                   placeholder="john@example.com"
                   disabled={loading}
                 />
@@ -334,7 +334,7 @@ const Chat = () => {
                   type="tel"
                   value={userInfo.phone}
                   onChange={(e) => setUserInfo({ ...userInfo, phone: e.target.value })}
-                  className="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+                  className="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition"
                   placeholder="+1 (555) 123-4567"
                   disabled={loading}
                 />
@@ -344,7 +344,7 @@ const Chat = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-brand-600 to-brand-600 hover:from-brand-700 hover:to-brand-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Loading...' : 'Continue to Chat'}
             </button>
@@ -355,14 +355,14 @@ const Chat = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="bg-white rounded-t-2xl shadow-sm p-6 border-b">
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-2xl font-bold text-gray-900 flex items-center">
-                <MessageCircle className="h-6 w-6 mr-2 text-purple-600" />
+                <MessageCircle className="h-6 w-6 mr-2 text-brand-600" />
                 Chat with METECHQ
               </h1>
               <p className="text-sm text-gray-600 mt-1">
@@ -390,13 +390,13 @@ const Chat = () => {
                   <div
                     className={`max-w-[70%] rounded-2xl px-4 py-3 ${
                       msg.sender === 'customer'
-                        ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white'
+                        ? 'bg-gradient-to-r from-brand-600 to-brand-600 text-white'
                         : 'bg-gray-100 text-gray-900'
                     }`}
                   >
                     <p className="text-sm break-words">{msg.message}</p>
                     <div className={`flex items-center mt-1 text-xs ${
-                      msg.sender === 'customer' ? 'text-purple-100' : 'text-gray-500'
+                      msg.sender === 'customer' ? 'text-brand-100' : 'text-gray-500'
                     }`}>
                       <Clock className="h-3 w-3 mr-1" />
                       {formatTime(msg.timestamp)}
@@ -422,10 +422,10 @@ const Chat = () => {
               {error}
             </div>
           )}
-          
+
           {/* Testimonial Form */}
           {showTestimonialForm ? (
-            <div className="border-2 border-purple-200 rounded-xl p-6 mb-4 bg-purple-50">
+            <div className="border-2 border-brand-200 rounded-xl p-6 mb-4 bg-brand-50">
               {testimonialSubmitted ? (
                 <div className="text-center py-6">
                   <div className="mb-4 flex justify-center">
@@ -442,7 +442,7 @@ const Chat = () => {
                 <form onSubmit={handleTestimonialSubmit} className="space-y-4">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-lg font-bold text-gray-900 flex items-center">
-                      <Star className="w-5 h-5 mr-2 text-purple-600" />
+                      <Star className="w-5 h-5 mr-2 text-brand-600" />
                       Share Your Experience
                     </h3>
                     <button
@@ -467,7 +467,7 @@ const Chat = () => {
                         type="text"
                         value={testimonialData.role}
                         onChange={(e) => setTestimonialData({ ...testimonialData, role: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"
                         placeholder="CEO, Developer, etc."
                         disabled={loading}
                       />
@@ -481,7 +481,7 @@ const Chat = () => {
                         type="text"
                         value={testimonialData.company}
                         onChange={(e) => setTestimonialData({ ...testimonialData, company: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"
                         placeholder="Your Company"
                         disabled={loading}
                       />
@@ -525,7 +525,7 @@ const Chat = () => {
                     <textarea
                       value={testimonialData.message}
                       onChange={(e) => setTestimonialData({ ...testimonialData, message: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 resize-none"
                       rows="4"
                       placeholder="Share your experience with us... (minimum 10 characters)"
                       required
@@ -540,7 +540,7 @@ const Chat = () => {
                   <button
                     type="submit"
                     disabled={loading || !testimonialData.message.trim()}
-                    className="w-full flex items-center justify-center space-x-2 py-3 px-4 rounded-lg font-semibold transition-all duration-200 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full flex items-center justify-center space-x-2 py-3 px-4 rounded-lg font-semibold transition-all duration-200 bg-gradient-to-r from-brand-600 to-brand-600 hover:from-brand-700 hover:to-brand-700 text-white disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {loading ? (
                       <>
@@ -562,14 +562,14 @@ const Chat = () => {
             <div className="mb-4">
               <button
                 onClick={() => setShowTestimonialForm(true)}
-                className="w-full flex items-center justify-center space-x-2 py-3 px-4 rounded-lg font-medium transition-all duration-200 bg-gradient-to-r from-purple-100 to-blue-100 hover:from-purple-200 hover:to-blue-200 text-purple-700 border border-purple-300"
+                className="w-full flex items-center justify-center space-x-2 py-3 px-4 rounded-lg font-medium transition-all duration-200 bg-gradient-to-r from-brand-100 to-brand-100 hover:from-brand-200 hover:to-brand-200 text-brand-700 border border-brand-300"
               >
                 <Star className="w-5 h-5" />
                 <span>Share Your Testimonial</span>
               </button>
             </div>
           )}
-          
+
           <form onSubmit={handleSendMessage} className="flex gap-3">
             <input
               type="text"
@@ -577,13 +577,13 @@ const Chat = () => {
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Type your message..."
               disabled={loading}
-              className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition disabled:opacity-50"
+              className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition disabled:opacity-50"
               maxLength={1000}
             />
             <button
               type="submit"
               disabled={loading || !message.trim()}
-              className="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              className="px-6 py-3 bg-gradient-to-r from-brand-600 to-brand-600 text-white rounded-lg hover:from-brand-700 hover:to-brand-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
               <Send className="h-5 w-5" />
               {loading ? '...' : 'Send'}

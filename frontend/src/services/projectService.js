@@ -1,11 +1,17 @@
+import { safeProjectUrl } from '../utils/projectUrls';
 import api from './api';
 
 class ProjectService {
   async getAllProjects() {
     try {
       // For admin - get all projects including private ones
-      const response = await api.get('/projects/all');
-      return response.data;
+      const projects = [];
+      for (let offset = 0; ; offset += 100) {
+        const response = await api.get('/projects/all', { params: { offset, limit: 100 } });
+        if (!Array.isArray(response.data)) throw new Error('Invalid project response');
+        projects.push(...response.data);
+        if (response.data.length < 100) return Array.from(new Map(projects.map(project => [project.id, project])).values());
+      }
     } catch (error) {
       console.error('Error fetching projects:', error);
       throw error;
@@ -13,14 +19,28 @@ class ProjectService {
   }
 
   async getPublicProjects() {
-    try {
-      // For public portfolio page - only public projects
-      const response = await api.get('/projects/');
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching public projects:', error);
-      throw error;
+    const allProjects = [];
+    const pageSize = 100;
+    let offset = 0;
+    while (true) {
+      const response = await api.get('/projects/', { params: { offset, limit: pageSize } });
+      if (!Array.isArray(response.data)) throw new Error('Invalid project response');
+      allProjects.push(...response.data);
+      if (response.data.length < pageSize) break;
+      offset += pageSize;
     }
+    return Array.from(new Map(allProjects.map(project => [project.id || project._id || project.slug, project])).values()).filter(project => project.is_private !== true).map(project => ({
+      ...project,
+      id: String(project.id || project._id || project.slug),
+      title: project.title || 'Untitled project',
+      description: project.description || '',
+      category: project.category || 'Web development',
+      image_url: safeProjectUrl(project.image_url || project.image),
+      live_demo_url: safeProjectUrl(project.live_demo_url || project.liveUrl),
+      github_url: safeProjectUrl(project.github_url || project.githubUrl),
+      images: [project.image_url || project.image, ...(project.gallery_images || project.images || [])].map(safeProjectUrl).filter((url, index, list) => url && list.indexOf(url) === index),
+      tech_stack: Array.isArray(project.tech_stack) ? project.tech_stack : (project.technologies || [])
+    }));
   }
 
   async getProject(id) {

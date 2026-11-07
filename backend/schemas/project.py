@@ -1,7 +1,31 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
+from urllib.parse import urlsplit
 from typing import List, Optional
 
-class ProjectCreate(BaseModel):
+class ProjectLinkValidation(BaseModel):
+    @field_validator('image_url', 'live_demo_url', 'github_url', 'demo_video_url', check_fields=False)
+    @classmethod
+    def validate_link(cls, value):
+        if value is None or value == '':
+            return value
+        value = value.strip()
+        if any(ord(char) < 32 for char in value) or '\\' in value:
+            raise ValueError('Invalid URL characters')
+        if value.startswith('/') and not value.startswith('//'):
+            return value
+        parsed = urlsplit(value)
+        if parsed.scheme not in {'http', 'https'} or not parsed.hostname or parsed.username or parsed.password:
+            raise ValueError('Use an http(s) website URL or a relative site path')
+        return value
+
+    @field_validator('gallery_images', check_fields=False)
+    @classmethod
+    def validate_gallery(cls, values):
+        if values is None:
+            return None
+        return [cls.validate_link(value) for value in values]
+
+class ProjectCreate(ProjectLinkValidation):
     title: str
     slug: Optional[str] = None
     category: str
@@ -21,7 +45,7 @@ class ProjectCreate(BaseModel):
     team_size: Optional[str] = None
     key_features: Optional[List[str]] = []
 
-class ProjectUpdate(BaseModel):
+class ProjectUpdate(ProjectLinkValidation):
     title: Optional[str] = None
     slug: Optional[str] = None
     category: Optional[str] = None

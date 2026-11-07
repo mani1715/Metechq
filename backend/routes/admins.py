@@ -129,81 +129,8 @@ async def verify_token(current_admin: dict = Depends(get_current_admin)):
 
 @router.post("/init")
 async def initialize_super_admin():
-    """Initialize first super admin (only works if no super admin exists)"""
-    existing = await admins_collection.find_one({"role": "super_admin"})
-    if existing:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Super admin already exists"
-        )
-    
-    if INIT_SUPERADMIN_PASSWORD:
-        bootstrap_password = INIT_SUPERADMIN_PASSWORD
-    elif IS_PRODUCTION:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Super admin initialization is disabled in production without INIT_SUPERADMIN_PASSWORD."
-        )
-    else:
-        bootstrap_password = secrets.token_urlsafe(16)
-    
-    bootstrap_username = INIT_SUPERADMIN_USERNAME or "admin"
-    
-    # Create default super admin with all permissions
-    admin = Admin(
-        username=bootstrap_username,
-        password_hash=hash_password(bootstrap_password),
-        role="super_admin",
-        permissions=AdminPermissions(
-            canManageAdmins=True,
-            canManageAbout=True,
-            canManagePortfolio=True,
-            canManageBlogs=True,
-            canManageTestimonials=True,
-            canManageDemos=True,
-            canViewContacts=True,
-            canManageContactPage=True,
-            canManageChat=True,
-            canManageNewsletter=True,
-            canManageBookings=True,
-            canManageBookingSettings=True,
-            canManagePricing=True,
-            canViewAnalytics=True,
-            canManageClients=True,
-            canManageClientProjects=True,
-            canAccessStorage=True,
-            canManageNotes=True,
-            canManageSettings=True,
-            canViewPrivateProjects=True,
-            canViewCredentials=True,
-            canEditCredentials=True
-        ),
-        created_by="system"
-    )
-    
-    admin_dict = admin.model_dump()
-    admin_dict['created_at'] = admin_dict['created_at'].isoformat()
-    
-    await admins_collection.insert_one(admin_dict)
-    
-    # Create token
-    token_data = {
-        "id": admin.id,
-        "username": admin.username,
-        "role": admin.role,
-        "permissions": admin.permissions.model_dump()
-    }
-    access_token = create_access_token(data=token_data)
-    
-    return TokenResponse(
-        token=access_token,
-        admin={
-            "id": admin.id,
-            "username": admin.username,
-            "role": admin.role,
-            "permissions": admin.permissions.model_dump()
-        }
-    )
+    """Initial admin creation belongs to server startup, never a public request."""
+    raise HTTPException(status_code=410, detail="HTTP bootstrap is disabled. Configure startup initialization on the server.")
 
 @router.get("/list")
 async def list_admins(current_admin: dict = Depends(require_super_admin)):

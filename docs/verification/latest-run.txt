@@ -1,0 +1,263 @@
+.....................................................                    [100%]
+============================== warnings summary ===============================
+..\..\..\Users\ettel\AppData\Local\Programs\Python\Python310\lib\site-packages\starlette\formparsers.py:12
+  C:\Users\ettel\AppData\Local\Programs\Python\Python310\lib\site-packages\starlette\formparsers.py:12: PendingDeprecationWarning: Please use `import python_multipart` instead.
+    import multipart
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+53 passed, 1 warning in 11.06s
+
+🚀 Starting METECHQ Admin Panel API Tests
+============================================================
+
+🔍 Testing API Health Check...
+   URL: http://127.0.0.1:54312/api/
+✅ API Health Check - PASSED
+
+🔍 Testing Admin Login (evaluation_admin)...
+   URL: http://127.0.0.1:54312/api/admins/login
+✅ Admin Login (evaluation_admin) - PASSED
+   🔑 Token obtained: eyJhbGciOiJIUzI1NiIs...
+
+🔍 Testing Dashboard Stats...
+   URL: http://127.0.0.1:54312/api/analytics/summary
+✅ Dashboard Stats - PASSED
+
+📝 Testing About Management...
+
+🔍 Testing Get About Content...
+   URL: http://127.0.0.1:54312/api/about
+✅ Get About Content - PASSED
+
+🔍 Testing Update About Content...
+   URL: http://127.0.0.1:54312/api/about
+✅ Update About Content - PASSED
+
+🛠️ Testing Services Management...
+
+🔍 Testing Get All Services...
+   URL: http://127.0.0.1:54312/api/services
+✅ Get All Services - PASSED
+
+🔍 Testing Create Service...
+   URL: http://127.0.0.1:54312/api/services
+✅ Create Service - PASSED
+
+🔍 Testing Update Service...
+   URL: http://127.0.0.1:54312/api/services/cc108fc8-3ab2-463b-8b9c-eddf9ecf02aa
+✅ Update Service - PASSED
+
+🔍 Testing Delete Service...
+   URL: http://127.0.0.1:54312/api/services/cc108fc8-3ab2-463b-8b9c-eddf9ecf02aa
+✅ Delete Service - PASSED
+
+💼 Testing Portfolio Management...
+
+🔍 Testing Get All Projects...
+   URL: http://127.0.0.1:54312/api/projects
+✅ Get All Projects - PASSED
+
+🔍 Testing Create Project...
+   URL: http://127.0.0.1:54312/api/projects
+✅ Create Project - PASSED
+
+🔍 Testing Update Project...
+   URL: http://127.0.0.1:54312/api/projects/41c83976-379b-43f5-a538-88063c384356
+✅ Update Project - PASSED
+
+🔍 Testing Delete Project...
+   URL: http://127.0.0.1:54312/api/projects/41c83976-379b-43f5-a538-88063c384356
+✅ Delete Project - PASSED
+
+📰 Testing Blogs Management...
+
+🔍 Testing Get All Blogs...
+   URL: http://127.0.0.1:54312/api/blogs/admin/all
+✅ Get All Blogs - PASSED
+
+🔍 Testing Create Blog...
+   URL: http://127.0.0.1:54312/api/blogs/admin/create
+✅ Create Blog - PASSED
+
+🔍 Testing Update Blog...
+   URL: http://127.0.0.1:54312/api/blogs/admin/82304ebc-c18a-44e3-9fd3-205658200b32
+✅ Update Blog - PASSED
+
+🔍 Testing Delete Blog...
+   URL: http://127.0.0.1:54312/api/blogs/admin/82304ebc-c18a-44e3-9fd3-205658200b32
+✅ Delete Blog - PASSED
+
+💬 Testing Testimonials Management...
+
+🔍 Testing Get All Testimonials...
+   URL: http://127.0.0.1:54312/api/testimonials/admin/all
+✅ Get All Testimonials - PASSED
+
+🔍 Testing Create Testimonial...
+   URL: http://127.0.0.1:54312/api/testimonials/admin/create
+✅ Create Testimonial - PASSED
+
+🔍 Testing Update Testimonial...
+   URL: http://127.0.0.1:54312/api/testimonials/admin/a5030be4-26c4-459b-937b-0ece8251c5ef
+✅ Update Testimonial - PASSED
+
+🔍 Testing Delete Testimonial...
+   URL: http://127.0.0.1:54312/api/testimonials/admin/a5030be4-26c4-459b-937b-0ece8251c5ef
+✅ Delete Testimonial - PASSED
+
+📧 Testing Contacts Management...
+
+🔍 Testing Get All Contacts...
+   URL: http://127.0.0.1:54312/api/contacts/admin/all
+✅ Get All Contacts - PASSED
+
+🎯 Testing Skills Management...
+
+🔍 Testing Get All Skills...
+   URL: http://127.0.0.1:54312/api/skills
+✅ Get All Skills - PASSED
+
+🔍 Testing Create Skill...
+   URL: http://127.0.0.1:54312/api/skills
+✅ Create Skill - PASSED
+
+🔍 Testing Update Skill...
+   URL: http://127.0.0.1:54312/api/skills/551b28c8-f8f6-4544-bbfd-41392ee9d7e3
+✅ Update Skill - PASSED
+
+🔍 Testing Delete Skill...
+   URL: http://127.0.0.1:54312/api/skills/551b28c8-f8f6-4544-bbfd-41392ee9d7e3
+✅ Delete Skill - PASSED
+
+📝 Testing Notes Management...
+
+🔍 Testing Get All Notes...
+   URL: http://127.0.0.1:54312/api/notes
+✅ Get All Notes - PASSED
+
+🔍 Testing Create Note...
+   URL: http://127.0.0.1:54312/api/notes
+✅ Create Note - PASSED
+
+🔍 Testing Update Note...
+   URL: http://127.0.0.1:54312/api/notes/63fcb0df-fc00-4160-b151-8ebfb5ba56eb
+✅ Update Note - PASSED
+
+🔍 Testing Delete Note...
+   URL: http://127.0.0.1:54312/api/notes/63fcb0df-fc00-4160-b151-8ebfb5ba56eb
+✅ Delete Note - PASSED
+
+👥 Testing Admins Management...
+
+🔍 Testing Get All Admins...
+   URL: http://127.0.0.1:54312/api/admins/list
+✅ Get All Admins - PASSED
+
+⚙️ Testing Settings Management...
+
+🔍 Testing Get Settings...
+   URL: http://127.0.0.1:54312/api/settings
+✅ Get Settings - PASSED
+
+🔍 Testing Update Settings...
+   URL: http://127.0.0.1:54312/api/settings
+✅ Update Settings - PASSED
+
+📅 Testing Booking Management...
+
+🔍 Testing Get Booking Settings...
+   URL: http://127.0.0.1:54312/api/booking-settings
+✅ Get Booking Settings - PASSED
+
+🔍 Testing Get All Bookings...
+   URL: http://127.0.0.1:54312/api/bookings/admin/all
+✅ Get All Bookings - PASSED
+
+👤 Testing Client Management...
+
+🔍 Testing Get All Clients...
+   URL: http://127.0.0.1:54312/api/admin/clients
+✅ Get All Clients - PASSED
+
+🔍 Testing Get Client Projects...
+   URL: http://127.0.0.1:54312/api/admin/client-projects
+✅ Get Client Projects - PASSED
+
+============================================================
+📊 TEST SUMMARY
+============================================================
+Total Tests: 37
+Passed: 37
+Failed: 0
+Success Rate: 100.0%
+
+🚀 Starting Client Management & Project Assignment API Tests
+======================================================================
+
+🔍 Testing Admin Login (evaluation_admin)...
+   URL: http://127.0.0.1:54312/api/admins/login
+✅ Admin Login (evaluation_admin) - PASSED
+   🔑 Admin token obtained: eyJhbGciOiJIUzI1NiIs...
+
+👤 Testing Client Management...
+
+🔍 Testing Get All Clients...
+   URL: http://127.0.0.1:54312/api/admin/clients
+✅ Get All Clients - PASSED
+
+🔍 Testing Create New Client...
+   URL: http://127.0.0.1:54312/api/admin/clients
+✅ Create New Client - PASSED
+   📝 Created client ID: 067ea212-b46b-46fb-bdce-650ba50a11f6
+
+🔍 Testing Get Client by ID...
+   URL: http://127.0.0.1:54312/api/admin/clients/067ea212-b46b-46fb-bdce-650ba50a11f6
+✅ Get Client by ID - PASSED
+
+🔍 Testing Update Client...
+   URL: http://127.0.0.1:54312/api/admin/clients/067ea212-b46b-46fb-bdce-650ba50a11f6
+✅ Update Client - PASSED
+
+📋 Testing Project Management...
+
+🔍 Testing Get All Client Projects...
+   URL: http://127.0.0.1:54312/api/admin/client-projects
+✅ Get All Client Projects - PASSED
+
+🔍 Testing Create Client Project...
+   URL: http://127.0.0.1:54312/api/admin/client-projects
+✅ Create Client Project - PASSED
+   📋 Created project ID: 80d21a8c-981d-42dc-9847-f37f89b0d7c8
+
+🔍 Testing Get Project by ID...
+   URL: http://127.0.0.1:54312/api/admin/client-projects/80d21a8c-981d-42dc-9847-f37f89b0d7c8
+✅ Get Project by ID - PASSED
+
+🔍 Testing Update Client Project...
+   URL: http://127.0.0.1:54312/api/admin/client-projects/80d21a8c-981d-42dc-9847-f37f89b0d7c8
+✅ Update Client Project - PASSED
+
+🏠 Testing Client Dashboard Access...
+
+🔍 Testing Client Login...
+   URL: http://127.0.0.1:54312/api/client/login
+✅ Client Login - PASSED
+
+🧹 Cleaning up test data...
+
+🔍 Testing Delete Test Project...
+   URL: http://127.0.0.1:54312/api/admin/client-projects/80d21a8c-981d-42dc-9847-f37f89b0d7c8
+✅ Delete Test Project - PASSED
+
+🔍 Testing Delete Test Client...
+   URL: http://127.0.0.1:54312/api/admin/clients/067ea212-b46b-46fb-bdce-650ba50a11f6
+✅ Delete Test Client - PASSED
+
+======================================================================
+📊 CLIENT MANAGEMENT TEST SUMMARY
+======================================================================
+Total Tests: 12
+Passed: 12
+Failed: 0
+Success Rate: 100.0%
+

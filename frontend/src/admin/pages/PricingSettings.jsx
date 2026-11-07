@@ -119,7 +119,7 @@ const PricingSettings = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-500"></div>
       </div>
     );
   }
@@ -129,7 +129,7 @@ const PricingSettings = () => {
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
-          <div className="p-3 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl">
+          <div className="p-3 bg-gradient-to-br from-brand-500 to-pink-500 rounded-xl">
             <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
@@ -146,8 +146,8 @@ const PricingSettings = () => {
         <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700 shadow-xl">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-500/20 rounded-lg">
-                <svg className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="p-2 bg-brand-500/20 rounded-lg">
+                <svg className="w-5 h-5 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
                 </svg>
               </div>
@@ -155,7 +155,7 @@ const PricingSettings = () => {
             </div>
             <button
               onClick={addWebsiteType}
-              className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-all flex items-center gap-2"
+              className="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-lg transition-all flex items-center gap-2"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -165,16 +165,16 @@ const PricingSettings = () => {
           </div>
           <div className="space-y-3">
             {pricing.website_types.map((type, index) => (
-              <div key={index} className="flex gap-3 items-center bg-gray-900/50 p-4 rounded-xl border border-gray-700 hover:border-blue-500/50 transition-all">
+              <div key={index} className="flex gap-3 items-center bg-gray-900/50 p-4 rounded-xl border border-gray-700 hover:border-brand-500/50 transition-all">
                 <input
                   type="text"
                   value={type.name}
                   onChange={(e) => updateWebsiteType(index, 'name', e.target.value)}
                   placeholder="Website Type Name"
-                  className="flex-1 bg-gray-700 text-white px-4 py-2.5 rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none"
+                  className="flex-1 bg-gray-700 text-white px-4 py-2.5 rounded-lg border border-gray-600 focus:border-brand-500 focus:outline-none"
                 />
                 <div className="flex items-center gap-2 bg-gray-700 px-4 py-2.5 rounded-lg border border-gray-600">
-                  <span className="text-blue-400 font-semibold">₹</span>
+                  <span className="text-brand-400 font-semibold">₹</span>
                   <input
                     type="number"
                     value={type.price}
@@ -254,8 +254,8 @@ const PricingSettings = () => {
         <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700 shadow-xl">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-purple-500/20 rounded-lg">
-                <svg className="w-5 h-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="p-2 bg-brand-500/20 rounded-lg">
+                <svg className="w-5 h-5 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                 </svg>
               </div>
@@ -263,7 +263,7 @@ const PricingSettings = () => {
             </div>
             <button
               onClick={addFeature}
-              className="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg transition-all flex items-center gap-2"
+              className="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-lg transition-all flex items-center gap-2"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -273,16 +273,16 @@ const PricingSettings = () => {
           </div>
           <div className="grid md:grid-cols-2 gap-3">
             {pricing.features.map((feature, index) => (
-              <div key={index} className="flex gap-3 items-center bg-gray-900/50 p-4 rounded-xl border border-gray-700 hover:border-purple-500/50 transition-all">
+              <div key={index} className="flex gap-3 items-center bg-gray-900/50 p-4 rounded-xl border border-gray-700 hover:border-brand-500/50 transition-all">
                 <input
                   type="text"
                   value={feature.name}
                   onChange={(e) => updateFeature(index, 'name', e.target.value)}
                   placeholder="Feature Name"
-                  className="flex-1 bg-gray-700 text-white px-4 py-2.5 rounded-lg border border-gray-600 focus:border-purple-500 focus:outline-none"
+                  className="flex-1 bg-gray-700 text-white px-4 py-2.5 rounded-lg border border-gray-600 focus:border-brand-500 focus:outline-none"
                 />
                 <div className="flex items-center gap-2 bg-gray-700 px-4 py-2.5 rounded-lg border border-gray-600">
-                  <span className="text-purple-400 font-semibold">₹</span>
+                  <span className="text-brand-400 font-semibold">₹</span>
                   <input
                     type="number"
                     value={feature.price}
@@ -384,7 +384,7 @@ const PricingSettings = () => {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-3"
+            className="px-8 py-4 bg-gradient-to-r from-brand-500 to-pink-500 hover:from-brand-600 hover:to-pink-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-3"
           >
             {saving ? (
               <>

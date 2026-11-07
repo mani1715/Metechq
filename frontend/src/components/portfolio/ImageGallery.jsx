@@ -1,3 +1,4 @@
+import ProjectImage from './ProjectImage';
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, X, ZoomIn } from 'lucide-react';
 
@@ -43,8 +44,8 @@ const ImageGallery = ({ images, projectTitle, currentIndex, setCurrentIndex }) =
       <div className="project-gallery" data-testid="image-gallery">
         {/* Main Featured Image */}
         <div className="gallery-item gallery-main" onClick={() => openLightbox(0)}>
-          <img 
-            src={images[0]} 
+          <ProjectImage
+            src={images[0]}
             alt={`${projectTitle} - Screenshot 1`}
             className="gallery-image"
             loading="eager"
@@ -60,14 +61,14 @@ const ImageGallery = ({ images, projectTitle, currentIndex, setCurrentIndex }) =
         {images.length > 1 && (
           <div className="gallery-thumbnails">
             {images.slice(1).map((image, idx) => (
-              <div 
-                key={idx + 1} 
+              <div
+                key={idx + 1}
                 className="gallery-thumbnail"
                 onClick={() => openLightbox(idx + 1)}
                 data-testid={`gallery-thumbnail-${idx + 1}`}
               >
-                <img 
-                  src={image} 
+                <ProjectImage
+                  src={image}
                   alt={`${projectTitle} - Screenshot ${idx + 2}`}
                   className="thumbnail-image"
                   loading="lazy"
@@ -84,8 +85,8 @@ const ImageGallery = ({ images, projectTitle, currentIndex, setCurrentIndex }) =
       {/* Lightbox Modal */}
       {lightboxOpen && (
         <div className="lightbox-overlay" onClick={closeLightbox} data-testid="lightbox">
-          <button 
-            className="lightbox-close" 
+          <button
+            className="lightbox-close"
             onClick={closeLightbox}
             aria-label="Close lightbox"
             data-testid="lightbox-close-btn"
@@ -94,8 +95,8 @@ const ImageGallery = ({ images, projectTitle, currentIndex, setCurrentIndex }) =
           </button>
 
           <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
-            <img 
-              src={images[lightboxIndex]} 
+            <ProjectImage
+              src={images[lightboxIndex]}
               alt={`${projectTitle} - Full size ${lightboxIndex + 1}`}
               className="lightbox-image"
               data-testid="lightbox-image"
@@ -104,16 +105,16 @@ const ImageGallery = ({ images, projectTitle, currentIndex, setCurrentIndex }) =
 
           {images.length > 1 && (
             <>
-              <button 
-                className="lightbox-nav lightbox-prev" 
+              <button
+                className="lightbox-nav lightbox-prev"
                 onClick={(e) => { e.stopPropagation(); prevImage(); }}
                 aria-label="Previous image"
                 data-testid="lightbox-prev-btn"
               >
                 <ChevronLeft className="h-8 w-8" />
               </button>
-              <button 
-                className="lightbox-nav lightbox-next" 
+              <button
+                className="lightbox-nav lightbox-next"
                 onClick={(e) => { e.stopPropagation(); nextImage(); }}
                 aria-label="Next image"
                 data-testid="lightbox-next-btn"

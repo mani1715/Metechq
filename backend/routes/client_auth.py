@@ -6,6 +6,7 @@ from auth.jwt import create_access_token
 from auth.client_auth import get_current_client
 from utils.rate_limiter import login_rate_limiter
 from datetime import datetime
+import re
 
 router = APIRouter(tags=["client-auth"])
 
@@ -26,7 +27,7 @@ async def client_login(credentials: ClientLogin, request: Request):
         )
 
     # Find client by email (case-insensitive)
-    client_doc = await clients_collection.find_one({"email": {"$regex": f"^{normalized_email}$", "$options": "i"}})
+    client_doc = await clients_collection.find_one({"email": {"$regex": f"^{re.escape(normalized_email)}$", "$options": "i"}})
     
     if not client_doc:
         raise HTTPException(

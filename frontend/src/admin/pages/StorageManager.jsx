@@ -45,7 +45,7 @@ const StorageManager = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('admin_token') || localStorage.getItem('adminToken');
-    
+
     try {
       if (editingItem) {
         await axios.put(
@@ -60,7 +60,7 @@ const StorageManager = () => {
           { headers: { Authorization: `Bearer ${token}` } }
         );
       }
-      
+
       fetchItems();
       closeModal();
     } catch (error) {
@@ -71,7 +71,7 @@ const StorageManager = () => {
 
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this item?')) return;
-    
+
     try {
       const token = localStorage.getItem('admin_token') || localStorage.getItem('adminToken');
       await axios.delete(`${BACKEND_URL}/storage/items/${id}`, {
@@ -87,10 +87,10 @@ const StorageManager = () => {
   const handleFileSelect = async (e) => {
     const files = Array.from(e.target.files);
     if (!files.length) return;
-    
+
     setSelectedFiles(files);
     setUploadingFiles(true);
-    
+
     // Initialize progress tracking
     const initialProgress = files.map((file, index) => ({
       id: index,
@@ -99,19 +99,19 @@ const StorageManager = () => {
       progress: 0
     }));
     setUploadProgress(initialProgress);
-    
+
     try {
       const token = localStorage.getItem('admin_token') || localStorage.getItem('adminToken');
       const uploadedFiles = [];
-      
+
       // Upload files one by one with progress tracking
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        
+
         try {
           const formDataUpload = new FormData();
           formDataUpload.append('file', file);
-          
+
           const response = await axios.post(
             `${BACKEND_URL}/storage/upload`,
             formDataUpload,
@@ -122,24 +122,24 @@ const StorageManager = () => {
               }
             }
           );
-          
+
           uploadedFiles.push({
             url: response.data.url,
             name: response.data.filename
           });
-          
+
           // Update progress to completed
-          setUploadProgress(prev => prev.map((p, idx) => 
+          setUploadProgress(prev => prev.map((p, idx) =>
             idx === i ? { ...p, status: 'completed', progress: 100 } : p
           ));
         } catch (error) {
           console.error(`Error uploading ${file.name}:`, error);
-          setUploadProgress(prev => prev.map((p, idx) => 
+          setUploadProgress(prev => prev.map((p, idx) =>
             idx === i ? { ...p, status: 'error', progress: 0 } : p
           ));
         }
       }
-      
+
       // Update form data with uploaded files
       setFormData({
         ...formData,
@@ -147,7 +147,7 @@ const StorageManager = () => {
         type: 'file',
         title: formData.title || (uploadedFiles.length === 1 ? uploadedFiles[0].name : `${uploadedFiles.length} files`)
       });
-      
+
     } finally {
       setUploadingFiles(false);
     }
@@ -186,7 +186,7 @@ const StorageManager = () => {
     setSelectedFiles([]);
     setUploadProgress([]);
   };
-  
+
   const removeUploadedFile = (index) => {
     setFormData({
       ...formData,
@@ -218,22 +218,22 @@ const StorageManager = () => {
 
   return (
     <div className="admin-page">
-      <div className="admin-page-header" style={{ 
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      <div className="admin-page-header" style={{
+        background: 'linear-gradient(135deg, #5b4632 0%, #a34e1d 100%)',
         color: 'white',
         padding: '32px',
         borderRadius: '16px',
         marginBottom: '32px'
       }}>
         <div>
-          <h1 data-testid="storage-manager-heading" style={{ 
+          <h1 data-testid="storage-manager-heading" style={{
             fontSize: '32px',
             fontWeight: '700',
             marginBottom: '8px'
           }}>
             🗄️ Private Storage
           </h1>
-          <p style={{ 
+          <p style={{
             fontSize: '16px',
             opacity: 0.9,
             margin: 0
@@ -241,8 +241,8 @@ const StorageManager = () => {
             Securely manage notes, code snippets, and files
           </p>
         </div>
-        <button 
-          className="admin-btn admin-btn-primary" 
+        <button
+          className="admin-btn admin-btn-primary"
           onClick={() => openModal()}
           data-testid="add-storage-item-btn"
           style={{
@@ -250,7 +250,7 @@ const StorageManager = () => {
             fontSize: '16px',
             fontWeight: '600',
             background: 'white',
-            color: '#667eea',
+            color: '#5b4632',
             border: 'none',
             borderRadius: '10px',
             display: 'flex',
@@ -288,10 +288,10 @@ const StorageManager = () => {
           display: 'flex',
           alignItems: 'center'
         }}>
-          <Search size={20} style={{ 
+          <Search size={20} style={{
             position: 'absolute',
             left: '16px',
-            color: '#667eea',
+            color: '#5b4632',
             zIndex: 1
           }} />
           <input
@@ -310,7 +310,7 @@ const StorageManager = () => {
               transition: 'all 0.2s'
             }}
             onFocus={(e) => {
-              e.target.style.borderColor = '#667eea';
+              e.target.style.borderColor = '#5b4632';
               e.target.style.boxShadow = '0 0 0 4px rgba(102, 126, 234, 0.1)';
             }}
             onBlur={(e) => {
@@ -319,8 +319,8 @@ const StorageManager = () => {
             }}
           />
         </div>
-        <select 
-          value={filterType} 
+        <select
+          value={filterType}
           onChange={(e) => setFilterType(e.target.value)}
           className="admin-select"
           data-testid="storage-type-filter"
@@ -390,16 +390,16 @@ const StorageManager = () => {
               </p>
             )}
             {item.fileUrl && (
-              <a 
-                href={item.fileUrl} 
-                target="_blank" 
+              <a
+                href={item.fileUrl}
+                target="_blank"
                 rel="noopener noreferrer"
-                style={{ 
-                  display: 'inline-flex', 
-                  alignItems: 'center', 
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
                   gap: '6px',
                   marginTop: '12px',
-                  color: '#7C5CFF',
+                  color: '#a34e1d',
                   fontSize: '14px',
                   textDecoration: 'none'
                 }}
@@ -422,8 +422,8 @@ const StorageManager = () => {
       {showModal && (
         <div className="admin-modal-overlay">
           <div className="admin-modal" style={{ maxWidth: '700px' }}>
-            <div className="admin-modal-header" style={{ 
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            <div className="admin-modal-header" style={{
+              background: 'linear-gradient(135deg, #5b4632 0%, #a34e1d 100%)',
               color: 'white',
               padding: '24px',
               borderRadius: '12px 12px 0 0',
@@ -432,11 +432,11 @@ const StorageManager = () => {
               <h2 style={{ margin: 0, fontSize: '24px', fontWeight: '600' }}>
                 {editingItem ? 'Edit Storage Item' : 'Add New Storage Item'}
               </h2>
-              <button 
-                className="admin-btn-icon" 
+              <button
+                className="admin-btn-icon"
                 onClick={closeModal}
-                style={{ 
-                  background: 'rgba(255, 255, 255, 0.2)', 
+                style={{
+                  background: 'rgba(255, 255, 255, 0.2)',
                   color: 'white',
                   border: 'none',
                   borderRadius: '8px',
@@ -446,13 +446,13 @@ const StorageManager = () => {
                 <X size={20} />
               </button>
             </div>
-            
+
             <form onSubmit={handleSubmit} style={{ padding: '0 24px 24px' }}>
               {/* Title Field */}
               <div className="admin-form-group" style={{ marginBottom: '20px' }}>
-                <label 
-                  htmlFor="storage-title" 
-                  style={{ 
+                <label
+                  htmlFor="storage-title"
+                  style={{
                     display: 'block',
                     marginBottom: '8px',
                     fontSize: '14px',
@@ -479,16 +479,16 @@ const StorageManager = () => {
                     transition: 'all 0.2s',
                     outline: 'none'
                   }}
-                  onFocus={(e) => e.target.style.borderColor = '#667eea'}
+                  onFocus={(e) => e.target.style.borderColor = '#5b4632'}
                   onBlur={(e) => e.target.style.borderColor = '#E5E7EB'}
                 />
               </div>
 
               {/* Type Selection */}
               <div className="admin-form-group" style={{ marginBottom: '20px' }}>
-                <label 
+                <label
                   htmlFor="storage-type"
-                  style={{ 
+                  style={{
                     display: 'block',
                     marginBottom: '8px',
                     fontSize: '14px',
@@ -523,8 +523,8 @@ const StorageManager = () => {
               {/* File Upload Section */}
               {formData.type === 'file' && (
                 <div className="admin-form-group" style={{ marginBottom: '20px' }}>
-                  <label 
-                    style={{ 
+                  <label
+                    style={{
                       display: 'block',
                       marginBottom: '12px',
                       fontSize: '14px',
@@ -534,7 +534,7 @@ const StorageManager = () => {
                   >
                     Upload Files (Multiple Supported)
                   </label>
-                  
+
                   {/* File Upload Button */}
                   <div style={{
                     border: '2px dashed #D1D5DB',
@@ -546,7 +546,7 @@ const StorageManager = () => {
                     transition: 'all 0.3s'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = '#667eea';
+                    e.currentTarget.style.borderColor = '#5b4632';
                     e.currentTarget.style.background = '#EEF2FF';
                   }}
                   onMouseLeave={(e) => {
@@ -563,21 +563,21 @@ const StorageManager = () => {
                       disabled={uploadingFiles}
                       data-testid="storage-file-input"
                     />
-                    <label 
-                      htmlFor="file-upload" 
-                      style={{ 
+                    <label
+                      htmlFor="file-upload"
+                      style={{
                         cursor: uploadingFiles ? 'not-allowed' : 'pointer',
                         display: 'block'
                       }}
                     >
-                      <Upload 
-                        size={40} 
-                        style={{ 
-                          color: '#667eea',
+                      <Upload
+                        size={40}
+                        style={{
+                          color: '#5b4632',
                           margin: '0 auto 12px'
-                        }} 
+                        }}
                       />
-                      <p style={{ 
+                      <p style={{
                         fontSize: '16px',
                         fontWeight: '600',
                         color: '#374151',
@@ -585,7 +585,7 @@ const StorageManager = () => {
                       }}>
                         {uploadingFiles ? 'Uploading...' : 'Click to upload or drag and drop'}
                       </p>
-                      <p style={{ 
+                      <p style={{
                         fontSize: '13px',
                         color: '#6B7280',
                         margin: 0
@@ -594,7 +594,7 @@ const StorageManager = () => {
                       </p>
                     </label>
                   </div>
-                  
+
                   {/* Upload Progress */}
                   {uploadProgress.length > 0 && (
                     <div style={{ marginTop: '16px', padding: '16px', background: '#F3F4F6', borderRadius: '8px' }}>
@@ -602,27 +602,27 @@ const StorageManager = () => {
                         Upload Progress
                       </p>
                       {uploadProgress.map((file, idx) => (
-                        <div key={idx} style={{ 
-                          display: 'flex', 
-                          alignItems: 'center', 
+                        <div key={idx} style={{
+                          display: 'flex',
+                          alignItems: 'center',
                           gap: '12px',
                           padding: '8px 0',
                           borderBottom: idx < uploadProgress.length - 1 ? '1px solid #E5E7EB' : 'none'
                         }}>
-                          {file.status === 'uploading' && <Loader size={16} className="spin" style={{ color: '#667eea' }} />}
+                          {file.status === 'uploading' && <Loader size={16} className="spin" style={{ color: '#5b4632' }} />}
                           {file.status === 'completed' && <CheckCircle size={16} style={{ color: '#10B981' }} />}
                           {file.status === 'error' && <XCircle size={16} style={{ color: '#EF4444' }} />}
-                          <span style={{ 
+                          <span style={{
                             flex: 1,
                             fontSize: '14px',
                             color: file.status === 'error' ? '#EF4444' : '#374151'
                           }}>
                             {file.name}
                           </span>
-                          <span style={{ 
+                          <span style={{
                             fontSize: '12px',
                             fontWeight: '600',
-                            color: file.status === 'completed' ? '#10B981' : file.status === 'error' ? '#EF4444' : '#667eea'
+                            color: file.status === 'completed' ? '#10B981' : file.status === 'error' ? '#EF4444' : '#5b4632'
                           }}>
                             {file.status === 'completed' ? 'Done' : file.status === 'error' ? 'Failed' : 'Uploading...'}
                           </span>
@@ -630,7 +630,7 @@ const StorageManager = () => {
                       ))}
                     </div>
                   )}
-                  
+
                   {/* Uploaded Files List */}
                   {formData.files && formData.files.length > 0 && (
                     <div style={{ marginTop: '16px' }}>
@@ -677,9 +677,9 @@ const StorageManager = () => {
 
               {/* Content Field */}
               <div className="admin-form-group" style={{ marginBottom: '20px' }}>
-                <label 
+                <label
                   htmlFor="storage-content"
-                  style={{ 
+                  style={{
                     display: 'block',
                     marginBottom: '8px',
                     fontSize: '14px',
@@ -696,7 +696,7 @@ const StorageManager = () => {
                   rows={8}
                   placeholder={formData.type === 'code' ? '// Enter your code here...' : 'Enter content, notes, or description...'}
                   data-testid="storage-content-textarea"
-                  style={{ 
+                  style={{
                     width: '100%',
                     padding: '12px 16px',
                     fontSize: formData.type === 'code' ? '13px' : '15px',
@@ -707,16 +707,16 @@ const StorageManager = () => {
                     outline: 'none',
                     transition: 'all 0.2s'
                   }}
-                  onFocus={(e) => e.target.style.borderColor = '#667eea'}
+                  onFocus={(e) => e.target.style.borderColor = '#5b4632'}
                   onBlur={(e) => e.target.style.borderColor = '#E5E7EB'}
                 />
               </div>
 
               {/* Tags Field */}
               <div className="admin-form-group" style={{ marginBottom: '24px' }}>
-                <label 
+                <label
                   htmlFor="storage-tags"
-                  style={{ 
+                  style={{
                     display: 'block',
                     marginBottom: '8px',
                     fontSize: '14px',
@@ -730,9 +730,9 @@ const StorageManager = () => {
                   id="storage-tags"
                   type="text"
                   value={formData.tags.join(', ')}
-                  onChange={(e) => setFormData({ 
-                    ...formData, 
-                    tags: e.target.value.split(',').map(t => t.trim()).filter(t => t) 
+                  onChange={(e) => setFormData({
+                    ...formData,
+                    tags: e.target.value.split(',').map(t => t.trim()).filter(t => t)
                   })}
                   placeholder="e.g., api, secrets, important, documentation"
                   data-testid="storage-tags-input"
@@ -745,7 +745,7 @@ const StorageManager = () => {
                     outline: 'none',
                     transition: 'all 0.2s'
                   }}
-                  onFocus={(e) => e.target.style.borderColor = '#667eea'}
+                  onFocus={(e) => e.target.style.borderColor = '#5b4632'}
                   onBlur={(e) => e.target.style.borderColor = '#E5E7EB'}
                 />
               </div>
@@ -758,9 +758,9 @@ const StorageManager = () => {
                 paddingTop: '20px',
                 borderTop: '2px solid #F3F4F6'
               }}>
-                <button 
-                  type="button" 
-                  className="admin-btn" 
+                <button
+                  type="button"
+                  className="admin-btn"
                   onClick={closeModal}
                   style={{
                     padding: '12px 24px',
@@ -775,9 +775,9 @@ const StorageManager = () => {
                 >
                   Cancel
                 </button>
-                <button 
-                  type="submit" 
-                  className="admin-btn admin-btn-primary" 
+                <button
+                  type="submit"
+                  className="admin-btn admin-btn-primary"
                   data-testid="storage-save-btn"
                   disabled={uploadingFiles}
                   style={{
@@ -786,7 +786,7 @@ const StorageManager = () => {
                     fontWeight: '600',
                     border: 'none',
                     borderRadius: '8px',
-                    background: uploadingFiles ? '#9CA3AF' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    background: uploadingFiles ? '#9CA3AF' : 'linear-gradient(135deg, #5b4632 0%, #a34e1d 100%)',
                     color: 'white',
                     cursor: uploadingFiles ? 'not-allowed' : 'pointer',
                     display: 'flex',

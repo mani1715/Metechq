@@ -1,3 +1,4 @@
+from auth.admin_auth import require_permission
 from fastapi import APIRouter, HTTPException, Depends
 from typing import Optional
 from datetime import datetime
@@ -27,7 +28,7 @@ async def get_booking_settings():
     return settings
 
 @router.get("/admin", response_model=Optional[BookingSettingResponse])
-async def get_booking_settings_admin(_: dict = Depends(get_current_admin)):
+async def get_booking_settings_admin(_: dict = Depends(require_permission("canManageBookingSettings"))):
     """Get booking settings (ADMIN)"""
     settings = await booking_settings_collection.find_one({})
     return settings
@@ -35,7 +36,7 @@ async def get_booking_settings_admin(_: dict = Depends(get_current_admin)):
 @router.post("/admin", response_model=BookingSettingResponse)
 async def create_booking_settings(
     settings: BookingSettingCreate,
-    _: dict = Depends(get_current_admin)
+    _: dict = Depends(require_permission("canManageBookingSettings"))
 ):
     """Create or update booking settings (ADMIN)"""
     # Check if settings already exist
@@ -72,7 +73,7 @@ async def create_booking_settings(
 async def update_booking_settings(
     settings_id: str,
     settings_update: BookingSettingUpdate,
-    _: dict = Depends(get_current_admin)
+    _: dict = Depends(require_permission("canManageBookingSettings"))
 ):
     """Update booking settings (ADMIN)"""
     existing = await booking_settings_collection.find_one({"id": settings_id})
@@ -104,7 +105,7 @@ async def update_booking_settings(
 @router.delete("/admin/{settings_id}")
 async def delete_booking_settings(
     settings_id: str,
-    _: dict = Depends(get_current_admin)
+    _: dict = Depends(require_permission("canManageBookingSettings"))
 ):
     """Delete booking settings (ADMIN)"""
     result = await booking_settings_collection.delete_one({"id": settings_id})

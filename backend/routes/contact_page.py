@@ -1,3 +1,4 @@
+from auth.admin_auth import require_permission
 """Contact Page Content Routes"""
 from fastapi import APIRouter, HTTPException, Depends
 from typing import Dict, Any
@@ -28,7 +29,7 @@ async def get_contact_page():
 @router.put("/", response_model=Dict[str, Any])
 async def update_contact_page(
     content: ContactPageUpdate,
-    current_admin: dict = Depends(get_current_admin)
+    current_admin: dict = Depends(require_permission("canManageContactPage"))
 ):
     """Update contact page content (admin only)"""
     try:
@@ -69,7 +70,7 @@ async def update_contact_page(
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/reset")
-async def reset_contact_page(current_admin: dict = Depends(get_current_admin)):
+async def reset_contact_page(current_admin: dict = Depends(require_permission("canManageContactPage"))):
     """Reset contact page to default content (admin only)"""
     try:
         default_content = get_default_contact_content()

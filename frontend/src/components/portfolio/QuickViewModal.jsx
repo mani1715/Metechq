@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import ProjectImage from './ProjectImage';
+import React, { useState, useEffect, useRef } from 'react';
 import { X, ChevronLeft, ChevronRight, ExternalLink, Github, Calendar, Tag as TagIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '../ui/button';
@@ -6,6 +7,25 @@ import './portfolio-components.css';
 
 const QuickViewModal = ({ project, isOpen, onClose }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const dialogRef = useRef(null);
+  useEffect(() => {
+    if (!isOpen) return;
+    setCurrentImageIndex(0);
+    const previous = document.activeElement;
+    const dialog = dialogRef.current;
+    dialog?.querySelector('button')?.focus();
+    const handleKey = (event) => {
+      if (event.key === 'Escape') onClose();
+      if (event.key !== 'Tab' || !dialog) return;
+      const nodes = [...dialog.querySelectorAll('a[href],button:not([disabled]),[tabindex="0"]')];
+      const first = nodes[0], last = nodes[nodes.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    };
+    document.addEventListener('keydown', handleKey);
+    return () => { document.removeEventListener('keydown', handleKey); previous?.focus(); };
+  }, [isOpen, project?.id, onClose]);
 
   if (!isOpen || !project) return null;
 
@@ -25,7 +45,7 @@ const QuickViewModal = ({ project, isOpen, onClose }) => {
       <div className="modal-backdrop" onClick={onClose} aria-hidden="true"></div>
 
       {/* Modal */}
-      <div className="quick-view-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div ref={dialogRef} className="quick-view-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -39,7 +59,7 @@ const QuickViewModal = ({ project, isOpen, onClose }) => {
         <div className="modal-content">
           {/* Image Carousel */}
           <div className="modal-image-section">
-            <img
+            <ProjectImage
               src={images[currentImageIndex]}
               alt={`${project.title} - Image ${currentImageIndex + 1}`}
               className="modal-image"
@@ -148,16 +168,16 @@ const QuickViewModal = ({ project, isOpen, onClose }) => {
                 </Button>
               </Link>
               <div className="modal-external-links">
-                {project.liveLink && (
-                  <a href={project.liveLink} target="_blank" rel="noopener noreferrer">
+                {(project.live_demo_url || project.liveUrl) && (
+                  <a href={(project.live_demo_url || project.liveUrl)} target="_blank" rel="noopener noreferrer">
                     <Button variant="outline" className="modal-btn">
                       <ExternalLink className="h-4 w-4 mr-2" />
-                      Live Demo
+                      Visit website
                     </Button>
                   </a>
                 )}
-                {project.githubLink && (
-                  <a href={project.githubLink} target="_blank" rel="noopener noreferrer">
+                {(project.github_url || project.githubUrl) && (
+                  <a href={(project.github_url || project.githubUrl)} target="_blank" rel="noopener noreferrer">
                     <Button variant="outline" className="modal-btn">
                       <Github className="h-4 w-4 mr-2" />
                       Source Code

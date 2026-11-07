@@ -1,4 +1,5 @@
-from fastapi import APIRouter, HTTPException, status, Depends, Header
+from auth.admin_auth import require_permission
+from fastapi import APIRouter, HTTPException, status, Depends, Header, Query
 from typing import List, Optional
 from schemas.project import ProjectCreate, ProjectUpdate, ProjectResponse
 from database import projects_collection
@@ -11,17 +12,17 @@ from auth.jwt import decode_access_token
 router = APIRouter(prefix="/projects", tags=["projects"])
 
 @router.get("/", response_model=List[ProjectResponse])
-async def get_projects():
+async def get_projects(offset: int = Query(0, ge=0), limit: int = Query(100, ge=1, le=100)):
     """Get public projects only (for public portfolio page)"""
-    cursor = projects_collection.find({"is_private": {"$ne": True}}).sort("created_at", -1)
-    projects = await cursor.to_list(length=100)
+    cursor = projects_collection.find({"is_private": {"$ne": True}}).sort([("created_at", -1), ("id", 1)]).skip(offset).limit(limit)
+    projects = await cursor.to_list(length=limit)
     return [serialize_document(project) for project in projects]
 
 @router.get("/all", response_model=List[ProjectResponse])
-async def get_all_projects(current_admin: dict = Depends(get_current_admin)):
+async def get_all_projects(offset: int = Query(0, ge=0), limit: int = Query(100, ge=1, le=100), current_admin: dict = Depends(require_permission("canManagePortfolio"))):
     """Get all projects including private ones (admin only)"""
-    cursor = projects_collection.find().sort("created_at", -1)
-    projects = await cursor.to_list(length=100)
+    cursor = projects_collection.find().sort([("created_at", -1), ("id", 1)]).skip(offset).limit(limit)
+    projects = await cursor.to_list(length=limit)
     return [serialize_document(project) for project in projects]
 
 @router.get("/{project_id}", response_model=ProjectResponse)
@@ -37,12 +38,13 @@ async def get_project(project_id: str, authorization: Optional[str] = Header(Non
     # Check if project is private
     if project.get("is_private", False):
         is_admin = False
-        if authorization and authorization.startswith("Bearer "):
-            token = authorization.split()[1]
-            payload = decode_access_token(token)
-            if payload and payload.get("role") in ["admin", "super_admin"]:
-                is_admin = True
-        
+        if authorization:
+            try:
+                admin = await get_current_admin(authorization)
+                is_admin = admin["role"] == "super_admin" or admin.get("permissions", {}).get("canViewPrivateProjects", False)
+            except HTTPException:
+                pass
+
         if not is_admin:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -52,7 +54,7 @@ async def get_project(project_id: str, authorization: Optional[str] = Header(Non
     return serialize_document(project)
 
 @router.post("/", response_model=ProjectResponse)
-async def create_project(project_data: ProjectCreate, current_admin: dict = Depends(get_current_admin)):
+async def create_project(project_data: ProjectCreate, current_admin: dict = Depends(require_permission("canManagePortfolio"))):
     """Create a new project (admin only)"""
     # Auto-generate slug if not provided
     if not project_data.slug:
@@ -70,7 +72,7 @@ async def create_project(project_data: ProjectCreate, current_admin: dict = Depe
 async def update_project(
     project_id: str,
     project_data: ProjectUpdate,
-    current_admin: dict = Depends(get_current_admin)
+    current_admin: dict = Depends(require_permission("canManagePortfolio"))
 ):
     """Update a project (admin only)"""
     # Check if project exists
@@ -99,7 +101,7 @@ async def update_project(
     return serialize_document(updated_project)
 
 @router.delete("/{project_id}")
-async def delete_project(project_id: str, current_admin: dict = Depends(get_current_admin)):
+async def delete_project(project_id: str, current_admin: dict = Depends(require_permission("canManagePortfolio"))):
     """Delete a project (admin only)"""
     result = await projects_collection.delete_one({"id": project_id})
     if result.deleted_count == 0:

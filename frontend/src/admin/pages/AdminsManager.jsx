@@ -176,7 +176,7 @@ const AdminsManager = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('admin_token') || localStorage.getItem('adminToken');
-    
+
     try {
       if (editingAdmin) {
         const updateData = {
@@ -186,7 +186,7 @@ const AdminsManager = () => {
         if (formData.password) {
           updateData.password = formData.password;
         }
-        
+
         await axios.put(
           `${BACKEND_URL}/admins/${editingAdmin.id}`,
           updateData,
@@ -199,7 +199,7 @@ const AdminsManager = () => {
           { headers: { Authorization: `Bearer ${token}` } }
         );
       }
-      
+
       fetchAdmins();
       closeModal();
     } catch (error) {
@@ -210,7 +210,7 @@ const AdminsManager = () => {
 
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this admin?')) return;
-    
+
     try {
       const token = localStorage.getItem('admin_token') || localStorage.getItem('adminToken');
       await axios.delete(`${BACKEND_URL}/admins/${id}`, {
@@ -307,7 +307,7 @@ const AdminsManager = () => {
   const applyPreset = (presetName) => {
     setSelectedPreset(presetName);
     if (presetName === 'custom') return;
-    
+
     setFormData({
       ...formData,
       permissions: { ...permissionPresets[presetName] }
@@ -359,22 +359,22 @@ const AdminsManager = () => {
   return (
     <div className="admin-page">
       {/* Header with Gradient Background */}
-      <div className="admin-page-header" style={{ 
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      <div className="admin-page-header" style={{
+        background: 'linear-gradient(135deg, #5b4632 0%, #a34e1d 100%)',
         color: 'white',
         padding: '32px',
         borderRadius: '16px',
         marginBottom: '32px'
       }}>
         <div>
-          <h1 data-testid="admins-manager-heading" style={{ 
+          <h1 data-testid="admins-manager-heading" style={{
             fontSize: '32px',
             fontWeight: '700',
             marginBottom: '8px'
           }}>
             👥 Admin Management
           </h1>
-          <p style={{ 
+          <p style={{
             fontSize: '16px',
             opacity: 0.9,
             margin: 0
@@ -382,8 +382,8 @@ const AdminsManager = () => {
             Manage admin users and their permissions
           </p>
         </div>
-        <button 
-          className="admin-btn admin-btn-primary" 
+        <button
+          className="admin-btn admin-btn-primary"
           onClick={() => openModal()}
           data-testid="add-admin-btn"
           style={{
@@ -391,7 +391,7 @@ const AdminsManager = () => {
             fontSize: '16px',
             fontWeight: '600',
             background: 'white',
-            color: '#667eea',
+            color: '#5b4632',
             border: 'none',
             borderRadius: '10px',
             display: 'flex',
@@ -427,7 +427,7 @@ const AdminsManager = () => {
         }}>
           <thead>
             <tr style={{
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              background: 'linear-gradient(135deg, #5b4632 0%, #a34e1d 100%)',
               color: 'white'
             }}>
               <th style={{
@@ -478,9 +478,9 @@ const AdminsManager = () => {
               >
                 <td style={{ padding: '16px 20px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    {admin.role === 'super_admin' ? 
-                      <Shield size={18} style={{ color: '#10B981' }} /> : 
-                      <User size={18} style={{ color: '#667eea' }} />
+                    {admin.role === 'super_admin' ?
+                      <Shield size={18} style={{ color: '#10B981' }} /> :
+                      <User size={18} style={{ color: '#5b4632' }} />
                     }
                     <span style={{ fontWeight: '500', fontSize: '15px', color: '#111827' }}>
                       {admin.username}
@@ -538,10 +538,10 @@ const AdminsManager = () => {
                   </div>
                 </td>
                 <td style={{ padding: '16px 20px', fontSize: '14px', color: '#6B7280' }}>
-                  {new Date(admin.created_at).toLocaleDateString('en-US', { 
-                    month: '2-digit', 
-                    day: '2-digit', 
-                    year: 'numeric' 
+                  {new Date(admin.created_at).toLocaleDateString('en-US', {
+                    month: '2-digit',
+                    day: '2-digit',
+                    year: 'numeric'
                   })}
                 </td>
                 <td style={{ padding: '16px 20px' }}>
@@ -557,18 +557,18 @@ const AdminsManager = () => {
                             border: 'none',
                             borderRadius: '6px',
                             cursor: 'pointer',
-                            color: '#667eea',
+                            color: '#5b4632',
                             display: 'flex',
                             alignItems: 'center',
                             transition: 'all 0.2s'
                           }}
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.background = '#667eea';
+                            e.currentTarget.style.background = '#5b4632';
                             e.currentTarget.style.color = 'white';
                           }}
                           onMouseLeave={(e) => {
                             e.currentTarget.style.background = '#EEF2FF';
-                            e.currentTarget.style.color = '#667eea';
+                            e.currentTarget.style.color = '#5b4632';
                           }}
                         >
                           <Edit size={16} />
@@ -621,8 +621,8 @@ const AdminsManager = () => {
       {showModal && (
         <div className="admin-modal-overlay">
           <div className="admin-modal" style={{ maxWidth: '600px' }}>
-            <div className="admin-modal-header" style={{ 
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            <div className="admin-modal-header" style={{
+              background: 'linear-gradient(135deg, #5b4632 0%, #a34e1d 100%)',
               color: 'white',
               padding: '24px',
               borderRadius: '12px 12px 0 0',
@@ -631,11 +631,11 @@ const AdminsManager = () => {
               <h2 style={{ margin: 0, fontSize: '24px', fontWeight: '600' }}>
                 {editingAdmin ? 'Edit Admin' : 'Add New Admin'}
               </h2>
-              <button 
-                className="admin-btn-icon" 
+              <button
+                className="admin-btn-icon"
                 onClick={closeModal}
-                style={{ 
-                  background: 'rgba(255, 255, 255, 0.2)', 
+                style={{
+                  background: 'rgba(255, 255, 255, 0.2)',
                   color: 'white',
                   border: 'none',
                   borderRadius: '8px',
@@ -645,13 +645,13 @@ const AdminsManager = () => {
                 <X size={20} />
               </button>
             </div>
-            
+
             <form onSubmit={handleSubmit} style={{ padding: '0 24px 24px' }}>
               {/* Username Field */}
               <div className="admin-form-group" style={{ marginBottom: '20px' }}>
-                <label 
-                  htmlFor="admin-username" 
-                  style={{ 
+                <label
+                  htmlFor="admin-username"
+                  style={{
                     display: 'block',
                     marginBottom: '8px',
                     fontSize: '14px',
@@ -678,16 +678,16 @@ const AdminsManager = () => {
                     transition: 'all 0.2s',
                     outline: 'none'
                   }}
-                  onFocus={(e) => e.target.style.borderColor = '#667eea'}
+                  onFocus={(e) => e.target.style.borderColor = '#5b4632'}
                   onBlur={(e) => e.target.style.borderColor = '#E5E7EB'}
                 />
               </div>
 
               {/* Password Field */}
               <div className="admin-form-group" style={{ marginBottom: '20px' }}>
-                <label 
+                <label
                   htmlFor="admin-password"
-                  style={{ 
+                  style={{
                     display: 'block',
                     marginBottom: '8px',
                     fontSize: '14px',
@@ -695,8 +695,8 @@ const AdminsManager = () => {
                     color: '#374151'
                   }}
                 >
-                  Password {editingAdmin ? 
-                    <span style={{ fontSize: '12px', fontWeight: '400', color: '#6B7280' }}>(leave empty to keep current)</span> : 
+                  Password {editingAdmin ?
+                    <span style={{ fontSize: '12px', fontWeight: '400', color: '#6B7280' }}>(leave empty to keep current)</span> :
                     <span style={{ color: '#EF4444' }}>*</span>
                   }
                 </label>
@@ -717,16 +717,16 @@ const AdminsManager = () => {
                     transition: 'all 0.2s',
                     outline: 'none'
                   }}
-                  onFocus={(e) => e.target.style.borderColor = '#667eea'}
+                  onFocus={(e) => e.target.style.borderColor = '#5b4632'}
                   onBlur={(e) => e.target.style.borderColor = '#E5E7EB'}
                 />
               </div>
 
               {/* Role Selection */}
               <div className="admin-form-group" style={{ marginBottom: '20px' }}>
-                <label 
+                <label
                   htmlFor="admin-role"
-                  style={{ 
+                  style={{
                     display: 'block',
                     marginBottom: '8px',
                     fontSize: '14px',
@@ -759,9 +759,9 @@ const AdminsManager = () => {
 
               {/* Permission Preset Selection */}
               <div className="admin-form-group" style={{ marginBottom: '20px' }}>
-                <label 
+                <label
                   htmlFor="permission-preset"
-                  style={{ 
+                  style={{
                     display: 'block',
                     marginBottom: '8px',
                     fontSize: '14px',
@@ -801,7 +801,7 @@ const AdminsManager = () => {
               {/* Permissions */}
               <div className="admin-form-group" style={{ marginBottom: '20px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                  <label style={{ 
+                  <label style={{
                     fontSize: '14px',
                     fontWeight: '600',
                     color: '#374151'
@@ -843,7 +843,7 @@ const AdminsManager = () => {
                     </button>
                   </div>
                 </div>
-                
+
                 {/* Admin Management */}
                 <div style={{ marginBottom: '16px' }}>
                   <h4 style={{ fontSize: '13px', fontWeight: '600', color: '#6B7280', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Admin Management</h4>
@@ -962,12 +962,12 @@ const AdminsManager = () => {
                   </div>
                 </div>
 
-                <div style={{ 
-                  marginTop: '12px', 
-                  padding: '12px 16px', 
-                  background: '#EFF6FF', 
-                  borderRadius: '8px', 
-                  fontSize: '13px', 
+                <div style={{
+                  marginTop: '12px',
+                  padding: '12px 16px',
+                  background: '#EFF6FF',
+                  borderRadius: '8px',
+                  fontSize: '13px',
                   color: '#1E40AF',
                   border: '1px solid #DBEAFE'
                 }}>
@@ -983,9 +983,9 @@ const AdminsManager = () => {
                 paddingTop: '20px',
                 borderTop: '2px solid #F3F4F6'
               }}>
-                <button 
-                  type="button" 
-                  className="admin-btn" 
+                <button
+                  type="button"
+                  className="admin-btn"
                   onClick={closeModal}
                   style={{
                     padding: '12px 24px',
@@ -1000,9 +1000,9 @@ const AdminsManager = () => {
                 >
                   Cancel
                 </button>
-                <button 
-                  type="submit" 
-                  className="admin-btn admin-btn-primary" 
+                <button
+                  type="submit"
+                  className="admin-btn admin-btn-primary"
                   data-testid="admin-save-btn"
                   style={{
                     padding: '12px 32px',
@@ -1010,7 +1010,7 @@ const AdminsManager = () => {
                     fontWeight: '600',
                     border: 'none',
                     borderRadius: '8px',
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    background: 'linear-gradient(135deg, #5b4632 0%, #a34e1d 100%)',
                     color: 'white',
                     cursor: 'pointer',
                     display: 'flex',

@@ -1,3 +1,4 @@
+from auth.admin_auth import require_permission
 from fastapi import APIRouter, HTTPException, status, Depends
 from schemas.pricing import PricingUpdate, PricingResponse
 from database import pricing_collection
@@ -59,7 +60,7 @@ async def get_pricing():
 @router.put("/", response_model=PricingResponse)
 async def update_pricing(
     pricing_data: PricingUpdate,
-    current_admin: dict = Depends(get_current_admin)
+    current_admin: dict = Depends(require_permission("canManagePricing"))
 ):
     """Update pricing configuration (admin only)"""
     existing = await pricing_collection.find_one({"id": "pricing_config"})

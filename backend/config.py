@@ -86,6 +86,8 @@ def get_allowed_origins() -> list:
         "http://localhost:3002",
         "http://localhost:3003",
         "http://127.0.0.1:3000",
+        "http://127.0.0.1:3001",
+        "http://127.0.0.1:3002",
         "http://127.0.0.1:3003",
     ]
     origins = []
@@ -121,6 +123,12 @@ def validate_config():
     
     # Check client secret in production
     if IS_PRODUCTION:
+        if not CLIENT_JWT_SECRET:
+            errors.append("CLIENT_JWT_SECRET is required in production.")
+        elif CLIENT_JWT_SECRET == JWT_SECRET_KEY:
+            errors.append("Admin and client JWT secrets must be different.")
+        if not CORS_ORIGINS_RAW or '*' in CORS_ORIGINS_RAW:
+            errors.append("Production CORS must list explicit trusted origins.")
         if CLIENT_JWT_SECRET and len(CLIENT_JWT_SECRET) < 32:
             errors.append("CLIENT_JWT_SECRET must be at least 32 characters long in production.")
         if CLIENT_JWT_SECRET and CLIENT_JWT_SECRET.lower() in INSECURE_SECRETS:

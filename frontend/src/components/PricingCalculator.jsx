@@ -117,7 +117,7 @@ const PricingCalculator = ({ onEstimateChange }) => {
     return (
       <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-3xl p-8">
         <div className="flex items-center justify-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-500"></div>
         </div>
       </div>
     );
@@ -131,12 +131,12 @@ const PricingCalculator = ({ onEstimateChange }) => {
     <div className="bg-gradient-to-br from-gray-900/90 to-gray-800/90 backdrop-blur-sm border border-gray-700 rounded-3xl p-8 shadow-2xl">
       {/* Header */}
       <div className="text-center mb-8">
-        <div className="inline-flex items-center justify-center p-3 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl mb-4">
+        <div className="inline-flex items-center justify-center p-3 bg-gradient-to-br from-brand-500 to-pink-500 rounded-2xl mb-4">
           <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
           </svg>
         </div>
-        <h2 className="text-3xl font-bold text-white mb-2 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+        <h2 className="text-3xl font-bold text-white mb-2 bg-gradient-to-r from-brand-400 to-pink-400 bg-clip-text text-transparent">
           Estimate Your Project Cost
         </h2>
         <p className="text-gray-400">Configure your project requirements to get an instant estimate</p>
@@ -145,7 +145,7 @@ const PricingCalculator = ({ onEstimateChange }) => {
       {/* Website Type Selection */}
       <div className="mb-8">
         <label className="flex items-center gap-2 text-sm font-semibold text-gray-300 mb-4">
-          <svg className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-5 h-5 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
           </svg>
           Website Type
@@ -157,13 +157,13 @@ const PricingCalculator = ({ onEstimateChange }) => {
               onClick={() => setSelectedWebsiteType(type.name)}
               className={`p-4 rounded-xl border-2 transition-all text-left ${
                 selectedWebsiteType === type.name
-                  ? 'bg-blue-500/20 border-blue-500 shadow-lg shadow-blue-500/20'
-                  : 'bg-gray-800/50 border-gray-700 hover:border-blue-500/50'
+                  ? 'bg-brand-500/20 border-brand-500 shadow-lg shadow-brand-500/20'
+                  : 'bg-gray-800/50 border-gray-700 hover:border-brand-500/50'
               }`}
             >
               <div className="flex items-center justify-between">
                 <span className="text-white font-medium">{type.name}</span>
-                <span className="text-blue-400 font-semibold">{formatPrice(type.price)}</span>
+                <span className="text-brand-400 font-semibold">{formatPrice(type.price)}</span>
               </div>
             </button>
           ))}
@@ -201,7 +201,7 @@ const PricingCalculator = ({ onEstimateChange }) => {
       {/* Features Selection */}
       <div className="mb-8">
         <label className="flex items-center gap-2 text-sm font-semibold text-gray-300 mb-4">
-          <svg className="w-5 h-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-5 h-5 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
           </svg>
           Features (Multiple selection)
@@ -213,13 +213,13 @@ const PricingCalculator = ({ onEstimateChange }) => {
               onClick={() => toggleFeature(feature.name)}
               className={`p-4 rounded-xl border-2 transition-all text-left ${
                 selectedFeatures.includes(feature.name)
-                  ? 'bg-purple-500/20 border-purple-500 shadow-lg shadow-purple-500/20'
-                  : 'bg-gray-800/50 border-gray-700 hover:border-purple-500/50'
+                  ? 'bg-brand-500/20 border-brand-500 shadow-lg shadow-brand-500/20'
+                  : 'bg-gray-800/50 border-gray-700 hover:border-brand-500/50'
               }`}
             >
               <div className="flex items-center justify-between">
                 <span className="text-white font-medium">{feature.name}</span>
-                <span className="text-purple-400 font-semibold">{formatPrice(feature.price)}</span>
+                <span className="text-brand-400 font-semibold">{formatPrice(feature.price)}</span>
               </div>
             </button>
           ))}
@@ -253,9 +253,9 @@ const PricingCalculator = ({ onEstimateChange }) => {
       </div>
 
       {/* Estimated Price Display */}
-      <div className="bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-orange-500/20 border-2 border-purple-500/50 rounded-2xl p-6 text-center">
+      <div className="bg-gradient-to-r from-brand-500/20 via-pink-500/20 to-orange-500/20 border-2 border-brand-500/50 rounded-2xl p-6 text-center">
         <div className="text-gray-400 text-sm mb-2">Estimated Project Cost</div>
-        <div className="text-4xl md:text-5xl font-bold text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text mb-3">
+        <div className="text-4xl md:text-5xl font-bold text-transparent bg-gradient-to-r from-brand-400 via-pink-400 to-orange-400 bg-clip-text mb-3">
           {estimatedPrice.min > 0 ? (
             <>
               {formatPrice(estimatedPrice.min)} - {formatPrice(estimatedPrice.max)}

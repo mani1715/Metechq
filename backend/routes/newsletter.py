@@ -1,3 +1,4 @@
+from auth.admin_auth import require_permission
 from fastapi import APIRouter, HTTPException, status, Depends
 from typing import List
 from schemas.newsletter import NewsletterSubscribe, NewsletterResponse, NewsletterUpdate
@@ -45,14 +46,14 @@ async def subscribe_to_newsletter(subscription_data: NewsletterSubscribe):
     }
 
 @router.get("/admin/all", response_model=List[NewsletterResponse])
-async def get_all_subscribers(admin = Depends(get_current_admin)):
+async def get_all_subscribers(admin = Depends(require_permission("canManageNewsletter"))):
     """Get all newsletter subscribers (admin only)"""
     cursor = newsletter_collection.find().sort("created_at", -1)
     subscribers = await cursor.to_list(length=10000)
     return [serialize_document(subscriber) for subscriber in subscribers]
 
 @router.delete("/admin/{subscriber_id}")
-async def delete_subscriber(subscriber_id: str, admin = Depends(get_current_admin)):
+async def delete_subscriber(subscriber_id: str, admin = Depends(require_permission("canManageNewsletter"))):
     """Delete a newsletter subscriber (admin only)"""
     result = await newsletter_collection.delete_one({"id": subscriber_id})
     if result.deleted_count == 0:
@@ -63,7 +64,7 @@ async def delete_subscriber(subscriber_id: str, admin = Depends(get_current_admi
     return {"message": "Subscriber deleted successfully"}
 
 @router.get("/admin/export")
-async def export_subscribers(admin = Depends(get_current_admin)):
+async def export_subscribers(admin = Depends(require_permission("canManageNewsletter"))):
     """Export all subscribers as CSV (admin only)"""
     cursor = newsletter_collection.find().sort("created_at", -1)
     subscribers = await cursor.to_list(length=10000)

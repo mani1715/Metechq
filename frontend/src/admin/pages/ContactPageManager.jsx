@@ -38,31 +38,31 @@ const ContactPageManager = () => {
       setSaving(true);
       // Remove fields that shouldn't be sent to backend
       const { created_at, created_by, updated_at, updated_by, _id, ...cleanContent } = content;
-      
+
       const response = await contactPageService.updateContactPage(cleanContent);
-      
+
       // Update local state with response from server
       setContent(response);
-      
+
       toast.success('Contact page updated successfully! Changes are now live on the website.');
     } catch (error) {
       console.error('Full error:', error);
       console.error('Error response:', error.response?.data);
-      
+
       // Properly format error message
       let errorMessage = 'Failed to update contact page';
-      
+
       if (error.response?.data?.detail) {
         // If detail is an array of validation errors
         if (Array.isArray(error.response.data.detail)) {
-          errorMessage = error.response.data.detail.map(err => 
+          errorMessage = error.response.data.detail.map(err =>
             `${err.loc?.join(' → ') || 'Field'}: ${err.msg}`
           ).join(', ');
-        } 
+        }
         // If detail is an object
         else if (typeof error.response.data.detail === 'object') {
           errorMessage = JSON.stringify(error.response.data.detail, null, 2);
-        } 
+        }
         // If detail is a string
         else {
           errorMessage = String(error.response.data.detail);
@@ -70,7 +70,7 @@ const ContactPageManager = () => {
       } else if (error.message) {
         errorMessage = error.message;
       }
-      
+
       toast.error(errorMessage, { duration: 5000 });
     } finally {
       setSaving(false);
@@ -259,7 +259,7 @@ const ContactPageManager = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-600"></div>
       </div>
     );
   }
@@ -298,7 +298,7 @@ const ContactPageManager = () => {
       <div className="space-y-6">
         {/* Hero Section */}
         <Card className="p-6">
-          <h2 className="text-2xl font-bold mb-4 text-purple-700">Hero Section</h2>
+          <h2 className="text-2xl font-bold mb-4 text-brand-700">Hero Section</h2>
           <div className="space-y-4">
             <div>
               <Label>Title</Label>
@@ -330,7 +330,7 @@ const ContactPageManager = () => {
 
         {/* Form Section */}
         <Card className="p-6">
-          <h2 className="text-2xl font-bold mb-4 text-purple-700">Contact Form</h2>
+          <h2 className="text-2xl font-bold mb-4 text-brand-700">Contact Form</h2>
           <div className="space-y-4">
             <div>
               <Label>Form Title</Label>
@@ -402,7 +402,7 @@ const ContactPageManager = () => {
         {/* Contact Information Cards */}
         <Card className="p-6">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-bold text-purple-700">Contact Information</h2>
+            <h2 className="text-2xl font-bold text-brand-700">Contact Information</h2>
             <Button onClick={addContactCard} size="sm">
               <Plus className="w-4 h-4 mr-2" />
               Add Card
@@ -485,7 +485,7 @@ const ContactPageManager = () => {
         {/* Business Hours */}
         <Card className="p-6">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-bold text-purple-700">Business Hours</h2>
+            <h2 className="text-2xl font-bold text-brand-700">Business Hours</h2>
             <Button onClick={addSchedule} size="sm">
               <Plus className="w-4 h-4 mr-2" />
               Add Schedule
@@ -563,7 +563,7 @@ const ContactPageManager = () => {
         {/* FAQ Section */}
         <Card className="p-6">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-bold text-purple-700">Frequently Asked Questions</h2>
+            <h2 className="text-2xl font-bold text-brand-700">Frequently Asked Questions</h2>
             <Button onClick={addFAQ} size="sm" data-testid="add-faq-button">
               <Plus className="w-4 h-4 mr-2" />
               Add FAQ
@@ -629,7 +629,7 @@ const ContactPageManager = () => {
         {/* CTA Section */}
         <Card className="p-6">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-bold text-purple-700">Call-to-Action Section</h2>
+            <h2 className="text-2xl font-bold text-brand-700">Call-to-Action Section</h2>
             <Button onClick={addStat} size="sm">
               <Plus className="w-4 h-4 mr-2" />
               Add Stat

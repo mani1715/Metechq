@@ -1,3 +1,4 @@
+from auth.admin_auth import require_permission
 from fastapi import APIRouter, HTTPException, status, Depends
 from typing import List
 from schemas.note import NoteCreate, NoteUpdate, NoteResponse
@@ -18,7 +19,7 @@ async def get_all_notes(
     search: str = None,
     limit: int = 100,
     skip: int = 0,
-    current_admin: dict = Depends(get_current_admin)
+    current_admin: dict = Depends(require_permission("canManageNotes"))
 ):
     """Get all notes with sanitized search and pagination"""
     query = {}
@@ -53,7 +54,7 @@ async def get_all_notes(
 @router.get("/{note_id}", response_model=NoteResponse)
 async def get_note(
     note_id: str,
-    current_admin: dict = Depends(get_current_admin)
+    current_admin: dict = Depends(require_permission("canManageNotes"))
 ):
     """Get a specific note"""
     note = await notes_collection.find_one({"id": note_id})
@@ -73,7 +74,7 @@ async def get_note(
 @router.post("/", response_model=NoteResponse)
 async def create_note(
     note_data: NoteCreate,
-    current_admin: dict = Depends(get_current_admin)
+    current_admin: dict = Depends(require_permission("canManageNotes"))
 ):
     """Create a new note"""
     # Create new note
@@ -104,7 +105,7 @@ async def create_note(
 async def update_note(
     note_id: str,
     note_data: NoteUpdate,
-    current_admin: dict = Depends(get_current_admin)
+    current_admin: dict = Depends(require_permission("canManageNotes"))
 ):
     """Update a note"""
     note = await notes_collection.find_one({"id": note_id})
@@ -136,7 +137,7 @@ async def update_note(
 @router.delete("/{note_id}")
 async def delete_note(
     note_id: str,
-    current_admin: dict = Depends(get_current_admin)
+    current_admin: dict = Depends(require_permission("canManageNotes"))
 ):
     """Delete a note"""
     result = await notes_collection.delete_one({"id": note_id})

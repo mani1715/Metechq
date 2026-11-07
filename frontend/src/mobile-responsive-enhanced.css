@@ -46,7 +46,7 @@ textarea {
    MOBILE DEVICES (320px - 768px)
    ============================================================================ */
 @media (max-width: 768px) {
-  
+
   /* ----- GLOBAL RESETS ----- */
   section {
     padding: 40px 16px !important;
@@ -172,8 +172,8 @@ textarea {
     padding: 12px 8px;
     font-size: 15px;
     font-weight: 500;
-    color: #1e293b;
-    border-bottom: 1px solid #e2e8f0;
+    color: #403126;
+    border-bottom: 1px solid #e4d8c8;
     transition: all 0.2s ease;
     text-decoration: none;
   }
@@ -183,7 +183,7 @@ textarea {
   }
 
   .mobile-nav-link.active {
-    color: #8b5cf6;
+    color: #a34e1d;
     font-weight: 600;
   }
 
@@ -770,7 +770,7 @@ textarea {
    TABLET DEVICES (768px - 1024px)
    ============================================================================ */
 @media (min-width: 769px) and (max-width: 1024px) {
-  
+
   .section-container-premium {
     max-width: 720px;
     padding: 0 32px !important;
@@ -816,7 +816,7 @@ textarea {
    SMALL MOBILE (320px - 480px)
    ============================================================================ */
 @media (max-width: 480px) {
-  
+
   .hero-headline-premium,
   .services-hero-title {
     font-size: 24px !important;
@@ -855,7 +855,7 @@ textarea {
    LANDSCAPE ORIENTATION ON MOBILE
    ============================================================================ */
 @media (max-height: 500px) and (orientation: landscape) {
-  
+
   .hero-section-premium,
   .services-hero-premium {
     padding: 24px 16px !important;

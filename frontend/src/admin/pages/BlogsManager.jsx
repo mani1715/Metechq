@@ -11,7 +11,7 @@ const BlogsManager = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory, setFilterCategory] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
-  
+
   const [formData, setFormData] = useState({
     title: '',
     slug: '',
@@ -97,7 +97,7 @@ const BlogsManager = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!formData.title || !formData.content || !formData.excerpt) {
       toast.error('Please fill in all required fields');
       return;
@@ -117,7 +117,7 @@ const BlogsManager = () => {
         await createBlog(blogData);
         toast.success('Blog created successfully');
       }
-      
+
       handleCloseModal();
       fetchAllBlogs();
     } catch (error) {
@@ -183,15 +183,15 @@ const BlogsManager = () => {
       {/* Header */}
       <div style={{ marginBottom: '32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <h1 style={{ fontSize: '32px', fontWeight: '700', color: '#1C2A3A', margin: '0 0 8px 0' }}>
+          <h1 style={{ fontSize: '32px', fontWeight: '700', color: '#352a21', margin: '0 0 8px 0' }}>
             Blog Manager
           </h1>
           <p style={{ color: '#6B7280', margin: 0 }}>
             Manage your blog posts - {filteredBlogs.length} of {blogs.length} blogs
           </p>
         </div>
-        <button 
-          onClick={() => handleOpenModal()} 
+        <button
+          onClick={() => handleOpenModal()}
           className="admin-btn admin-btn-primary"
           disabled={loading}
         >
@@ -201,9 +201,9 @@ const BlogsManager = () => {
       </div>
 
       {/* Filters */}
-      <div style={{ 
-        display: 'flex', 
-        gap: '16px', 
+      <div style={{
+        display: 'flex',
+        gap: '16px',
         marginBottom: '24px',
         flexWrap: 'wrap'
       }}>
@@ -215,7 +215,7 @@ const BlogsManager = () => {
           className="admin-form-input"
           style={{ flex: '1', minWidth: '250px', maxWidth: '400px' }}
         />
-        
+
         <select
           value={filterCategory}
           onChange={(e) => setFilterCategory(e.target.value)}
@@ -273,7 +273,7 @@ const BlogsManager = () => {
                 filteredBlogs.map((blog) => (
                   <tr key={blog.id}>
                     <td>
-                      <div style={{ fontWeight: '500', color: '#1C2A3A' }}>
+                      <div style={{ fontWeight: '500', color: '#352a21' }}>
                         {blog.title}
                       </div>
                       <div style={{ fontSize: '14px', color: '#6B7280', marginTop: '4px' }}>
@@ -289,7 +289,7 @@ const BlogsManager = () => {
                       <button
                         onClick={() => toggleStatus(blog)}
                         className="admin-badge"
-                        style={{ 
+                        style={{
                           background: blog.status === 'published' ? '#DCFCE7' : '#FEF3C7',
                           color: blog.status === 'published' ? '#16A34A' : '#D97706',
                           cursor: 'pointer',
@@ -348,8 +348,8 @@ const BlogsManager = () => {
       {/* Modal */}
       {showModal && (
         <div className="admin-modal-overlay" onClick={handleCloseModal}>
-          <div 
-            className="admin-modal" 
+          <div
+            className="admin-modal"
             onClick={(e) => e.stopPropagation()}
             style={{ maxWidth: '900px', width: '90%', maxHeight: '90vh', overflow: 'auto' }}
           >
@@ -359,7 +359,7 @@ const BlogsManager = () => {
                 <X size={24} />
               </button>
             </div>
-            
+
             <form onSubmit={handleSubmit} className="admin-modal-body">
               {/* Title */}
               <div className="admin-form-group">
@@ -517,16 +517,16 @@ const BlogsManager = () => {
 
               {/* Form Actions */}
               <div className="admin-modal-footer">
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   onClick={handleCloseModal}
                   className="admin-btn admin-btn-secondary"
                   disabled={loading}
                 >
                   Cancel
                 </button>
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   className="admin-btn admin-btn-primary"
                   disabled={loading}
                 >

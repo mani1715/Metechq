@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -87,14 +87,16 @@ import BookingSettings from './admin/pages/BookingSettings';
 
 function AppContent() {
   const location = useLocation();
+  useEffect(() => { window.scrollTo(0, 0); }, [location.pathname]);
   const isDemoRoute = location.pathname.startsWith('/demo/');
   const isAdminRoute = location.pathname.startsWith('/admin');
-  const showChatWidget = !isAdminRoute; // Show chat widget on all pages except admin
+  const isClientWorkspace = location.pathname === '/client/dashboard';
+  const showChatWidget = !isAdminRoute && !isClientWorkspace; // Show chat widget on all pages except admin
 
   return (
     <>
       {!isDemoRoute && !isAdminRoute && <Navbar />}
-      <main className={isDemoRoute || isAdminRoute ? "" : "main-content"}>
+      <main id="main-content" tabIndex={-1} className={isDemoRoute || isAdminRoute ? "" : "main-content"}>
         <Routes>
           {/* Main Website Routes */}
           <Route path="/" element={<Home />} />
@@ -107,49 +109,49 @@ function AppContent() {
           <Route path="/blogs" element={<BlogList />} />
           <Route path="/blogs/:slug" element={<BlogDetail />} />
           <Route path="/submit-testimonial" element={<SubmitTestimonial />} />
-          
+
           {/* Client Portal Routes */}
           <Route path="/client/login" element={<ClientLogin />} />
           <Route path="/client/dashboard" element={<ClientDashboard />} />
-          
+
           {/* E-commerce Demo Routes */}
           <Route path="/demo/ecommerce" element={<EcommerceHome />} />
           <Route path="/demo/ecommerce/shop" element={<EcommerceShop />} />
           <Route path="/demo/ecommerce/product/:slug" element={<EcommerceProductDetail />} />
           <Route path="/demo/ecommerce/cart" element={<EcommerceCart />} />
           <Route path="/demo/ecommerce/checkout" element={<EcommerceCheckout />} />
-          
+
           {/* Corporate Demo Routes */}
           <Route path="/demo/corporate" element={<CorporateHome />} />
-          
+
           {/* Mobile Design System Demo */}
           <Route path="/demo/mobile-design" element={<MobileDesignHome />} />
-          
+
           {/* Restaurant Booking Demo */}
           <Route path="/demo/restaurant-booking" element={<RestaurantBookingHome />} />
-          
+
           {/* Hospitality Demo */}
           <Route path="/demo/hospitality" element={<HospitalityHome />} />
-          
+
           {/* SaaS Landing Demo */}
           <Route path="/demo/saas-landing" element={<SaasLandingHome />} />
-          
+
           {/* Social Media Management Demo */}
           <Route path="/demo/social-media" element={<SocialMediaHome />} />
-          
+
           {/* Real-Time Analytics Dashboard Demo */}
           <Route path="/demo/analytics" element={<AnalyticsDashboard />} />
-          
+
           {/* LMS Demo Routes */}
           <Route path="/demo/lms" element={<LmsHome />} />
           <Route path="/demo/lms/courses" element={<LmsCourses />} />
           <Route path="/demo/lms/course/:slug" element={<LmsCourseDetail />} />
-          
+
           {/* Real Estate Demo Routes */}
           <Route path="/demo/real-estate" element={<RealEstateHome />} />
           <Route path="/demo/real-estate/listings" element={<RealEstateListings />} />
           <Route path="/demo/real-estate/property/:slug" element={<RealEstatePropertyDetail />} />
-          
+
           {/* Admin Routes */}
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin" element={<AdminLayout />}>
@@ -180,7 +182,7 @@ function AppContent() {
           </Route>
         </Routes>
       </main>
-      {!isDemoRoute && !isAdminRoute && <Footer />}
+      {!isDemoRoute && !isAdminRoute && !isClientWorkspace && <Footer />}
       {showChatWidget && <ChatWidget />}
       <Toaster />
     </>

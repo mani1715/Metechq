@@ -94,7 +94,7 @@ const TestimonialsManager = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
       if (editingTestimonial) {
         await updateTestimonial(editingTestimonial.id, formData);
@@ -103,7 +103,7 @@ const TestimonialsManager = () => {
         await createTestimonial(formData);
         alert('Testimonial created successfully!');
       }
-      
+
       handleCloseModal();
       fetchTestimonials();
     } catch (error) {
@@ -179,11 +179,11 @@ const TestimonialsManager = () => {
       {/* Header */}
       <div style={{ marginBottom: '32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h1 style={{ fontSize: '32px', fontWeight: '700', color: '#1C2A3A', margin: '0 0 8px 0' }}>
+          <h1 style={{ fontSize: '32px', fontWeight: '700', color: '#352a21', margin: '0 0 8px 0' }}>
             Testimonials Manager
           </h1>
           <p style={{ color: '#6B7280', margin: 0 }}>
-            Manage client testimonials - {testimonials.length} total 
+            Manage client testimonials - {testimonials.length} total
             ({approvedCount} approved, {pendingCount} pending, {rejectedCount} rejected)
           </p>
         </div>
@@ -252,8 +252,8 @@ const TestimonialsManager = () => {
               {filteredTestimonials.length === 0 ? (
                 <tr>
                   <td colSpan="7" style={{ padding: '48px', textAlign: 'center', color: '#9CA3AF' }}>
-                    {statusFilter === 'all' 
-                      ? 'No testimonials yet. Create your first testimonial!' 
+                    {statusFilter === 'all'
+                      ? 'No testimonials yet. Create your first testimonial!'
                       : `No ${statusFilter} testimonials.`}
                   </td>
                 </tr>
@@ -335,7 +335,7 @@ const TestimonialsManager = () => {
                     <td style={{ padding: '16px', textAlign: 'center' }}>
                       <span className={`admin-badge ${
                         testimonial.source === 'client_portal' ? 'success' :
-                        testimonial.source === 'public_submitted' ? 'info' : 
+                        testimonial.source === 'public_submitted' ? 'info' :
                         testimonial.source === 'admin_created' ? 'secondary' :
                         'warning'
                       }`}>
@@ -347,8 +347,8 @@ const TestimonialsManager = () => {
                     </td>
                     <td style={{ padding: '16px', textAlign: 'center' }}>
                       <span className={`admin-badge ${
-                        testimonial.status === 'approved' ? 'success' : 
-                        testimonial.status === 'rejected' ? 'danger' : 
+                        testimonial.status === 'approved' ? 'success' :
+                        testimonial.status === 'rejected' ? 'danger' :
                         'warning'
                       }`}>
                         {testimonial.status === 'approved' ? (

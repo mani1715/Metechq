@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  Briefcase, 
-  Mail, 
-  Wrench, 
+import {
+  Briefcase,
+  Mail,
+  Wrench,
   TrendingUp,
   ArrowRight,
   Clock,
@@ -105,7 +105,7 @@ const Dashboard = () => {
         <h1 style={{
           fontSize: '32px',
           fontWeight: '700',
-          color: '#1C2A3A',
+          color: '#352a21',
           margin: '0 0 8px 0'
         }}>Dashboard</h1>
         <p style={{
@@ -132,7 +132,7 @@ const Dashboard = () => {
             <p className="admin-stat-label">{stat.label}</p>
             <Link to={stat.link} style={{
               fontSize: '14px',
-              color: '#7C5CFF',
+              color: '#a34e1d',
               textDecoration: 'none',
               display: 'inline-flex',
               alignItems: 'center',
@@ -169,13 +169,13 @@ const Dashboard = () => {
                   width: '40px',
                   height: '40px',
                   borderRadius: '8px',
-                  background: 'rgba(124, 92, 255, 0.1)',
+                  background: 'rgba(163, 78, 29, 0.1)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   flexShrink: 0
                 }}>
-                  <activity.icon size={20} color="#7C5CFF" />
+                  <activity.icon size={20} color="#a34e1d" />
                 </div>
                 <div style={{ flex: 1 }}>
                   <p style={{
@@ -221,8 +221,8 @@ const Dashboard = () => {
                   transition: 'all 0.2s'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = '#7C5CFF';
-                  e.currentTarget.style.background = 'rgba(124, 92, 255, 0.02)';
+                  e.currentTarget.style.borderColor = '#a34e1d';
+                  e.currentTarget.style.background = 'rgba(163, 78, 29, 0.02)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.borderColor = '#E5E7EB';
@@ -233,11 +233,11 @@ const Dashboard = () => {
                   width: '48px',
                   height: '48px',
                   borderRadius: '10px',
-                  background: action.color === 'purple' ? 'rgba(124, 92, 255, 0.1)' :
+                  background: action.color === 'purple' ? 'rgba(163, 78, 29, 0.1)' :
                             action.color === 'gold' ? 'rgba(212, 175, 55, 0.1)' :
                             'rgba(28, 42, 58, 0.1)',
-                  color: action.color === 'purple' ? '#7C5CFF' :
-                        action.color === 'gold' ? '#D4AF37' : '#1C2A3A',
+                  color: action.color === 'purple' ? '#a34e1d' :
+                        action.color === 'gold' ? '#c5792c' : '#352a21',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -250,7 +250,7 @@ const Dashboard = () => {
                     margin: '0 0 4px 0',
                     fontSize: '15px',
                     fontWeight: '600',
-                    color: '#1C2A3A'
+                    color: '#352a21'
                   }}>{action.title}</h4>
                   <p style={{
                     margin: 0,

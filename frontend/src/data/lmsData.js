@@ -1,12 +1,12 @@
 // Educational LMS Platform - Course Data
 
 export const categories = [
-  { id: 1, name: 'Web Development', icon: 'Code', color: '#8b5cf6' },
+  { id: 1, name: 'Web Development', icon: 'Code', color: '#a34e1d' },
   { id: 2, name: 'Data Science', icon: 'Database', color: '#3b82f6' },
   { id: 3, name: 'Design', icon: 'Palette', color: '#ec4899' },
   { id: 4, name: 'Business', icon: 'Briefcase', color: '#f59e0b' },
   { id: 5, name: 'Marketing', icon: 'TrendingUp', color: '#10b981' },
-  { id: 6, name: 'Personal Development', icon: 'Users', color: '#6366f1' }
+  { id: 6, name: 'Personal Development', icon: 'Users', color: '#a34e1d' }
 ];
 
 export const courses = [

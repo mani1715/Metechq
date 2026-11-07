@@ -1,3 +1,5 @@
+> **Assessment revision — 7 November 2026:** Start with [Evaluation guide](docs/EVALUATION_GUIDE.md), [Threat model and tested limits](THREATS.md), [AI work log](PROMPTS.md), and [Portfolio/client operating guide](docs/PORTFOLIO_AND_CLIENT_GUIDE.md). Deployment is deferred. These current evidence documents qualify broader feature/security descriptions in the older overview below. Existing demo records must be replaced with your actual work before submission.
+
 # 🚀 METECHQ – Portfolio & Client Management Platform
 
 A **full stack portfolio and agency management platform** designed for developers, freelancers, and software agencies. The system includes a **public portfolio website**, a **powerful admin dashboard**, and a **secure client portal** for managing projects and client communication.

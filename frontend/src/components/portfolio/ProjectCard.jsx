@@ -1,3 +1,4 @@
+import ProjectImage from './ProjectImage';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ExternalLink, Github, Star, Eye } from 'lucide-react';
@@ -5,7 +6,6 @@ import { Card } from '../ui/card';
 import { Button } from '../ui/button';
 import './portfolio-components.css';
 
-const DEFAULT_PROJECT_IMAGE = 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=60';
 
 const ProjectCard = ({ project, onQuickView }) => {
   if (!project) return null;
@@ -15,7 +15,7 @@ const ProjectCard = ({ project, onQuickView }) => {
   const slug = project.slug || id;
   const category = project.category || 'Web Development';
   const description = project.description || '';
-  const imageUrl = project.image_url || project.image || DEFAULT_PROJECT_IMAGE;
+  const imageUrl = project.image_url || project.image || '';
   const techStack = project.tech_stack || project.technologies || [];
   const featured = Boolean(project.featured);
   const liveDemoUrl = project.live_demo_url || project.liveUrl;
@@ -33,15 +33,12 @@ const ProjectCard = ({ project, onQuickView }) => {
 
       {/* Project Image */}
       <div className="project-card-image-wrapper">
-        <img
+        <ProjectImage
           src={imageUrl}
           alt={title}
           className="project-card-image"
           loading="lazy"
-          onError={(e) => {
-            e.target.onerror = null;
-            e.target.src = DEFAULT_PROJECT_IMAGE;
-          }}
+
         />
 
         {/* Hover Overlay */}
@@ -72,7 +69,7 @@ const ProjectCard = ({ project, onQuickView }) => {
               <a href={liveDemoUrl} target="_blank" rel="noopener noreferrer">
                 <Button className="project-overlay-btn btn-demo">
                   <ExternalLink className="h-4 w-4" />
-                  <span>Live Demo</span>
+                  <span>{liveDemoUrl.startsWith('/demo/') ? 'Live demo' : 'Visit website'}</span>
                 </Button>
               </a>
             )}

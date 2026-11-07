@@ -13,6 +13,8 @@ from models.client_project import ProjectComment, ProjectActivity
 from models.client_project import ChatMessage
 from datetime import datetime
 import os
+from pathlib import Path
+from config import UPLOAD_DIR
 
 router = APIRouter(prefix="/client/projects", tags=["client-projects"])
 
@@ -234,7 +236,9 @@ async def download_project_file(
             detail="File not found"
         )
     
-    file_path = file_info['file_path']
+    file_path = Path(file_info['file_path']).resolve()
+    if not file_path.is_relative_to((UPLOAD_DIR / 'client_projects').resolve()):
+        raise HTTPException(status_code=404, detail="File not found")
     
     if not os.path.exists(file_path):
         raise HTTPException(

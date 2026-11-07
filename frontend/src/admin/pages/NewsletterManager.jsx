@@ -45,18 +45,18 @@ const NewsletterManager = () => {
   const handleExport = async () => {
     try {
       const data = await newsletterService.exportSubscribers();
-      
+
       // Create a Blob from the CSV content
       const blob = new Blob([data.csv], { type: 'text/csv' });
       const url = window.URL.createObjectURL(blob);
-      
+
       // Create a temporary link and trigger download
       const link = document.createElement('a');
       link.href = url;
       link.download = `newsletter-subscribers-${new Date().toISOString().split('T')[0]}.csv`;
       document.body.appendChild(link);
       link.click();
-      
+
       // Cleanup
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
@@ -107,7 +107,7 @@ const NewsletterManager = () => {
             </p>
           </div>
         </div>
-        <button 
+        <button
           onClick={handleExport}
           className="admin-button admin-button-secondary"
           disabled={subscribers.length === 0}
@@ -128,9 +128,9 @@ const NewsletterManager = () => {
       {/* Stats Card */}
       <div className="admin-card mb-6" style={{ padding: '1.5rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <div style={{ 
-            padding: '0.875rem', 
-            backgroundColor: 'rgba(139, 92, 246, 0.1)', 
+          <div style={{
+            padding: '0.875rem',
+            backgroundColor: 'rgba(163, 78, 29, 0.1)',
             borderRadius: '0.75rem',
             display: 'flex',
             alignItems: 'center',
@@ -148,8 +148,8 @@ const NewsletterManager = () => {
       {/* Subscribers List */}
       <div className="admin-card">
         {subscribers.length === 0 ? (
-          <div style={{ 
-            textAlign: 'center', 
+          <div style={{
+            textAlign: 'center',
             padding: '3rem 1rem',
             display: 'flex',
             flexDirection: 'column',
@@ -157,11 +157,11 @@ const NewsletterManager = () => {
             justifyContent: 'center'
           }}>
             <Mail className="w-12 h-12 text-muted" style={{ marginBottom: '1rem', opacity: 0.5 }} />
-            <h3 style={{ 
-              fontSize: '1.125rem', 
-              fontWeight: '500', 
+            <h3 style={{
+              fontSize: '1.125rem',
+              fontWeight: '500',
               marginBottom: '0.5rem',
-              color: 'var(--color-text)' 
+              color: 'var(--color-text)'
             }}>
               No subscribers yet
             </h3>
@@ -191,8 +191,8 @@ const NewsletterManager = () => {
                     </td>
                     <td style={{ padding: '1rem' }}>
                       <span className={`admin-badge ${
-                        subscriber.status === 'subscribed' 
-                          ? 'admin-badge-success' 
+                        subscriber.status === 'subscribed'
+                          ? 'admin-badge-success'
                           : 'admin-badge-secondary'
                       }`} style={{ display: 'inline-block' }}>
                         {subscriber.status}

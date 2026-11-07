@@ -1,3 +1,4 @@
+import DOMPurify from 'dompurify';
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Calendar, User, Tag, ArrowLeft, Share2 } from 'lucide-react';
@@ -36,19 +37,19 @@ const BlogDetail = () => {
       const data = await getBlogBySlug(slug);
       setBlog(data);
       setError(null);
-      
+
       // Track blog view
       if (data && data.id) {
         trackBlogView(data.id, data.title);
       }
-      
+
       // Update document title
       if (data.seo_title) {
         document.title = data.seo_title;
       } else {
         document.title = `${data.title} | METECHQ Blog`;
       }
-      
+
       // Update meta description
       if (data.seo_description) {
         let metaDescription = document.querySelector('meta[name="description"]');
@@ -105,11 +106,11 @@ const BlogDetail = () => {
       <div style={{ minHeight: '100vh', background: '#0A0F1E', paddingTop: '80px' }}>
         <div style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 24px', textAlign: 'center' }}>
           <div style={{ color: '#EF4444', fontSize: '18px', marginBottom: '24px' }}>{error || 'Blog not found'}</div>
-          <button 
+          <button
             onClick={() => navigate('/blogs')}
             style={{
               padding: '12px 32px',
-              background: '#8B5CF6',
+              background: '#a34e1d',
               color: '#fff',
               border: 'none',
               borderRadius: '8px',
@@ -128,7 +129,7 @@ const BlogDetail = () => {
   return (
     <div style={{ minHeight: '100vh', background: '#0A0F1E', paddingTop: '80px' }}>
       {/* Header Section */}
-      <section style={{ 
+      <section style={{
         background: '#0F1629',
         borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
         padding: '40px 24px'
@@ -141,7 +142,7 @@ const BlogDetail = () => {
               display: 'inline-flex',
               alignItems: 'center',
               gap: '8px',
-              color: '#8B5CF6',
+              color: '#a34e1d',
               textDecoration: 'none',
               fontSize: '15px',
               fontWeight: '500',
@@ -160,8 +161,8 @@ const BlogDetail = () => {
             <span style={{
               display: 'inline-block',
               padding: '6px 16px',
-              background: 'rgba(139, 92, 246, 0.2)',
-              color: '#A78BFA',
+              background: 'rgba(163, 78, 29, 0.2)',
+              color: '#d7a875',
               borderRadius: '20px',
               fontSize: '14px',
               fontWeight: '600'
@@ -171,7 +172,7 @@ const BlogDetail = () => {
           </div>
 
           {/* Title */}
-          <h1 style={{ 
+          <h1 style={{
             fontSize: '42px',
             fontWeight: '700',
             color: '#fff',
@@ -182,14 +183,14 @@ const BlogDetail = () => {
           </h1>
 
           {/* Meta Info */}
-          <div style={{ 
+          <div style={{
             display: 'flex',
             flexWrap: 'wrap',
             gap: '24px',
             alignItems: 'center',
             marginBottom: '16px'
           }}>
-            <div style={{ 
+            <div style={{
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
@@ -199,7 +200,7 @@ const BlogDetail = () => {
               <User size={18} />
               <span>{blog.author}</span>
             </div>
-            <div style={{ 
+            <div style={{
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
@@ -209,16 +210,16 @@ const BlogDetail = () => {
               <Calendar size={18} />
               <span>{formatDate(blog.created_at)}</span>
             </div>
-            
+
             {/* Social Share Buttons */}
             {shareEnabled && (
-              <div style={{ 
+              <div style={{
                 marginLeft: 'auto',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '12px'
               }}>
-                <ShareButtons 
+                <ShareButtons
                   title={blog.title}
                   url={window.location.href}
                   showLabel={true}
@@ -229,7 +230,7 @@ const BlogDetail = () => {
 
           {/* Tags */}
           {blog.tags && blog.tags.length > 0 && (
-            <div style={{ 
+            <div style={{
               display: 'flex',
               flexWrap: 'wrap',
               gap: '10px'
@@ -261,15 +262,15 @@ const BlogDetail = () => {
 
       {/* Cover Image */}
       {blog.cover_image && (
-        <section style={{ 
+        <section style={{
           maxWidth: '1200px',
           margin: '0 auto',
           padding: '40px 24px'
         }}>
-          <img 
+          <img
             src={blog.cover_image}
             alt={blog.title}
-            style={{ 
+            style={{
               width: '100%',
               height: 'auto',
               maxHeight: '500px',
@@ -282,19 +283,19 @@ const BlogDetail = () => {
       )}
 
       {/* Blog Content */}
-      <article style={{ 
+      <article style={{
         maxWidth: '900px',
         margin: '0 auto',
         padding: '40px 24px 80px'
       }}>
-        <div 
-          style={{ 
+        <div
+          style={{
             color: 'rgba(255, 255, 255, 0.85)',
             fontSize: '18px',
             lineHeight: '1.8',
             letterSpacing: '0.01em'
           }}
-          dangerouslySetInnerHTML={{ __html: blog.content }}
+          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(blog.content, { USE_PROFILES: { html: true } }) }}
           className="blog-content"
         />
       </article>
@@ -313,51 +314,51 @@ const BlogDetail = () => {
           margin-bottom: 16px;
           line-height: 1.3;
         }
-        
+
         .blog-content h2 {
           font-size: 32px;
         }
-        
+
         .blog-content h3 {
           font-size: 26px;
         }
-        
+
         .blog-content h4 {
           font-size: 22px;
         }
-        
+
         .blog-content p {
           margin-bottom: 20px;
         }
-        
+
         .blog-content ul,
         .blog-content ol {
           margin: 20px 0;
           padding-left: 24px;
         }
-        
+
         .blog-content li {
           margin-bottom: 8px;
         }
-        
+
         .blog-content a {
-          color: #A78BFA;
+          color: #d7a875;
           text-decoration: underline;
         }
-        
+
         .blog-content a:hover {
-          color: #8B5CF6;
+          color: #a34e1d;
         }
-        
+
         .blog-content code {
           background: rgba(255, 255, 255, 0.1);
-          color: #A78BFA;
+          color: #d7a875;
           padding: 2px 6px;
           border-radius: 4px;
           font-size: 16px;
           font-family: 'Courier New', monospace;
         }
-        
+
         .blog-content pre {
           background: rgba(255, 255, 255, 0.05);
           border: 1px solid rgba(255, 255, 255, 0.1);
@@ -366,21 +367,21 @@ const BlogDetail = () => {
           overflow-x: auto;
           margin: 24px 0;
         }
-        
+
         .blog-content pre code {
           background: none;
           padding: 0;
           font-size: 14px;
         }
-        
+
         .blog-content blockquote {
-          border-left: 4px solid #8B5CF6;
+          border-left: 4px solid #a34e1d;
           padding-left: 20px;
           margin: 24px 0;
           color: rgba(255, 255, 255, 0.7);
           font-style: italic;
         }
-        
+
         .blog-content img {
           max-width: 100%;
           height: auto;
@@ -388,26 +389,26 @@ const BlogDetail = () => {
           margin: 24px 0;
           border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
+
         .blog-content table {
           width: 100%;
           border-collapse: collapse;
           margin: 24px 0;
         }
-        
+
         .blog-content th,
         .blog-content td {
           padding: 12px;
           border: 1px solid rgba(255, 255, 255, 0.1);
           text-align: left;
         }
-        
+
         .blog-content th {
-          background: rgba(139, 92, 246, 0.1);
+          background: rgba(163, 78, 29, 0.1);
           color: #fff;
           font-weight: 600;
         }
-        
+
         .blog-content hr {
           border: none;
           border-top: 1px solid rgba(255, 255, 255, 0.1);

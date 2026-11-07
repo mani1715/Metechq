@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Plus, Edit, Trash2, X, ExternalLink, Star, Lock, 
-  Github, Video, Image as ImageIcon, Users, Clock, CheckCircle 
+import {
+  Plus, Edit, Trash2, X, ExternalLink, Star, Lock,
+  Github, Video, Image as ImageIcon, Users, Clock, CheckCircle
 } from 'lucide-react';
+import { toast } from 'sonner';
 import { useAdmin } from '../context/AdminContext';
 
 const PortfolioManager = () => {
   const { adminData, addProject, updateProject, deleteProject, fetchProjects } = useAdmin();
+  const [saving, setSaving] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory, setFilterCategory] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
-  
+
   const [formData, setFormData] = useState({
     title: '',
     slug: '',
@@ -105,9 +107,10 @@ const PortfolioManager = () => {
     setFormData(prev => ({ ...prev, [field]: array }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
+    if (saving) return;
+
     const projectData = {
       title: formData.title,
       slug: formData.slug || formData.title.toLowerCase().replace(/\s+/g, '-'),
@@ -129,13 +132,15 @@ const PortfolioManager = () => {
       case_study_content: formData.case_study_content
     };
 
-    if (editingProject) {
-      updateProject(editingProject.id, projectData);
-    } else {
-      addProject(projectData);
-    }
-    
-    handleCloseModal();
+    setSaving(true);
+    try {
+      if (editingProject) await updateProject(editingProject.id, projectData);
+      else await addProject(projectData);
+      handleCloseModal();
+    } catch (error) {
+      const detail = error.response?.data?.detail;
+      toast.error(typeof detail === 'string' ? detail : 'Could not save the project. Check your links and try again.');
+    } finally { setSaving(false); }
   };
 
   const handleDelete = (id) => {
@@ -158,15 +163,15 @@ const PortfolioManager = () => {
       {/* Header */}
       <div style={{ marginBottom: '32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h1 style={{ fontSize: '32px', fontWeight: '700', color: '#1C2A3A', margin: '0 0 8px 0' }}>
+          <h1 style={{ fontSize: '32px', fontWeight: '700', color: '#352a21', margin: '0 0 8px 0' }}>
             Portfolio Manager
           </h1>
           <p style={{ color: '#6B7280', margin: 0 }}>
-            Manage your project showcase - {filteredProjects.length} of {adminData.projects.length} projects
+            Add your real projects, screenshots, and deployed links. Showing {filteredProjects.length} of {adminData.projects.length} projects
           </p>
         </div>
-        <button 
-          onClick={() => handleOpenModal()} 
+        <button
+          onClick={() => handleOpenModal()}
           className="admin-btn admin-btn-primary"
           data-testid="add-project-button"
         >
@@ -176,9 +181,9 @@ const PortfolioManager = () => {
       </div>
 
       {/* Filters */}
-      <div style={{ 
-        display: 'flex', 
-        gap: '16px', 
+      <div style={{
+        display: 'flex',
+        gap: '16px',
         marginBottom: '24px',
         flexWrap: 'wrap'
       }}>
@@ -191,7 +196,7 @@ const PortfolioManager = () => {
           style={{ flex: '1', minWidth: '250px', maxWidth: '400px' }}
           data-testid="search-projects-input"
         />
-        
+
         <select
           value={filterCategory}
           onChange={(e) => setFilterCategory(e.target.value)}
@@ -259,7 +264,7 @@ const PortfolioManager = () => {
                           }}
                         />
                         <div>
-                          <div style={{ fontWeight: '600', color: '#1C2A3A' }}>
+                          <div style={{ fontWeight: '600', color: '#352a21' }}>
                             {project.title}
                           </div>
                           <div style={{ fontSize: '13px', color: '#6B7280' }}>
@@ -281,7 +286,7 @@ const PortfolioManager = () => {
                     <td>
                       <div style={{ fontSize: '13px', color: '#6B7280' }}>
                         {(project.tech_stack || project.techStack)?.slice(0, 3).join(', ')}
-                        {(project.tech_stack || project.techStack)?.length > 3 && 
+                        {(project.tech_stack || project.techStack)?.length > 3 &&
                           ` +${(project.tech_stack || project.techStack).length - 3}`}
                       </div>
                     </td>
@@ -321,7 +326,7 @@ const PortfolioManager = () => {
                     <td>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         {project.featured && (
-                          <Star size={16} fill="#D4AF37" color="#D4AF37" title="Featured" />
+                          <Star size={16} fill="#c5792c" color="#c5792c" title="Featured" />
                         )}
                         <span className={project.is_private ? "admin-badge admin-badge-warning" : "admin-badge admin-badge-success"}>
                           {project.is_private ? "Private" : "Public"}
@@ -371,8 +376,8 @@ const PortfolioManager = () => {
       {/* Enhanced Modal */}
       {showModal && (
         <div className="admin-modal-overlay" onClick={handleCloseModal}>
-          <div 
-            className="admin-modal" 
+          <div
+            className="admin-modal"
             onClick={(e) => e.stopPropagation()}
             style={{ maxWidth: '900px', maxHeight: '90vh', overflow: 'auto' }}
           >
@@ -384,15 +389,15 @@ const PortfolioManager = () => {
                 <X size={20} />
               </button>
             </div>
-            
+
             <form onSubmit={handleSubmit}>
               <div className="admin-modal-body">
                 {/* Basic Information */}
                 <div style={{ marginBottom: '24px' }}>
-                  <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px', color: '#1C2A3A' }}>
+                  <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px', color: '#352a21' }}>
                     Basic Information
                   </h3>
-                  
+
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                     <div className="admin-form-group">
                       <label className="admin-form-label">Project Title *</label>
@@ -468,10 +473,10 @@ const PortfolioManager = () => {
 
                 {/* Project Details */}
                 <div style={{ marginBottom: '24px' }}>
-                  <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px', color: '#1C2A3A' }}>
+                  <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px', color: '#352a21' }}>
                     Project Details
                   </h3>
-                  
+
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                     <div className="admin-form-group">
                       <label className="admin-form-label">Client Name</label>
@@ -537,10 +542,10 @@ const PortfolioManager = () => {
 
                 {/* Media & Links */}
                 <div style={{ marginBottom: '24px' }}>
-                  <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px', color: '#1C2A3A' }}>
+                  <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px', color: '#352a21' }}>
                     Media & Links
                   </h3>
-                  
+
                   <div className="admin-form-group">
                     <label className="admin-form-label">Main Image URL *</label>
                     <input
@@ -570,7 +575,7 @@ const PortfolioManager = () => {
                   </div>
 
                   <div className="admin-form-group">
-                    <label className="admin-form-label">Live Demo URL</label>
+                    <label className="admin-form-label">Deployed website URL</label>
                     <input
                       type="text"
                       className="admin-form-input"
@@ -610,10 +615,10 @@ const PortfolioManager = () => {
 
                 {/* Case Study */}
                 <div style={{ marginBottom: '24px' }}>
-                  <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px', color: '#1C2A3A' }}>
+                  <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px', color: '#352a21' }}>
                     Case Study (Optional)
                   </h3>
-                  
+
                   <div className="admin-form-group">
                     <label className="admin-form-label">Detailed Case Study Content</label>
                     <textarea
@@ -629,10 +634,10 @@ const PortfolioManager = () => {
 
                 {/* Visibility Settings */}
                 <div style={{ marginBottom: '24px' }}>
-                  <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px', color: '#1C2A3A' }}>
+                  <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px', color: '#352a21' }}>
                     Visibility Settings
                   </h3>
-                  
+
                   <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
                     <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
                       <input
@@ -644,7 +649,7 @@ const PortfolioManager = () => {
                       <Star size={16} />
                       <span>Featured Project</span>
                     </label>
-                    
+
                     <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
                       <input
                         type="checkbox"
@@ -658,18 +663,18 @@ const PortfolioManager = () => {
                   </div>
                 </div>
               </div>
-              
+
               <div className="admin-modal-footer">
-                <button 
-                  type="button" 
-                  onClick={handleCloseModal} 
+                <button
+                  type="button"
+                  onClick={handleCloseModal}
                   className="admin-btn admin-btn-secondary"
                   data-testid="cancel-project-button"
                 >
                   Cancel
                 </button>
-                <button 
-                  type="submit" 
+                <button
+                  type="submit" disabled={saving}
                   className="admin-btn admin-btn-primary"
                   data-testid="save-project-button"
                 >

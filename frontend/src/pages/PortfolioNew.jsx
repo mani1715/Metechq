@@ -15,6 +15,8 @@ const PROJECTS_PER_PAGE = 6;
 
 const Portfolio = () => {
   const [portfolioProjects, setPortfolioProjects] = useState([]);
+  const [loadError, setLoadError] = useState(false);
+  const [attempt, setAttempt] = useState(0);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
@@ -32,10 +34,11 @@ const Portfolio = () => {
     const fetchProjects = async () => {
       try {
         setLoading(true);
+        setLoadError(false);
         const data = await projectService.getPublicProjects();
         // Transform backend data to match frontend structure
         const transformedProjects = data.map(project => {
-          const img = project.image_url || project.image || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=60';
+          const img = project.image_url || project.image || '';
           const tech = project.tech_stack || project.technologies || [];
           const live = project.live_demo_url || project.liveUrl || '';
           const github = project.github_url || project.githubUrl || '';
@@ -61,13 +64,14 @@ const Portfolio = () => {
         });
         setPortfolioProjects(transformedProjects);
       } catch (error) {
+        setLoadError(true);
         console.error('Error fetching projects:', error);
       } finally {
         setLoading(false);
       }
     };
     fetchProjects();
-  }, []);
+  }, [attempt]);
 
   // Extract unique categories
   const categories = useMemo(() => {
@@ -183,6 +187,8 @@ const Portfolio = () => {
     }))
   };
 
+  useEffect(() => () => { document.body.style.overflow = ''; }, []);
+  if (loadError) return <section className="work-status"><h1>Unable to load projects</h1><p>Your projects haven’t been removed. Please try again when the connection is available.</p><button className="studio-button" onClick={() => setAttempt(n => n + 1)}>Try again</button></section>;
   // Show loading state
   if (loading) {
     return (

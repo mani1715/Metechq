@@ -35,7 +35,7 @@ async def get_current_admin(authorization: Optional[str] = Header(None)):
     
     # Get admin from database
     admin = await admins_collection.find_one({"id": payload.get("id")})
-    if not admin:
+    if not admin or admin.get("is_active") is False:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Admin not found"
@@ -72,3 +72,13 @@ def check_permission(admin: dict, permission: str) -> bool:
     
     permissions = admin.get("permissions", {})
     return permissions.get(permission, False)
+
+
+def require_permission(permission: str):
+    """Enforce configured admin permissions on the server, not only in menus."""
+    async def guard(authorization: Optional[str] = Header(None)):
+        admin = await get_current_admin(authorization)
+        if not check_permission(admin, permission):
+            raise HTTPException(status_code=403, detail="You do not have permission for this operation")
+        return admin
+    return guard

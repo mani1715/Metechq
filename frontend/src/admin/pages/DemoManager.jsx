@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { 
+import {
   Plus, Edit, Trash2, X, ExternalLink, Monitor, Code, FileText, Eye
 } from 'lucide-react';
 import { useAdmin } from '../context/AdminContext';
@@ -10,7 +10,7 @@ const DemoManager = () => {
   const [editingDemo, setEditingDemo] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [showPreview, setShowPreview] = useState(false);
-  
+
   const [formData, setFormData] = useState({
     title: '',
     slug: '',
@@ -96,7 +96,7 @@ const DemoManager = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     const projectData = {
       title: formData.title,
       slug: formData.slug || formData.title.toLowerCase().replace(/\s+/g, '-'),
@@ -116,7 +116,7 @@ const DemoManager = () => {
     } else {
       addProject(projectData);
     }
-    
+
     handleCloseModal();
   };
 
@@ -127,7 +127,7 @@ const DemoManager = () => {
   };
 
   // Filter demos based on search
-  const filteredDemos = demoProjects.filter(demo => 
+  const filteredDemos = demoProjects.filter(demo =>
     demo.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     demo.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
     demo.category.toLowerCase().includes(searchTerm.toLowerCase())
@@ -136,8 +136,8 @@ const DemoManager = () => {
   return (
     <div>
       {/* Header with Storage Manager Style */}
-      <div style={{ 
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      <div style={{
+        background: 'linear-gradient(135deg, #5b4632 0%, #a34e1d 100%)',
         color: 'white',
         padding: '32px',
         borderRadius: '16px',
@@ -147,14 +147,14 @@ const DemoManager = () => {
         alignItems: 'center'
       }}>
         <div>
-          <h1 style={{ 
-            fontSize: '32px', 
-            fontWeight: '700', 
+          <h1 style={{
+            fontSize: '32px',
+            fontWeight: '700',
             marginBottom: '8px'
           }}>
             🎨 Demo Manager
           </h1>
-          <p style={{ 
+          <p style={{
             fontSize: '16px',
             opacity: 0.9,
             margin: 0
@@ -162,15 +162,15 @@ const DemoManager = () => {
             Manage your demo showcases - {filteredDemos.length} demos
           </p>
         </div>
-        <button 
-          onClick={() => handleOpenModal()} 
+        <button
+          onClick={() => handleOpenModal()}
           data-testid="add-demo-button"
           style={{
             padding: '14px 28px',
             fontSize: '16px',
             fontWeight: '600',
             background: 'white',
-            color: '#667eea',
+            color: '#5b4632',
             border: 'none',
             borderRadius: '10px',
             display: 'flex',
@@ -195,7 +195,7 @@ const DemoManager = () => {
       </div>
 
       {/* Search with Storage Manager Style */}
-      <div style={{ 
+      <div style={{
         marginBottom: '32px',
         padding: '20px',
         background: 'white',
@@ -203,10 +203,10 @@ const DemoManager = () => {
         boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
       }}>
         <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-          <Monitor size={20} style={{ 
+          <Monitor size={20} style={{
             position: 'absolute',
             left: '16px',
-            color: '#667eea',
+            color: '#5b4632',
             zIndex: 1
           }} />
           <input
@@ -225,7 +225,7 @@ const DemoManager = () => {
               transition: 'all 0.2s'
             }}
             onFocus={(e) => {
-              e.target.style.borderColor = '#667eea';
+              e.target.style.borderColor = '#5b4632';
               e.target.style.boxShadow = '0 0 0 4px rgba(102, 126, 234, 0.1)';
             }}
             onBlur={(e) => {
@@ -237,17 +237,17 @@ const DemoManager = () => {
       </div>
 
       {/* Demos Grid */}
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', 
-        gap: '24px' 
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
+        gap: '24px'
       }}>
         {filteredDemos.length === 0 ? (
-          <div style={{ 
-            gridColumn: '1 / -1', 
-            textAlign: 'center', 
+          <div style={{
+            gridColumn: '1 / -1',
+            textAlign: 'center',
             padding: '60px 20px',
-            color: '#6B7280' 
+            color: '#6B7280'
           }}>
             <Monitor size={48} style={{ margin: '0 auto 16px', opacity: 0.5 }} />
             <p style={{ fontSize: '18px', marginBottom: '8px' }}>
@@ -259,7 +259,7 @@ const DemoManager = () => {
           </div>
         ) : (
           filteredDemos.map((demo) => (
-            <div 
+            <div
               key={demo.id}
               data-testid={`demo-card-${demo.id}`}
               style={{
@@ -301,7 +301,7 @@ const DemoManager = () => {
                   display: 'flex',
                   gap: '8px'
                 }}>
-                  <span className="admin-badge admin-badge-primary" style={{ background: '#6366F1' }}>
+                  <span className="admin-badge admin-badge-primary" style={{ background: '#a34e1d' }}>
                     {demo.category}
                   </span>
                 </div>
@@ -309,18 +309,18 @@ const DemoManager = () => {
 
               {/* Content */}
               <div style={{ padding: '20px' }}>
-                <h3 style={{ 
-                  fontSize: '18px', 
-                  fontWeight: '600', 
-                  color: '#1C2A3A',
+                <h3 style={{
+                  fontSize: '18px',
+                  fontWeight: '600',
+                  color: '#352a21',
                   marginBottom: '8px',
                   lineHeight: '1.4'
                 }}>
                   {demo.title}
                 </h3>
-                
-                <p style={{ 
-                  fontSize: '14px', 
+
+                <p style={{
+                  fontSize: '14px',
                   color: '#6B7280',
                   marginBottom: '16px',
                   lineHeight: '1.6',
@@ -335,13 +335,13 @@ const DemoManager = () => {
                 {/* Tech Stack */}
                 {(demo.tech_stack || demo.techStack)?.length > 0 && (
                   <div style={{ marginBottom: '16px' }}>
-                    <div style={{ 
-                      display: 'flex', 
-                      flexWrap: 'wrap', 
-                      gap: '6px' 
+                    <div style={{
+                      display: 'flex',
+                      flexWrap: 'wrap',
+                      gap: '6px'
                     }}>
                       {(demo.tech_stack || demo.techStack).slice(0, 4).map((tech, idx) => (
-                        <span 
+                        <span
                           key={idx}
                           style={{
                             fontSize: '12px',
@@ -369,9 +369,9 @@ const DemoManager = () => {
                 )}
 
                 {/* Demo URL */}
-                <div style={{ 
-                  fontSize: '13px', 
-                  color: '#6366F1',
+                <div style={{
+                  fontSize: '13px',
+                  color: '#a34e1d',
                   marginBottom: '16px',
                   fontWeight: '500',
                   display: 'flex',
@@ -383,8 +383,8 @@ const DemoManager = () => {
                 </div>
 
                 {/* Actions */}
-                <div style={{ 
-                  display: 'flex', 
+                <div style={{
+                  display: 'flex',
                   gap: '8px',
                   paddingTop: '16px',
                   borderTop: '1px solid #E5E7EB'
@@ -426,8 +426,8 @@ const DemoManager = () => {
       {/* Modal */}
       {showModal && (
         <div className="admin-modal-overlay" onClick={handleCloseModal}>
-          <div 
-            className="admin-modal" 
+          <div
+            className="admin-modal"
             onClick={(e) => e.stopPropagation()}
             style={{ maxWidth: '700px', maxHeight: '90vh', overflow: 'auto' }}
           >
@@ -439,15 +439,15 @@ const DemoManager = () => {
                 <X size={20} />
               </button>
             </div>
-            
+
             <form onSubmit={handleSubmit}>
               <div className="admin-modal-body">
                 {/* Basic Information */}
                 <div style={{ marginBottom: '24px' }}>
-                  <h3 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '16px', color: '#1C2A3A' }}>
+                  <h3 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '16px', color: '#352a21' }}>
                     Basic Information
                   </h3>
-                  
+
                   <div className="admin-form-group">
                     <label className="admin-form-label">Demo Title *</label>
                     <input
@@ -502,15 +502,15 @@ const DemoManager = () => {
 
                 {/* Demo Details */}
                 <div style={{ marginBottom: '24px' }}>
-                  <h3 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '16px', color: '#1C2A3A' }}>
+                  <h3 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '16px', color: '#352a21' }}>
                     Demo Details
                   </h3>
 
                   {/* Link Type Selection - Storage Manager Style */}
                   <div className="admin-form-group" style={{ marginBottom: '20px' }}>
-                    <label 
+                    <label
                       htmlFor="demo-link-type"
-                      style={{ 
+                      style={{
                         display: 'block',
                         marginBottom: '8px',
                         fontSize: '14px',
@@ -525,8 +525,8 @@ const DemoManager = () => {
                       value={formData.demo_link_type}
                       onChange={(e) => {
                         const newType = e.target.value;
-                        setFormData({ 
-                          ...formData, 
+                        setFormData({
+                          ...formData,
                           demo_link_type: newType,
                           live_demo_url: newType === 'internal' ? '/demo/' : 'https://'
                         });
@@ -544,23 +544,23 @@ const DemoManager = () => {
                         outline: 'none',
                         transition: 'all 0.2s'
                       }}
-                      onFocus={(e) => e.target.style.borderColor = '#667eea'}
+                      onFocus={(e) => e.target.style.borderColor = '#5b4632'}
                       onBlur={(e) => e.target.style.borderColor = '#E5E7EB'}
                     >
                       <option value="internal">🏠 Internal Path (Local Demo)</option>
                       <option value="external">🌐 External Link (External URL)</option>
                     </select>
                     <small style={{ color: '#6B7280', fontSize: '12px', marginTop: '6px', display: 'block' }}>
-                      {formData.demo_link_type === 'internal' 
+                      {formData.demo_link_type === 'internal'
                         ? 'Use internal routing for demos hosted within the app (e.g., /demo/ecommerce)'
                         : 'Link to external URLs for demos hosted elsewhere (e.g., https://example.com)'}
                     </small>
                   </div>
 
                   <div className="admin-form-group">
-                    <label 
+                    <label
                       htmlFor="demo-url"
-                      style={{ 
+                      style={{
                         display: 'block',
                         marginBottom: '8px',
                         fontSize: '14px',
@@ -568,7 +568,7 @@ const DemoManager = () => {
                         color: '#374151'
                       }}
                     >
-                      {formData.demo_link_type === 'internal' ? 'Demo URL Path' : 'External Demo URL'} 
+                      {formData.demo_link_type === 'internal' ? 'Demo URL Path' : 'External Demo URL'}
                       <span style={{ color: '#EF4444' }}> *</span>
                     </label>
                     <div style={{ position: 'relative' }}>
@@ -577,8 +577,8 @@ const DemoManager = () => {
                         type="text"
                         value={formData.live_demo_url}
                         onChange={(e) => handleInputChange('live_demo_url', e.target.value)}
-                        placeholder={formData.demo_link_type === 'internal' 
-                          ? '/demo/your-demo-name' 
+                        placeholder={formData.demo_link_type === 'internal'
+                          ? '/demo/your-demo-name'
                           : 'https://external-demo-site.com'}
                         required
                         data-testid="demo-url-input"
@@ -593,7 +593,7 @@ const DemoManager = () => {
                           outline: 'none'
                         }}
                         onFocus={(e) => {
-                          e.target.style.borderColor = '#667eea';
+                          e.target.style.borderColor = '#5b4632';
                           e.target.style.boxShadow = '0 0 0 4px rgba(102, 126, 234, 0.1)';
                         }}
                         onBlur={(e) => {
@@ -612,7 +612,7 @@ const DemoManager = () => {
                           padding: '6px 12px',
                           fontSize: '13px',
                           fontWeight: '500',
-                          background: showPreview ? '#667eea' : '#F3F4F6',
+                          background: showPreview ? '#5b4632' : '#F3F4F6',
                           color: showPreview ? 'white' : '#4B5563',
                           border: 'none',
                           borderRadius: '6px',
@@ -629,23 +629,23 @@ const DemoManager = () => {
                       </button>
                     </div>
                     <small style={{ color: '#6B7280', fontSize: '12px', marginTop: '6px', display: 'block' }}>
-                      {formData.demo_link_type === 'internal' 
+                      {formData.demo_link_type === 'internal'
                         ? 'Example: /demo/ecommerce, /demo/corporate, /demo/saas-landing'
                         : 'Example: https://example.com, https://demo.yoursite.com'}
                     </small>
-                    
+
                     {/* Live Preview Section */}
                     {showPreview && formData.live_demo_url && (
                       <div style={{
                         marginTop: '16px',
-                        border: '2px solid #667eea',
+                        border: '2px solid #5b4632',
                         borderRadius: '12px',
                         overflow: 'hidden',
                         background: '#F9FAFB'
                       }}>
                         <div style={{
                           padding: '12px 16px',
-                          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                          background: 'linear-gradient(135deg, #5b4632 0%, #a34e1d 100%)',
                           color: 'white',
                           fontSize: '14px',
                           fontWeight: '600',
@@ -663,8 +663,8 @@ const DemoManager = () => {
                           background: 'white'
                         }}>
                           <iframe
-                            src={formData.live_demo_url.startsWith('http') 
-                              ? formData.live_demo_url 
+                            src={formData.live_demo_url.startsWith('http')
+                              ? formData.live_demo_url
                               : `${window.location.origin}${formData.live_demo_url}`}
                             title="Demo Preview"
                             style={{
@@ -716,18 +716,18 @@ const DemoManager = () => {
                   </div>
                 </div>
               </div>
-              
+
               <div className="admin-modal-footer">
-                <button 
-                  type="button" 
-                  onClick={handleCloseModal} 
+                <button
+                  type="button"
+                  onClick={handleCloseModal}
                   className="admin-btn admin-btn-secondary"
                   data-testid="cancel-demo-button"
                 >
                   Cancel
                 </button>
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   className="admin-btn admin-btn-primary"
                   data-testid="save-demo-button"
                 >

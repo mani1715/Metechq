@@ -6,7 +6,7 @@ const Settings = () => {
   const { adminData, updateSettings, resetToDefaults } = useAdmin();
   const [showSuccess, setShowSuccess] = useState(false);
   const [activeTab, setActiveTab] = useState('agency');
-  
+
   const [agencyData, setAgencyData] = useState(adminData?.settings?.agency || {});
   const [socialData, setSocialData] = useState(adminData?.settings?.social || {});
   const [themeData, setThemeData] = useState(adminData?.settings?.theme || {});
@@ -60,7 +60,7 @@ const Settings = () => {
       {/* Header */}
       <div style={{ marginBottom: '32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h1 style={{ fontSize: '32px', fontWeight: '700', color: '#1C2A3A', margin: '0 0 8px 0' }}>
+          <h1 style={{ fontSize: '32px', fontWeight: '700', color: '#352a21', margin: '0 0 8px 0' }}>
             Settings
           </h1>
           <p style={{ color: '#6B7280', margin: 0 }}>
@@ -95,8 +95,8 @@ const Settings = () => {
               padding: '12px 24px',
               background: 'transparent',
               border: 'none',
-              borderBottom: activeTab === tab.id ? '2px solid #7C5CFF' : '2px solid transparent',
-              color: activeTab === tab.id ? '#7C5CFF' : '#6B7280',
+              borderBottom: activeTab === tab.id ? '2px solid #a34e1d' : '2px solid transparent',
+              color: activeTab === tab.id ? '#a34e1d' : '#6B7280',
               fontWeight: activeTab === tab.id ? '600' : '400',
               cursor: 'pointer',
               marginBottom: '-2px',
@@ -253,26 +253,26 @@ const Settings = () => {
               />
             </div>
 
-            <div style={{ 
-              marginTop: '32px', 
-              paddingTop: '24px', 
-              borderTop: '2px solid #E5E7EB' 
+            <div style={{
+              marginTop: '32px',
+              paddingTop: '24px',
+              borderTop: '2px solid #E5E7EB'
             }}>
-              <h4 style={{ 
-                fontSize: '18px', 
-                fontWeight: '600', 
-                color: '#1C2A3A', 
-                marginBottom: '16px' 
+              <h4 style={{
+                fontSize: '18px',
+                fontWeight: '600',
+                color: '#352a21',
+                marginBottom: '16px'
               }}>
                 WhatsApp Integration
               </h4>
-              
+
               <div className="admin-form-group">
                 <label className="admin-form-label">WhatsApp Number (Indian Number)</label>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ 
-                    padding: '10px 16px', 
-                    background: '#F3F4F6', 
+                  <span style={{
+                    padding: '10px 16px',
+                    background: '#F3F4F6',
                     border: '1px solid #D1D5DB',
                     borderRadius: '6px',
                     fontWeight: '600',
@@ -293,30 +293,30 @@ const Settings = () => {
                     style={{ flex: 1 }}
                   />
                 </div>
-                <p style={{ 
-                  fontSize: '13px', 
-                  color: '#6B7280', 
-                  marginTop: '6px' 
+                <p style={{
+                  fontSize: '13px',
+                  color: '#6B7280',
+                  marginTop: '6px'
                 }}>
                   Enter 10-digit Indian mobile number (e.g., 9876543210). Country code +91 will be added automatically.
                 </p>
               </div>
             </div>
 
-            <div style={{ 
-              marginTop: '32px', 
-              paddingTop: '24px', 
-              borderTop: '2px solid #E5E7EB' 
+            <div style={{
+              marginTop: '32px',
+              paddingTop: '24px',
+              borderTop: '2px solid #E5E7EB'
             }}>
-              <h4 style={{ 
-                fontSize: '18px', 
-                fontWeight: '600', 
-                color: '#1C2A3A', 
-                marginBottom: '16px' 
+              <h4 style={{
+                fontSize: '18px',
+                fontWeight: '600',
+                color: '#352a21',
+                marginBottom: '16px'
               }}>
                 Social Sharing Options
               </h4>
-              
+
               <div className="admin-form-group">
                 <label style={{
                   display: 'flex',
@@ -324,8 +324,8 @@ const Settings = () => {
                   gap: '12px',
                   cursor: 'pointer',
                   padding: '12px',
-                  background: 'rgba(124, 92, 255, 0.05)',
-                  border: '1px solid rgba(124, 92, 255, 0.2)',
+                  background: 'rgba(163, 78, 29, 0.05)',
+                  border: '1px solid rgba(163, 78, 29, 0.2)',
                   borderRadius: '8px'
                 }}>
                   <input
@@ -339,16 +339,16 @@ const Settings = () => {
                     }}
                   />
                   <div>
-                    <div style={{ 
-                      fontWeight: '600', 
-                      color: '#1C2A3A', 
-                      marginBottom: '4px' 
+                    <div style={{
+                      fontWeight: '600',
+                      color: '#352a21',
+                      marginBottom: '4px'
                     }}>
                       Enable Social Share Buttons
                     </div>
-                    <div style={{ 
-                      fontSize: '13px', 
-                      color: '#6B7280' 
+                    <div style={{
+                      fontSize: '13px',
+                      color: '#6B7280'
                     }}>
                       Display share buttons (LinkedIn, Twitter, WhatsApp, Email) on blog posts and portfolio projects
                     </div>
@@ -368,8 +368,8 @@ const Settings = () => {
           </div>
           <div style={{ padding: '24px' }}>
             <div style={{
-              background: 'rgba(124, 92, 255, 0.05)',
-              border: '1px solid rgba(124, 92, 255, 0.2)',
+              background: 'rgba(163, 78, 29, 0.05)',
+              border: '1px solid rgba(163, 78, 29, 0.2)',
               borderRadius: '8px',
               padding: '16px',
               marginBottom: '24px',

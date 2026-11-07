@@ -137,22 +137,22 @@ const NotesManager = () => {
   return (
     <div className="admin-page">
       {/* Header with Gradient Background */}
-      <div className="admin-page-header" style={{ 
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      <div className="admin-page-header" style={{
+        background: 'linear-gradient(135deg, #5b4632 0%, #a34e1d 100%)',
         color: 'white',
         padding: '32px',
         borderRadius: '16px',
         marginBottom: '32px'
       }}>
         <div>
-          <h1 data-testid="notes-manager-heading" style={{ 
+          <h1 data-testid="notes-manager-heading" style={{
             fontSize: '32px',
             fontWeight: '700',
             marginBottom: '8px'
           }}>
             📝 Text Notes Manager
           </h1>
-          <p style={{ 
+          <p style={{
             fontSize: '16px',
             opacity: 0.9,
             margin: 0
@@ -160,8 +160,8 @@ const NotesManager = () => {
             Save and manage text content with searchable names
           </p>
         </div>
-        <button 
-          className="admin-btn admin-btn-primary" 
+        <button
+          className="admin-btn admin-btn-primary"
           onClick={handleCreate}
           data-testid="add-note-btn"
           style={{
@@ -169,7 +169,7 @@ const NotesManager = () => {
             fontSize: '16px',
             fontWeight: '600',
             background: 'white',
-            color: '#667eea',
+            color: '#5b4632',
             border: 'none',
             borderRadius: '10px',
             display: 'flex',
@@ -208,10 +208,10 @@ const NotesManager = () => {
           display: 'flex',
           alignItems: 'center'
         }}>
-          <Search size={20} style={{ 
+          <Search size={20} style={{
             position: 'absolute',
             left: '16px',
-            color: '#667eea',
+            color: '#5b4632',
             zIndex: 1
           }} />
           <input
@@ -230,7 +230,7 @@ const NotesManager = () => {
               transition: 'all 0.2s'
             }}
             onFocus={(e) => {
-              e.target.style.borderColor = '#667eea';
+              e.target.style.borderColor = '#5b4632';
               e.target.style.boxShadow = '0 0 0 4px rgba(102, 126, 234, 0.1)';
             }}
             onBlur={(e) => {
@@ -290,14 +290,14 @@ const NotesManager = () => {
           <StickyNote size={48} />
           <h3>No notes found</h3>
           <p>Create your first note to save text content</p>
-          <button 
-            onClick={handleCreate} 
+          <button
+            onClick={handleCreate}
             style={{
               marginTop: '20px',
               padding: '14px 28px',
               fontSize: '16px',
               fontWeight: '600',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              background: 'linear-gradient(135deg, #5b4632 0%, #a34e1d 100%)',
               color: 'white',
               border: 'none',
               borderRadius: '10px',
@@ -316,8 +316,8 @@ const NotesManager = () => {
       {showModal && (
         <div className="admin-modal-overlay">
           <div className="admin-modal" style={{ maxWidth: '700px' }}>
-            <div className="admin-modal-header" style={{ 
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            <div className="admin-modal-header" style={{
+              background: 'linear-gradient(135deg, #5b4632 0%, #a34e1d 100%)',
               color: 'white',
               padding: '24px',
               borderRadius: '12px 12px 0 0',
@@ -326,11 +326,11 @@ const NotesManager = () => {
               <h2 style={{ margin: 0, fontSize: '24px', fontWeight: '600' }}>
                 {editingNote ? 'Edit Note' : 'Create New Note'}
               </h2>
-              <button 
-                className="admin-btn-icon" 
+              <button
+                className="admin-btn-icon"
                 onClick={closeModal}
-                style={{ 
-                  background: 'rgba(255, 255, 255, 0.2)', 
+                style={{
+                  background: 'rgba(255, 255, 255, 0.2)',
                   color: 'white',
                   border: 'none',
                   borderRadius: '8px',
@@ -340,13 +340,13 @@ const NotesManager = () => {
                 <X size={20} />
               </button>
             </div>
-            
+
             <form onSubmit={handleSubmit} style={{ padding: '0 24px 24px' }}>
               {/* Name/Title Field */}
               <div className="admin-form-group" style={{ marginBottom: '20px' }}>
-                <label 
-                  htmlFor="note-name" 
-                  style={{ 
+                <label
+                  htmlFor="note-name"
+                  style={{
                     display: 'block',
                     marginBottom: '8px',
                     fontSize: '14px',
@@ -373,16 +373,16 @@ const NotesManager = () => {
                     transition: 'all 0.2s',
                     outline: 'none'
                   }}
-                  onFocus={(e) => e.target.style.borderColor = '#667eea'}
+                  onFocus={(e) => e.target.style.borderColor = '#5b4632'}
                   onBlur={(e) => e.target.style.borderColor = '#E5E7EB'}
                 />
               </div>
 
               {/* Content Field */}
               <div className="admin-form-group" style={{ marginBottom: '20px' }}>
-                <label 
+                <label
                   htmlFor="note-content"
-                  style={{ 
+                  style={{
                     display: 'block',
                     marginBottom: '8px',
                     fontSize: '14px',
@@ -400,7 +400,7 @@ const NotesManager = () => {
                   placeholder="Enter your text content here..."
                   required
                   data-testid="note-content-textarea"
-                  style={{ 
+                  style={{
                     width: '100%',
                     padding: '12px 16px',
                     fontSize: '15px',
@@ -411,16 +411,16 @@ const NotesManager = () => {
                     outline: 'none',
                     transition: 'all 0.2s'
                   }}
-                  onFocus={(e) => e.target.style.borderColor = '#667eea'}
+                  onFocus={(e) => e.target.style.borderColor = '#5b4632'}
                   onBlur={(e) => e.target.style.borderColor = '#E5E7EB'}
                 />
               </div>
 
               {/* Tags Field */}
               <div className="admin-form-group" style={{ marginBottom: '24px' }}>
-                <label 
+                <label
                   htmlFor="note-tags"
-                  style={{ 
+                  style={{
                     display: 'block',
                     marginBottom: '8px',
                     fontSize: '14px',
@@ -448,20 +448,20 @@ const NotesManager = () => {
                       outline: 'none',
                       transition: 'all 0.2s'
                     }}
-                    onFocus={(e) => e.target.style.borderColor = '#667eea'}
+                    onFocus={(e) => e.target.style.borderColor = '#5b4632'}
                     onBlur={(e) => e.target.style.borderColor = '#E5E7EB'}
                   />
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     onClick={addTag}
                     style={{
                       padding: '12px 20px',
                       fontSize: '15px',
                       fontWeight: '600',
-                      border: '2px solid #667eea',
+                      border: '2px solid #5b4632',
                       borderRadius: '8px',
                       background: 'white',
-                      color: '#667eea',
+                      color: '#5b4632',
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
@@ -471,33 +471,33 @@ const NotesManager = () => {
                     <Tag size={16} /> Add
                   </button>
                 </div>
-                
+
                 {/* Tags Display */}
                 {formData.tags.length > 0 && (
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                     {formData.tags.map((tag, index) => (
-                      <span 
-                        key={index} 
+                      <span
+                        key={index}
                         style={{
                           display: 'inline-flex',
                           alignItems: 'center',
                           gap: '6px',
                           padding: '6px 12px',
                           background: '#EDE9FE',
-                          color: '#6366F1',
+                          color: '#a34e1d',
                           borderRadius: '6px',
                           fontSize: '14px',
                           fontWeight: '500'
                         }}
                       >
                         {tag}
-                        <button 
-                          type="button" 
+                        <button
+                          type="button"
                           onClick={() => removeTag(tag)}
                           style={{
                             background: 'transparent',
                             border: 'none',
-                            color: '#6366F1',
+                            color: '#a34e1d',
                             cursor: 'pointer',
                             padding: '0',
                             display: 'flex',
@@ -520,9 +520,9 @@ const NotesManager = () => {
                 paddingTop: '20px',
                 borderTop: '2px solid #F3F4F6'
               }}>
-                <button 
-                  type="button" 
-                  className="admin-btn" 
+                <button
+                  type="button"
+                  className="admin-btn"
                   onClick={closeModal}
                   style={{
                     padding: '12px 24px',
@@ -537,9 +537,9 @@ const NotesManager = () => {
                 >
                   Cancel
                 </button>
-                <button 
-                  type="submit" 
-                  className="admin-btn admin-btn-primary" 
+                <button
+                  type="submit"
+                  className="admin-btn admin-btn-primary"
                   data-testid="note-save-btn"
                   style={{
                     padding: '12px 32px',
@@ -547,7 +547,7 @@ const NotesManager = () => {
                     fontWeight: '600',
                     border: 'none',
                     borderRadius: '8px',
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    background: 'linear-gradient(135deg, #5b4632 0%, #a34e1d 100%)',
                     color: 'white',
                     cursor: 'pointer',
                     display: 'flex',

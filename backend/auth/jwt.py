@@ -30,14 +30,11 @@ def create_access_token(data: Dict, expires_delta: Optional[timedelta] = None) -
 def decode_access_token(token: str, is_client: bool = False) -> Optional[Dict]:
     """Decode and verify a JWT token from admin or client realm"""
     try:
-        secrets_to_try = [get_client_jwt_secret(), get_jwt_secret()] if is_client else [get_jwt_secret(), get_client_jwt_secret()]
-        for secret in secrets_to_try:
-            try:
-                payload = jwt.decode(token, secret, algorithms=[ALGORITHM])
-                return payload
-            except jwt.InvalidSignatureError:
-                continue
-        return None
+        secret = get_client_jwt_secret() if is_client else get_jwt_secret()
+        payload = jwt.decode(token, secret, algorithms=[ALGORITHM], options={"require": ["exp", "id"]})
+        if is_client != (payload.get("type") == "client"):
+            return None
+        return payload
     except jwt.ExpiredSignatureError:
         return None
     except jwt.InvalidTokenError:

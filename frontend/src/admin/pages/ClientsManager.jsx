@@ -66,7 +66,7 @@ export default function ClientsManager() {
         if (!updateData.password) {
           delete updateData.password;
         }
-        
+
         await clientService.updateClient(editingClient.id, updateData);
         toast.success('Client updated successfully');
       } else {
@@ -74,7 +74,7 @@ export default function ClientsManager() {
         await clientService.createClient(formData);
         toast.success('Client created successfully');
       }
-      
+
       fetchClients();
       handleCloseDialog();
     } catch (error) {
@@ -137,7 +137,7 @@ export default function ClientsManager() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-600"></div>
       </div>
     );
   }
@@ -230,7 +230,7 @@ export default function ClientsManager() {
               {editingClient ? 'Edit Client' : 'Create New Client'}
             </DialogTitle>
             <DialogDescription>
-              {editingClient 
+              {editingClient
                 ? 'Update client information and access settings'
                 : 'Add a new client to your portal. They will be able to login and view assigned projects.'
               }

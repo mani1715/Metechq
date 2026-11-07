@@ -17,7 +17,7 @@ const ServicesManager = () => {
   });
 
   const iconOptions = [
-    'Code', 'ShoppingCart', 'Layers', 'Palette', 'Smartphone', 
+    'Code', 'ShoppingCart', 'Layers', 'Palette', 'Smartphone',
     'Database', 'Cloud', 'Settings', 'Zap', 'Globe'
   ];
 
@@ -56,13 +56,13 @@ const ServicesManager = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     if (editingService) {
       updateService(editingService.id, formData);
     } else {
       addService(formData);
     }
-    
+
     handleCloseModal();
   };
 
@@ -81,7 +81,7 @@ const ServicesManager = () => {
       {/* Header */}
       <div style={{ marginBottom: '32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h1 style={{ fontSize: '32px', fontWeight: '700', color: '#1C2A3A', margin: '0 0 8px 0' }}>
+          <h1 style={{ fontSize: '32px', fontWeight: '700', color: '#352a21', margin: '0 0 8px 0' }}>
             Services Manager
           </h1>
           <p style={{ color: '#6B7280', margin: 0 }}>
@@ -137,7 +137,7 @@ const ServicesManager = () => {
               <h3 style={{
                 fontSize: '20px',
                 fontWeight: '600',
-                color: '#1C2A3A',
+                color: '#352a21',
                 margin: '0 0 8px 0'
               }}>
                 {service.title}
@@ -163,7 +163,7 @@ const ServicesManager = () => {
                     alignItems: 'center',
                     gap: '8px'
                   }}>
-                    <span style={{ color: '#7C5CFF' }}>✓</span>
+                    <span style={{ color: '#a34e1d' }}>✓</span>
                     {feature}
                   </div>
                 ))}
@@ -180,7 +180,7 @@ const ServicesManager = () => {
               <div style={{
                 fontSize: '16px',
                 fontWeight: '600',
-                color: '#7C5CFF'
+                color: '#a34e1d'
               }}>
                 {service.price}
               </div>
@@ -209,7 +209,7 @@ const ServicesManager = () => {
                 <X size={20} />
               </button>
             </div>
-            
+
             <form onSubmit={handleSubmit}>
               <div className="admin-modal-body">
                 <div className="admin-form-group">
@@ -279,7 +279,7 @@ const ServicesManager = () => {
                   </label>
                 </div>
               </div>
-              
+
               <div className="admin-modal-footer">
                 <button type="button" onClick={handleCloseModal} className="admin-btn admin-btn-secondary">
                   Cancel

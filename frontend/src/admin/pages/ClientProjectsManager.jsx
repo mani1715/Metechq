@@ -23,10 +23,10 @@ import { Progress } from '../../components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
 import { Checkbox } from '../../components/ui/checkbox';
 import { toast } from 'sonner';
-import { 
-  Plus, Edit, Trash2, Upload, Download, FileText, X, Target, ListChecks, 
+import {
+  Plus, Edit, Trash2, Upload, Download, FileText, X, Target, ListChecks,
   Users, DollarSign, Activity, MessageCircle, Send, Calendar, CheckCircle2,
-  User, Clock, Search, Filter, Download as DownloadIcon, BarChart3, 
+  User, Clock, Search, Filter, Download as DownloadIcon, BarChart3,
   RefreshCw, Copy, TrendingUp, AlertCircle
 } from 'lucide-react';
 import clientService from '../../services/clientService';
@@ -76,11 +76,11 @@ export default function ClientProjectsManager() {
   const getErrorMessage = (error, defaultMessage = 'An error occurred') => {
     if (error.response?.data?.detail) {
       const detail = error.response.data.detail;
-      
+
       // If detail is an array (validation errors)
       if (Array.isArray(detail)) {
         return detail.map(err => err.msg || err).join(', ');
-      } 
+      }
       // If detail is a string
       else if (typeof detail === 'string') {
         return detail;
@@ -90,7 +90,7 @@ export default function ClientProjectsManager() {
         return detail.msg || JSON.stringify(detail);
       }
     }
-    
+
     return defaultMessage;
   };
 
@@ -139,7 +139,7 @@ export default function ClientProjectsManager() {
 
   const fetchChatMessages = async () => {
     if (!selectedProject) return;
-    
+
     try {
       const messages = await clientService.getAdminChatMessages(selectedProject.id);
       setChatMessages(messages);
@@ -189,7 +189,7 @@ export default function ClientProjectsManager() {
         await clientService.createClientProject(formData);
         toast.success('Project created successfully');
       }
-      
+
       fetchProjects();
       handleCloseDialog();
     } catch (error) {
@@ -314,7 +314,7 @@ export default function ClientProjectsManager() {
 
   const handleDeleteMilestone = async (milestoneId) => {
     if (!window.confirm('Are you sure you want to delete this milestone?')) return;
-    
+
     try {
       await clientService.deleteMilestone(selectedProject.id, milestoneId);
       toast.success('Milestone deleted successfully');
@@ -352,7 +352,7 @@ export default function ClientProjectsManager() {
 
   const handleDeleteTask = async (taskId) => {
     if (!window.confirm('Are you sure you want to delete this task?')) return;
-    
+
     try {
       await clientService.deleteTask(selectedProject.id, taskId);
       toast.success('Task deleted successfully');
@@ -378,7 +378,7 @@ export default function ClientProjectsManager() {
 
   const handleRemoveTeamMember = async (adminId) => {
     if (!window.confirm('Are you sure you want to remove this team member?')) return;
-    
+
     try {
       await clientService.removeTeamMember(selectedProject.id, adminId);
       toast.success('Team member removed successfully');
@@ -431,7 +431,7 @@ export default function ClientProjectsManager() {
     }
 
     try {
-      await Promise.all(selectedProjects.map(id => 
+      await Promise.all(selectedProjects.map(id =>
         clientService.updateClientProject(id, { status: newStatus })
       ));
       toast.success(`${selectedProjects.length} project(s) updated successfully`);
@@ -491,8 +491,8 @@ export default function ClientProjectsManager() {
   };
 
   const toggleProjectSelection = (projectId) => {
-    setSelectedProjects(prev => 
-      prev.includes(projectId) 
+    setSelectedProjects(prev =>
+      prev.includes(projectId)
         ? prev.filter(id => id !== projectId)
         : [...prev, projectId]
     );
@@ -509,8 +509,8 @@ export default function ClientProjectsManager() {
   const getStatusColor = (status) => {
     const colors = {
       pending: 'bg-yellow-100 text-yellow-800',
-      in_progress: 'bg-blue-100 text-blue-800',
-      review: 'bg-purple-100 text-purple-800',
+      in_progress: 'bg-brand-100 text-brand-800',
+      review: 'bg-brand-100 text-brand-800',
       completed: 'bg-green-100 text-green-800'
     };
     return colors[status] || 'bg-gray-100 text-gray-800';
@@ -534,7 +534,7 @@ export default function ClientProjectsManager() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-600"></div>
       </div>
     );
   }
@@ -574,7 +574,7 @@ export default function ClientProjectsManager() {
                   <div
                     key={project.id}
                     className={`p-4 cursor-pointer hover:bg-gray-50 transition-colors ${
-                      selectedProject?.id === project.id ? 'bg-blue-50 border-l-4 border-blue-600' : ''
+                      selectedProject?.id === project.id ? 'bg-brand-50 border-l-4 border-brand-600' : ''
                     }`}
                     onClick={() => {
                       setSelectedProject(project);
@@ -787,10 +787,10 @@ export default function ClientProjectsManager() {
                         <div key={task.id} className="bg-gray-50 border rounded-lg p-4">
                           <div className="flex items-start justify-between">
                             <div className="flex items-start gap-3 flex-1">
-                              <CheckCircle2 
+                              <CheckCircle2
                                 className={`w-5 h-5 mt-0.5 ${
                                   task.status === 'completed' ? 'text-green-600' : 'text-gray-400'
-                                }`} 
+                                }`}
                               />
                               <div className="flex-1">
                                 <h4 className={`font-semibold ${
@@ -851,7 +851,7 @@ export default function ClientProjectsManager() {
                     {selectedProject.team_members && selectedProject.team_members.length > 0 ? (
                       selectedProject.team_members.map((member, idx) => (
                         <div key={idx} className="bg-gray-50 border rounded-lg p-4 flex items-center gap-4">
-                          <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-full flex items-center justify-center">
+                          <div className="w-12 h-12 bg-gradient-to-br from-brand-500 to-brand-500 rounded-full flex items-center justify-center">
                             <User className="w-6 h-6 text-white" />
                           </div>
                           <div className="flex-1">
@@ -892,9 +892,9 @@ export default function ClientProjectsManager() {
                     {selectedProject.budget ? (
                       <div className="space-y-4">
                         <div className="grid grid-cols-3 gap-4">
-                          <div className="bg-blue-50 border rounded-lg p-4">
+                          <div className="bg-brand-50 border rounded-lg p-4">
                             <p className="text-sm text-gray-600 mb-1">Total</p>
-                            <p className="text-2xl font-bold text-blue-600">
+                            <p className="text-2xl font-bold text-brand-600">
                               {selectedProject.budget.currency} {selectedProject.budget.total_amount.toLocaleString()}
                             </p>
                           </div>
@@ -963,7 +963,7 @@ export default function ClientProjectsManager() {
                             data-testid={`file-item-${file.id}`}
                           >
                             <div className="flex items-center gap-3 flex-1">
-                              <FileText className="w-5 h-5 text-blue-600" />
+                              <FileText className="w-5 h-5 text-brand-600" />
                               <div>
                                 <p className="text-sm font-medium text-gray-900">{file.filename}</p>
                                 <p className="text-xs text-gray-500">
@@ -992,7 +992,7 @@ export default function ClientProjectsManager() {
                   <TabsContent value="activity" className="space-y-3 max-h-[500px] overflow-y-auto">
                     {selectedProject.activity_log && selectedProject.activity_log.length > 0 ? (
                       selectedProject.activity_log.slice().reverse().map((activity) => (
-                        <div key={activity.id} className="bg-white border-l-4 border-purple-500 p-4 rounded-r-lg">
+                        <div key={activity.id} className="bg-white border-l-4 border-brand-500 p-4 rounded-r-lg">
                           <div className="flex items-start justify-between">
                             <div>
                               <p className="text-sm font-semibold text-gray-900">{activity.description}</p>
@@ -1024,7 +1024,7 @@ export default function ClientProjectsManager() {
                                 <div
                                   className={`max-w-[70%] rounded-lg p-3 ${
                                     msg.sender_type === 'admin'
-                                      ? 'bg-blue-600 text-white'
+                                      ? 'bg-brand-600 text-white'
                                       : 'bg-white border text-gray-900'
                                   }`}
                                 >

@@ -36,7 +36,7 @@ const ChatManager = () => {
 
   const selectConversation = async (conv) => {
     setSelectedConv(conv);
-    
+
     // Mark as read if there are unread messages
     if (conv.unreadCount > 0) {
       try {
@@ -64,7 +64,7 @@ const ChatManager = () => {
         { message: replyText },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      
+
       setSelectedConv(response.data.conversation);
       setReplyText('');
       fetchConversations();
@@ -82,7 +82,7 @@ const ChatManager = () => {
       await axios.delete(`${BACKEND_URL}/chat/conversations/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      
+
       if (selectedConv && selectedConv.id === id) {
         setSelectedConv(null);
       }
@@ -229,7 +229,7 @@ const ChatManager = () => {
                       maxWidth: '70%',
                       padding: '12px 16px',
                       borderRadius: '12px',
-                      background: msg.sender === 'admin' ? '#7C5CFF' : '#f3f4f6',
+                      background: msg.sender === 'admin' ? '#a34e1d' : '#f3f4f6',
                       color: msg.sender === 'admin' ? 'white' : '#1f2937'
                     }}>
                       <p style={{ margin: 0, fontSize: '14px' }}>{msg.message}</p>

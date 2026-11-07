@@ -128,7 +128,7 @@ const BookingSection = () => {
 
     try {
       await bookingService.createBooking(formData);
-      
+
       setSuccess(true);
       toast.success('Booking Request Submitted!', {
         description: 'We will confirm your booking via email within 24 hours.'
@@ -161,7 +161,7 @@ const BookingSection = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600"></div>
       </div>
     );
   }
@@ -173,11 +173,11 @@ const BookingSection = () => {
   const availableTimeSlots = availableSlots.filter(slot => slot.is_available);
 
   return (
-    <section className="booking-section-wrapper py-16 bg-gradient-to-br from-purple-50 via-white to-blue-50" data-testid="booking-section">
+    <section className="booking-section-wrapper py-16 bg-gradient-to-br from-brand-50 via-white to-brand-50" data-testid="booking-section">
       <div className="container mx-auto px-4 max-w-4xl">
         {/* Section Header */}
         <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 bg-purple-100 text-purple-700 px-4 py-2 rounded-full mb-4">
+          <div className="inline-flex items-center gap-2 bg-brand-100 text-brand-700 px-4 py-2 rounded-full mb-4">
             <Calendar className="w-4 h-4" />
             <span className="text-sm font-medium">Free Consultation Available</span>
           </div>
@@ -300,7 +300,7 @@ const BookingSection = () => {
                   name="preferred_time_slot"
                   value={formData.preferred_time_slot}
                   onChange={handleChange}
-                  className={`w-full mt-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 ${errors.preferred_time_slot ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`w-full mt-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500 ${errors.preferred_time_slot ? 'border-red-500' : 'border-gray-300'}`}
                   disabled={!selectedDate}
                   data-testid="booking-time-select"
                 >
@@ -326,19 +326,19 @@ const BookingSection = () => {
             </div>
 
             {/* Meeting Type Display */}
-            <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+            <div className="bg-brand-50 border border-brand-200 rounded-lg p-4">
               <div className="flex items-center gap-3">
                 {bookingSettings.meeting_type === 'Google Meet' ? (
-                  <Video className="w-5 h-5 text-purple-600" />
+                  <Video className="w-5 h-5 text-brand-600" />
                 ) : (
-                  <Phone className="w-5 h-5 text-purple-600" />
+                  <Phone className="w-5 h-5 text-brand-600" />
                 )}
                 <div>
                   <div className="text-sm font-medium text-gray-900">
                     Meeting Type: {bookingSettings.meeting_type}
                   </div>
                   <div className="text-xs text-gray-600 mt-1">
-                    {bookingSettings.meeting_type === 'Google Meet' 
+                    {bookingSettings.meeting_type === 'Google Meet'
                       ? 'We will send you a Google Meet link via email after confirmation'
                       : 'We will call you on the provided phone number'
                     }
@@ -373,9 +373,9 @@ const BookingSection = () => {
               type="submit"
               disabled={submitting || success}
               className={`w-full py-6 text-lg font-semibold transition-all ${
-                success 
-                  ? 'bg-green-600 hover:bg-green-700' 
-                  : 'bg-purple-600 hover:bg-purple-700'
+                success
+                  ? 'bg-green-600 hover:bg-green-700'
+                  : 'bg-brand-600 hover:bg-brand-700'
               }`}
               data-testid="booking-submit-btn"
             >
@@ -399,11 +399,11 @@ const BookingSection = () => {
           </form>
 
           {/* Info Note */}
-          <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="mt-6 bg-brand-50 border border-brand-200 rounded-lg p-4">
             <div className="flex gap-3">
-              <Clock className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-              <div className="text-sm text-blue-900">
-                <strong>Important:</strong> All times are in Indian Standard Time (IST). 
+              <Clock className="w-5 h-5 text-brand-600 flex-shrink-0 mt-0.5" />
+              <div className="text-sm text-brand-900">
+                <strong>Important:</strong> All times are in Indian Standard Time (IST).
                 We will confirm your booking via email within 24 hours.
               </div>
             </div>
