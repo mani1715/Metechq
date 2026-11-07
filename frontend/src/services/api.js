@@ -2,25 +2,29 @@ import axios from 'axios';
 
 /**
  * API SERVICE – RENDER + VERCEL SAFE
- * Dynamically resolves /api proxy on remote domains to avoid localhost/CSP blocks
+ * - On deployed domains (Vercel): uses /api reverse proxy
+ * - On local development: uses local backend or falls back to live Render backend
  */
 
 export function getApiBaseUrl() {
-  // If running in browser on a remote/deployed host (not localhost), use same-origin /api rewrite
+  // If running in browser on remote deployed host (e.g. Vercel), use same-origin /api rewrite
   if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
     return '/api';
   }
+
   const envUrl = (process.env.REACT_APP_BACKEND_URL || '').trim();
-  if (envUrl) {
+  if (envUrl && envUrl.startsWith('http')) {
     return envUrl.endsWith('/api') ? envUrl : `${envUrl}/api`;
   }
-  return '/api';
+
+  // On localhost when no local backend is specified, connect directly to live Render backend
+  return 'https://metechq.onrender.com/api';
 }
 
 const BACKEND_URL = getApiBaseUrl();
 
-// Increased timeout for cold starts on Render (free tier can take 30-50 seconds to wake up)
-const API_TIMEOUT = process.env.NODE_ENV === 'development' ? 15000 : 60000;
+// Increased timeout for cold starts on Render
+const API_TIMEOUT = process.env.NODE_ENV === 'development' ? 20000 : 60000;
 
 const api = axios.create({
   baseURL: BACKEND_URL,
@@ -33,7 +37,7 @@ const api = axios.create({
 
 // Retry configuration
 const MAX_RETRIES = 2;
-const RETRY_DELAY = 2000; // 2 seconds
+const RETRY_DELAY = 2000;
 
 // Helper function to delay
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -41,7 +45,7 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 // Attach token intelligently based on request context
 api.interceptors.request.use(
   (config) => {
-    // Dynamically update baseURL if on remote deployment
+    // Ensure deployed hosts always use /api proxy
     if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
       config.baseURL = '/api';
     }

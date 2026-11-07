@@ -6,28 +6,20 @@ export function cn(...inputs) {
 }
 
 /**
- * Get the backend URL with proper HTTPS protocol enforcement
- * On deployed domains, returns /api to leverage same-origin proxy and prevent CSP / mixed-content errors.
- * @returns {string} The backend URL with correct protocol
+ * Get the backend URL with proper protocol enforcement.
+ * - On deployed domains: returns /api to leverage same-origin reverse proxy.
+ * - On local development: returns local backend or live Render backend.
+ * @returns {string} The backend URL
  */
 export function getBackendURL() {
-  // If in browser on a remote/production domain, always use relative /api
   if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
     return '/api';
   }
 
-  const backendUrl = (process.env.REACT_APP_BACKEND_URL || '').trim() || '/api';
-  
-  if (backendUrl.startsWith('/')) {
+  const backendUrl = (process.env.REACT_APP_BACKEND_URL || '').trim();
+  if (backendUrl && backendUrl.startsWith('http')) {
     return backendUrl;
   }
   
-  // If it's an absolute URL and we're on HTTPS, force HTTPS
-  if (typeof window !== 'undefined' && window.location.protocol === 'https:') {
-    if (backendUrl.startsWith('http://')) {
-      return backendUrl.replace('http://', 'https://');
-    }
-  }
-  
-  return backendUrl;
+  return 'https://metechq.onrender.com/api';
 }

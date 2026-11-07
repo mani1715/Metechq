@@ -1969,3 +1969,15 @@ C:\my projects\Metechq>Start-Process powershell -ArgumentList "-NoExit", "-Comma
 'Start-Process' is not recognized as an internal or external command,
 operable program or batch file.
 ```
+
+
+### C30 — Resolve local development 404 Cannot GET /api routes
+
+```text
+Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+api/content/:1 Failed to load resource: the server responded with a status of 404 (Not Found)
+Cannot GET /api/content/
+api/projects/?offset=0&limit=100:1 Failed to load resource: the server responded with a status of 404 (Not Found)
+Cannot GET /api/projects/
+i was getting these issue give me the correct command
+```
