@@ -1864,3 +1864,14 @@ https://vercel.com/maniettela23-2188/metechq/3MEEKeeLiNs9XA6MRUm1g1Xtya3n
 dpl_3MEEKeeLiNs9XA6MRUm1g1Xtya3n
 can you please take the hand on these deployment and complete the deployment
 ```
+
+
+### C20 — Render backend MongoDB configuration error
+
+```text
+ERROR:metechq.config:❌ Configuration Validation Failed: MONGODB_URI (or MONGO_URL) is required and cannot be empty.
+ERROR:server:Startup initialization failed: Configuration Validation Failed: MONGODB_URI (or MONGO_URL) is required and cannot be empty.
+ValueError: Configuration Validation Failed: MONGODB_URI (or MONGO_URL) is required and cannot be empty.
+ERROR:    Application startup failed. Exiting.
+i got these issue in the backend render deployment
+```
