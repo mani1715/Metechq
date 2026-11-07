@@ -1956,3 +1956,16 @@ see i want to give these commands to my friend for running in his lapto p give m
 ```text
 give me all commands at a time i will run all at a time
 ```
+
+
+### C29 — Windows CMD compatibility and startup command troubleshooting
+
+```text
+C:\my projects\Metechq># 5. Launch Backend in new window
+'#' is not recognized as an internal or external command,
+operable program or batch file.
+
+C:\my projects\Metechq>Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$PWDackend'; .env\Scripts\Activate.ps1; python -m uvicorn server:app --host 127.0.0.1 --port 8002 --reload"
+'Start-Process' is not recognized as an internal or external command,
+operable program or batch file.
+```
