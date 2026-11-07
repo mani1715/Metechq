@@ -114,6 +114,20 @@ const ProjectCard = ({ project, onQuickView }) => {
             View Details →
           </Link>
 
+          {liveDemoUrl && (
+            <a
+              href={liveDemoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="project-live-external-link"
+              title="Visit live website"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '0.875rem', fontWeight: 600, color: '#7C5CFF', textDecoration: 'none' }}
+            >
+              <span>{liveDemoUrl.startsWith('/demo/') ? 'Live Demo' : 'Visit Site'}</span>
+              <ExternalLink className="h-3.5 w-3.5" />
+            </a>
+          )}
+
           {githubUrl && (
             <a
               href={githubUrl}

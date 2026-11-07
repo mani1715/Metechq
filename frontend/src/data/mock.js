@@ -564,6 +564,96 @@ export const aboutData = {
 // Enhanced Portfolio Projects with Full Details (Admin-ready structure)
 export const portfolioProjects = [
   {
+    id: 'aishu-foods-ecommerce',
+    slug: 'aishu-foods-ecommerce',
+    title: 'AISHU FOODS | Authentic Delicacies & E-Commerce Platform',
+    shortDesc: 'Handcrafted authentic delicacies, traditional Andhra pickles, and pure ghee sweets with seamless online ordering',
+    description: 'A dedicated e-commerce brand platform offering authentic culinary delicacies, traditional Andhra pickles, and pure ghee sweets with high-performance browsing and secure ordering.',
+    longDesc: 'AISHU FOODS represents authentic culinary tradition brought into modern digital commerce. Built for food lovers and diaspora customers looking for authentic handcrafted recipes, traditional Andhra pickles, and sweets. The platform features responsive product showcases, streamlined shopping cart, and smooth checkout.',
+    category: 'E-commerce',
+    image: '/images/projects/aishufoods-cover.png',
+    images: [
+      '/images/projects/aishufoods-cover.png'
+    ],
+    technologies: ['E-Commerce', 'React', 'Node.js', 'Payment Gateway', 'Order Tracking'],
+    techStack: ['React', 'E-Commerce', 'Tailwind CSS', 'Payment Gateway', 'Responsive Design'],
+    featured: true,
+    githubLink: null,
+    liveLink: 'https://aishufoods.com/',
+    date: '2025-01-15',
+    clientName: 'Aishu Foods',
+    role: 'Full-Stack Development & E-Commerce Engineering',
+    views: 2450,
+    metrics: {
+      users: '15,000+',
+      increase: '+320%',
+      revenue: '+210%'
+    },
+    features: [
+      'Authentic traditional delicacies and pickle catalog',
+      'Streamlined product browsing with high-resolution imagery',
+      'Mobile-optimized shopping cart and checkout',
+      'Integrated secure payment options and order fulfillment'
+    ],
+    challenges: [
+      {
+        title: 'Performance & Imagery',
+        description: 'Optimized high-resolution product imagery and mobile responsiveness to ensure fast page loads for customers across regions.'
+      }
+    ],
+    solutions: [
+      {
+        title: 'Responsive Cart & Checkout',
+        description: 'Developed an intuitive variant selection and cart system tailored for quick ordering on mobile devices.'
+      }
+    ]
+  },
+  {
+    id: 'studio-photography-portfolio',
+    slug: 'studio-photography-portfolio',
+    title: 'Metechq Studio | Photography & Creative Portfolio',
+    shortDesc: 'Modern photography and creative studio website showcasing high-resolution gallery collections and client booking',
+    description: 'A stylish, responsive portfolio website designed for creative professionals and visual studios, featuring full-screen galleries and inquiry booking.',
+    longDesc: 'A modern studio and photography showcase website tailored for visual artists, photographers, and studios. Highlights include dynamic photoshoot collections, client testimonials, booking inquiry forms, and lightning-fast asset loading across all viewports.',
+    category: 'Photography & Studio',
+    image: '/images/projects/studio-website-cover.png',
+    images: [
+      '/images/projects/studio-website-cover.png'
+    ],
+    technologies: ['React', 'Tailwind CSS', 'Portfolio', 'Responsive Web Design'],
+    techStack: ['React', 'Tailwind CSS', 'Lucide Icons', 'Responsive Web Design'],
+    featured: true,
+    githubLink: null,
+    liveLink: 'https://studio-website-orcin-five.vercel.app/',
+    date: '2025-02-01',
+    clientName: 'Studio & Photography Sample',
+    role: 'UI/UX Design & Frontend Engineering',
+    views: 1890,
+    metrics: {
+      users: '8,000+',
+      increase: '+180%',
+      revenue: '+150%'
+    },
+    features: [
+      'Curated photo galleries with responsive grid layouts',
+      'High-speed image loading and smooth transitions',
+      'Service packages showcase and appointment booking inquiries',
+      'Client testimonials and behind-the-scenes portfolio storytelling'
+    ],
+    challenges: [
+      {
+        title: 'High-Resolution Media Loading',
+        description: 'Ensured image-heavy photography galleries load seamlessly without layout shifts or sluggish scrolling.'
+      }
+    ],
+    solutions: [
+      {
+        title: 'Modern Grid Architecture',
+        description: 'Implemented fluid masonry and responsive grid structures with lazy-loading and blur placeholders.'
+      }
+    ]
+  },
+  {
     id: 1,
     slug: 'shopify-ecommerce-platform',
     title: 'StyleHub E-Commerce Platform',

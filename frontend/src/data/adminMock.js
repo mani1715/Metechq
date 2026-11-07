@@ -158,6 +158,34 @@ export const adminData = {
 
   projects: [
     {
+      id: 'aishu-foods-ecommerce',
+      title: 'AISHU FOODS | Authentic Delicacies & E-Commerce Platform',
+      slug: 'aishu-foods-ecommerce',
+      category: 'E-commerce',
+      description: 'Handcrafted authentic delicacies, traditional Andhra pickles, and pure ghee sweets with seamless online ordering.',
+      image: '/images/projects/aishufoods-cover.png',
+      technologies: ['E-Commerce', 'React', 'Node.js', 'Payment Gateway', 'Order Tracking'],
+      featured: true,
+      liveUrl: 'https://aishufoods.com/',
+      githubUrl: '',
+      status: 'completed',
+      date: '2025-01-15'
+    },
+    {
+      id: 'studio-photography-portfolio',
+      title: 'Metechq Studio | Photography & Creative Portfolio',
+      slug: 'studio-photography-portfolio',
+      category: 'Photography & Studio',
+      description: 'Modern photography and creative studio website showcasing high-resolution gallery collections and client booking.',
+      image: '/images/projects/studio-website-cover.png',
+      technologies: ['React', 'Tailwind CSS', 'Portfolio', 'Responsive Web Design'],
+      featured: true,
+      liveUrl: 'https://studio-website-orcin-five.vercel.app/',
+      githubUrl: '',
+      status: 'completed',
+      date: '2025-02-01'
+    },
+    {
       id: 1,
       title: 'StyleHub Fashion Store',
       slug: 'stylehub-fashion-store',

@@ -1899,3 +1899,13 @@ mongodb+srv://maniettela23_db_user:<db_password>@cluster0.uajriqy.mongodb.net/
 Replace <db_password> with the password for the maniettela23_db_user database user. Ensure any option params are URL encoded.
 so these are the keys keep them in the code and tell me what are the things that i want to keep in the render environmment
 ```
+
+
+### C23 — Add live showcase projects with screenshots and links to portfolio
+
+```text
+[AISHU FOODS | Handcrafted Authentic Delicacies, Traditional Andhra Pickles & Pure Ghee Sweets](https://aishufoods.com/)
+https://studio-website-orcin-five.vercel.app/
+keep these 2 links in portifolio and these are our real time projects if possible take the screenshots and keep that as the profile mention these links and they they click on that the user can see the links 
+and see one is e commerce and the other one is photographers sample website
+```
