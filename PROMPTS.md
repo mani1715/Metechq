@@ -1995,3 +1995,10 @@ see that error was coming when i run these program localy
 ```text
 give me full commands
 ```
+
+
+### C33 — Provide single-terminal concurrent execution workflow
+
+```text
+see give me all commands i will run in a single terminal
+```

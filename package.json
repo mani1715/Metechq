@@ -1,0 +1,12 @@
+{
+  "name": "metechq",
+  "version": "1.0.0",
+  "private": true,
+  "description": "METECHQ Portfolio & Web Development Platform",
+  "scripts": {
+    "start": "npx --yes concurrently -k -n \"BACKEND,FRONTEND\" -c \"blue,green\" \"npm run backend\" \"npm run frontend\"",
+    "backend": "cd backend && python -m uvicorn server:app --host 127.0.0.1 --port 8002 --reload",
+    "frontend": "cd frontend && npm start",
+    "install:all": "cd backend && pip install -r requirements.txt && cd ../frontend && npm install --legacy-peer-deps"
+  }
+}
