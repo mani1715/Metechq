@@ -1875,3 +1875,16 @@ ValueError: Configuration Validation Failed: MONGODB_URI (or MONGO_URL) is requi
 ERROR:    Application startup failed. Exiting.
 i got these issue in the backend render deployment
 ```
+
+
+### C21 — Render backend deployment configuration failure retry
+
+```text
+==> Cloning from https://github.com/mani1715/Metechq
+==> Checking out commit 56d705a09726c15d141165508c310ad668907ece in branch main
+ERROR:metechq.config:❌ Configuration Validation Failed: MONGODB_URI (or MONGO_URL) is required and cannot be empty.
+ERROR:server:Startup initialization failed: Configuration Validation Failed: MONGODB_URI (or MONGO_URL) is required and cannot be empty.
+ValueError: Configuration Validation Failed: MONGODB_URI (or MONGO_URL) is required and cannot be empty.
+ERROR:    Application startup failed. Exiting.
+==> Exited with status 3
+```
