@@ -2030,3 +2030,10 @@ No module named uvicorn
 ```text
 can you please give me the path of these project
 ```
+
+
+### C37 — Provide final automated and manual health verification commands
+
+```text
+can you please give me the final commands for testing by using these commands the project is running or not
+```
