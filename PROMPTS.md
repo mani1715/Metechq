@@ -1909,3 +1909,11 @@ https://studio-website-orcin-five.vercel.app/
 keep these 2 links in portifolio and these are our real time projects if possible take the screenshots and keep that as the profile mention these links and they they click on that the user can see the links 
 and see one is e commerce and the other one is photographers sample website
 ```
+
+
+### C24 — Connect Render backend URL to Vercel frontend
+
+```text
+https://metechq.onrender.com/
+these is my backend link keep these in the frontend vercel then it will connects to the backend
+```
