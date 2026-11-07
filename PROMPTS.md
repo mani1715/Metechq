@@ -1942,3 +1942,10 @@ these are the errors that i was getting in the console and when i try to open ou
 ```text
 give me the commands for running the project and also in portifolio all projects are not coming
 ```
+
+
+### C27 — Provide end-to-end setup and run commands for external machines
+
+```text
+see i want to give these commands to my friend for running in his lapto p give me the commands perfectly
+```
