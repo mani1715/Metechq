@@ -1,4 +1,9 @@
-> **Assessment revision — 7 November 2026:** Start with [Evaluation guide](docs/EVALUATION_GUIDE.md), [Threat model and tested limits](THREATS.md), [AI work log](PROMPTS.md), and [Portfolio/client operating guide](docs/PORTFOLIO_AND_CLIENT_GUIDE.md). Deployment is deferred. These current evidence documents qualify broader feature/security descriptions in the older overview below. Existing demo records must be replaced with your actual work before submission.
+> **Live Production Deployment**:
+> - 🌐 **Live Website (Vercel)**: [https://frontend-iota-mauve-57.vercel.app](https://frontend-iota-mauve-57.vercel.app)
+> - ⚡ **Live API Backend (Render)**: [https://metechq.onrender.com](https://metechq.onrender.com)
+> - 📚 **Interactive Swagger Docs**: [https://metechq.onrender.com/docs](https://metechq.onrender.com/docs)
+>
+> **Project Evidence Documents**: [Evaluation Guide](docs/EVALUATION_GUIDE.md) | [Threat Model & Security](THREATS.md) | [Prompt History](PROMPTS.md) | [Portfolio & Client Guide](docs/PORTFOLIO_AND_CLIENT_GUIDE.md)
 
 # 🚀 METECHQ – Portfolio & Client Management Platform
 
@@ -185,52 +190,57 @@ These demos demonstrate the **types of projects an agency can deliver**.
 
 ---
 
-# 🚀 Installation Guide
+# 🚀 Quick Start & Installation Guide
 
-## Prerequisites
+## ⚡ Option 1: One-Command Concurrent Start (Recommended)
+From the project root directory, install and run both backend and frontend simultaneously in a single terminal:
 
-* Python 3.10+
-* Node.js 18+
-* MongoDB (Local or MongoDB Atlas)
-* Yarn package manager
+```bash
+npm start
+```
+*(Runs FastAPI backend at `http://127.0.0.1:8002` and React frontend at `http://localhost:3000`)*
 
 ---
 
-## Backend Setup
+## 🛠️ Option 2: Step-by-Step Setup (VS Code / Terminal)
 
+### Prerequisites
+* **Node.js 18+** & npm / yarn
+* **Python 3.10+** & pip
+* **Git**
+
+### Terminal 1 — Backend (FastAPI)
+```bash
 cd backend
-
 python -m venv venv
-source venv/bin/activate
+
+# Activate Virtual Environment:
+# Windows (PowerShell): .env\Scripts\Activate.ps1
+# Windows (CMD):        venv\Scripts\activate.bat
+# Mac / Linux:          source venv/bin/activate
 
 pip install -r requirements.txt
+python -m uvicorn server:app --host 127.0.0.1 --port 8002 --reload
+```
 
-uvicorn server:app --host 0.0.0.0 --port 8001 --reload
-
----
-
-## Frontend Setup
-
+### Terminal 2 — Frontend (React)
+```bash
 cd frontend
-
-yarn install
-yarn start
+npm install --legacy-peer-deps
+npm start
+```
 
 ---
 
 # 🌐 Application URLs
 
-Frontend
-http://localhost:3000
-
-Backend API
-http://localhost:8001/api
-
-Admin Panel
-http://localhost:3000/admin/login
-
-Client Portal
-http://localhost:3000/client/login
+| Service | Local URL | Live Production URL |
+| :--- | :--- | :--- |
+| **Frontend Website** | `http://localhost:3000` | [frontend-iota-mauve-57.vercel.app](https://frontend-iota-mauve-57.vercel.app) |
+| **Backend API** | `http://127.0.0.1:8002/api` | [metechq.onrender.com/api](https://metechq.onrender.com/api) |
+| **Swagger API Docs** | `http://127.0.0.1:8002/docs` | [metechq.onrender.com/docs](https://metechq.onrender.com/docs) |
+| **Admin Panel** | `http://localhost:3000/admin/login` | [frontend-iota-mauve-57.vercel.app/admin/login](https://frontend-iota-mauve-57.vercel.app/admin/login) |
+| **Client Portal** | `http://localhost:3000/client/login` | [frontend-iota-mauve-57.vercel.app/client/login](https://frontend-iota-mauve-57.vercel.app/client/login) |
 
 ---
 

@@ -2002,3 +2002,10 @@ give me full commands
 ```text
 see give me all commands i will run in a single terminal
 ```
+
+
+### C34 — Provide employer/interviewer project run instructions and documentation
+
+```text
+see i am applying for a job so i give my project github link to them so they will download the code and run the commands in their laptop for running and seeing the project so give me the commands for sending to them for running these project in the terminal or vs code
+```
