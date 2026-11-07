@@ -1,9 +1,9 @@
 import axios from 'axios';
 
 /**
- * API SERVICE – RENDER + VERCEL SAFE
+ * API SERVICE – RENDER + VERCEL + LOCAL SAFE
  * - On deployed domains (Vercel): uses /api reverse proxy
- * - On local development: uses local backend or falls back to live Render backend
+ * - On local development: routes directly to local FastAPI server http://127.0.0.1:8002/api
  */
 
 export function getApiBaseUrl() {
@@ -17,13 +17,13 @@ export function getApiBaseUrl() {
     return envUrl.endsWith('/api') ? envUrl : `${envUrl}/api`;
   }
 
-  // On localhost when no local backend is specified, connect directly to live Render backend
-  return 'https://metechq.onrender.com/api';
+  // Local development default
+  return 'http://127.0.0.1:8002/api';
 }
 
 const BACKEND_URL = getApiBaseUrl();
 
-// Increased timeout for cold starts on Render
+// Increased timeout for cold starts
 const API_TIMEOUT = process.env.NODE_ENV === 'development' ? 20000 : 60000;
 
 const api = axios.create({
@@ -48,7 +48,10 @@ api.interceptors.request.use(
     // Ensure deployed hosts always use /api proxy
     if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
       config.baseURL = '/api';
+    } else {
+      config.baseURL = getApiBaseUrl();
     }
+
     const isClientTarget = config.url?.startsWith('/client') || config.url?.includes('/client/');
     const adminToken = localStorage.getItem('admin_token') || localStorage.getItem('adminToken') || localStorage.getItem('token');
     const clientToken = localStorage.getItem('client_token');

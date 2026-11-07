@@ -1981,3 +1981,10 @@ api/projects/?offset=0&limit=100:1 Failed to load resource: the server responded
 Cannot GET /api/projects/
 i was getting these issue give me the correct command
 ```
+
+
+### C31 — Local environment URL routing and development server troubleshooting
+
+```text
+see that error was coming when i run these program localy
+```
