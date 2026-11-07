@@ -1888,3 +1888,14 @@ ValueError: Configuration Validation Failed: MONGODB_URI (or MONGO_URL) is requi
 ERROR:    Application startup failed. Exiting.
 ==> Exited with status 3
 ```
+
+
+### C22 — Supply MongoDB Atlas credentials and request Render configuration
+
+```text
+maniettela23_db_user
+<db_password>
+mongodb+srv://maniettela23_db_user:<db_password>@cluster0.uajriqy.mongodb.net/
+Replace <db_password> with the password for the maniettela23_db_user database user. Ensure any option params are URL encoded.
+so these are the keys keep them in the code and tell me what are the things that i want to keep in the render environmment
+```
