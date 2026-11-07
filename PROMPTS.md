@@ -1739,3 +1739,128 @@ see just with these small prompts that gaint project will not at all build right
 ```text
 see only mention the meta prompts at top mention like i use the chatgpt for providing the meta prompts like these and anti gravity keep the prompt right those are the real prompts that i have used use them all and also i have used the prompt in these chat also use those also
 ```
+
+
+### C10 — Run the code
+
+```text
+run the code
+```
+
+### C11 — Review changes and maintain prompts without dates
+
+```text
+codex done changes so observe all 
+There is a file called prompts.md so what ever prompts that i have used in these chat please read that full file then fill with the prompts that which are given in these chat
+```
+
+### C12 — Do not mention dates
+
+```text
+Dont mention the dates yarrr
+```
+
+### C13 — Push the code to GitHub
+
+```text
+push the code into the github
+```
+
+### C14 — Frontend deployment error on Vercel
+
+```text
+New Project
+importing from GitHub
+mani1715/Metechq
+frontendApplication Preset
+Deployment failed with error.
+Running build in Washington, D.C., USA (East) – iad1
+Build machine configuration: 2 cores, 8 GB
+Cloning github.com/mani1715/Metechq (Branch: main, Commit: 8f25fe1)
+Previous build caches not available.
+Cloning completed: 445.000ms
+Running "vercel build"
+Vercel CLI 65.11.0
+Installing dependencies...
+yarn install v1.22.19
+[1/4] Resolving packages...
+[2/4] Fetching packages...
+[3/4] Linking dependencies...
+warning " > react-day-picker@8.10.1" has incorrect peer dependency "date-fns@^2.28.0 || ^3.0.0".
+warning " > @babel/plugin-proposal-private-property-in-object@7.21.11" has unmet peer dependency "@babel/core@^7.0.0-0".
+when i try to deploy the frontend i got these issue please solve these issue
+```
+
+### C15 — Backend Dockerfile error on Render
+
+```text
+=> Cloning from https://github.com/mani1715/Metechq
+==> Checking out commit 8f25fe17ccc940684f94e028c70df075e8cdbd83 in branch main
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 2B done
+#1 DONE 0.0s
+error: failed to solve: failed to read dockerfile: open Dockerfile: no such file or directory
+error: exit status 1
+i got these issue when i try to deploy the backend in render
+```
+
+### C16 — Deploying backend dependency warning investigation
+
+```text
+Running build in Washington, D.C., USA (East) – iad1
+Build machine configuration: 2 cores, 8 GB
+Cloning github.com/mani1715/Metechq (Branch: main, Commit: 8f25fe1)
+Previous build caches not available.
+Cloning completed: 445.000ms
+Running "vercel build"
+Vercel CLI 65.11.0
+Installing dependencies...
+yarn install v1.22.19
+[1/4] Resolving packages...
+[2/4] Fetching packages...
+[3/4] Linking dependencies...
+warning " > react-day-picker@8.10.1" has incorrect peer dependency "date-fns@^2.28.0 || ^3.0.0".
+
+i got these issue when i am deploying the backend
+```
+
+### C17 — Render deployment Dockerfile issue
+
+```text
+==> Cloning from https://github.com/mani1715/Metechq
+==> Checking out commit 8f25fe17ccc940684f94e028c70df075e8cdbd83 in branch main
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 2B done
+#1 DONE 0.0s
+error: failed to solve: failed to read dockerfile: open Dockerfile: no such file or directory
+error: exit status 1
+i got these issue when i am deploying in the render
+```
+
+### C18 — Frontend peer dependency build follow-up
+
+```text
+Running build in Washington, D.C., USA (East) – iad1
+Build machine configuration: 2 cores, 8 GB
+Cloning github.com/mani1715/Metechq (Branch: main, Commit: 8f25fe1)
+Previous build caches not available.
+Cloning completed: 445.000ms
+Running "vercel build"
+Vercel CLI 65.11.0
+Installing dependencies...
+yarn install v1.22.19
+[1/4] Resolving packages...
+[2/4] Fetching packages...
+[3/4] Linking dependencies...
+warning " > react-day-picker@8.10.1" has incorrect peer dependency "date-fns@^2.28.0 || ^3.0.0".
+
+i got these issue when i am deploying the frontend
+```
+
+### C19 — Vercel deployment takeover and completion
+
+```text
+https://vercel.com/maniettela23-2188/metechq/3MEEKeeLiNs9XA6MRUm1g1Xtya3n
+dpl_3MEEKeeLiNs9XA6MRUm1g1Xtya3n
+can you please take the hand on these deployment and complete the deployment
+```
