@@ -1949,3 +1949,10 @@ give me the commands for running the project and also in portifolio all projects
 ```text
 see i want to give these commands to my friend for running in his lapto p give me the commands perfectly
 ```
+
+
+### C28 — Provide consolidated all-at-once run script for one-click execution
+
+```text
+give me all commands at a time i will run all at a time
+```
