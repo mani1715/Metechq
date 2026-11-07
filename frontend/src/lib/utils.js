@@ -7,20 +7,18 @@ export function cn(...inputs) {
 
 /**
  * Get the backend URL with proper HTTPS protocol enforcement
- * This ensures all API calls use HTTPS when the page is loaded over HTTPS
+ * On deployed domains, returns /api to leverage same-origin proxy and prevent CSP / mixed-content errors.
  * @returns {string} The backend URL with correct protocol
  */
 export function getBackendURL() {
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || '/api';
+  // If in browser on a remote/production domain, always use relative /api
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    return '/api';
+  }
+
+  const backendUrl = (process.env.REACT_APP_BACKEND_URL || '').trim() || '/api';
   
-  // If it's a relative URL, construct full URL with current protocol
   if (backendUrl.startsWith('/')) {
-    if (typeof window !== 'undefined') {
-      // Use the same protocol as the current page
-      const protocol = window.location.protocol; // https: or http:
-      const host = window.location.host;
-      return `${protocol}//${host}${backendUrl}`;
-    }
     return backendUrl;
   }
   

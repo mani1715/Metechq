@@ -1,23 +1,23 @@
 import axios from 'axios';
 
 /**
- * API SERVICE – RENDER + VERCEL SAFE (FIXED)
- * With improved timeout handling and retry logic
+ * API SERVICE – RENDER + VERCEL SAFE
+ * Dynamically resolves /api proxy on remote domains to avoid localhost/CSP blocks
  */
 
-// ⚠️ IMPORTANT: MUST include /api
-// Force the correct backend URL with /api prefix
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL 
-  ? (process.env.REACT_APP_BACKEND_URL.endsWith('/api') 
-      ? process.env.REACT_APP_BACKEND_URL 
-      : `${process.env.REACT_APP_BACKEND_URL}/api`)
-  : 'https://mspn-dev.onrender.com/api';
-
-if (!BACKEND_URL) {
-  console.error('❌ Backend URL not defined');
+export function getApiBaseUrl() {
+  // If running in browser on a remote/deployed host (not localhost), use same-origin /api rewrite
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    return '/api';
+  }
+  const envUrl = (process.env.REACT_APP_BACKEND_URL || '').trim();
+  if (envUrl) {
+    return envUrl.endsWith('/api') ? envUrl : `${envUrl}/api`;
+  }
+  return '/api';
 }
 
-
+const BACKEND_URL = getApiBaseUrl();
 
 // Increased timeout for cold starts on Render (free tier can take 30-50 seconds to wake up)
 const API_TIMEOUT = process.env.NODE_ENV === 'development' ? 15000 : 60000;
@@ -41,8 +41,12 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 // Attach token intelligently based on request context
 api.interceptors.request.use(
   (config) => {
+    // Dynamically update baseURL if on remote deployment
+    if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+      config.baseURL = '/api';
+    }
     const isClientTarget = config.url?.startsWith('/client') || config.url?.includes('/client/');
-    const adminToken = localStorage.getItem('admin_token') || localStorage.getItem('adminToken');
+    const adminToken = localStorage.getItem('admin_token') || localStorage.getItem('adminToken') || localStorage.getItem('token');
     const clientToken = localStorage.getItem('client_token');
 
     if (isClientTarget) {
@@ -84,15 +88,15 @@ api.interceptors.response.use(
     }
 
     if (error.response?.status === 401 && config?.headers?.Authorization && !config.url?.includes('/auth/login')) {
-      const currentPath = window.location.pathname;
+      const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
       if (currentPath.startsWith('/client') && (config.url?.startsWith('/client') || config.url?.includes('/client/'))) {
         localStorage.removeItem('client_token');
         localStorage.removeItem('client_data');
-        window.location.href = '/client/login';
+        if (typeof window !== 'undefined') window.location.href = '/client/login';
       } else if (currentPath.startsWith('/admin')) {
         localStorage.removeItem('admin_token');
         localStorage.removeItem('admin_user');
-        window.location.href = '/admin/login';
+        if (typeof window !== 'undefined') window.location.href = '/admin/login';
       }
     }
 

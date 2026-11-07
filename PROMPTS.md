@@ -1917,3 +1917,21 @@ and see one is e commerce and the other one is photographers sample website
 https://metechq.onrender.com/
 these is my backend link keep these in the frontend vercel then it will connects to the backend
 ```
+
+
+### C25 — Browser console CSP violation and localhost network error remediation
+
+```text
+Connecting to '<URL>' violates the following Content Security Policy directive: "connect-src 'self' https:". The action has been blocked.
+main.e8ea29fa.js:2 API Error: Network Error
+main.e8ea29fa.js:2 Error fetching public testimonials: AxiosError: Network Error
+main.e8ea29fa.js:2 API Error: Network Error
+main.e8ea29fa.js:2 Error fetching settings: AxiosError: Network Error
+localhost:8002/api/analytics/event:1  Failed to load resource: net::ERR_SSL_PROTOCOL_ERROR
+main.e8ea29fa.js:2 API Error: Network Error
+main.e8ea29fa.js:2 Error fetching about content: AxiosError: Network Error
+main.e8ea29fa.js:2 Using default about content due to network error
+main.e8ea29fa.js:2 API Error: Network Error
+main.e8ea29fa.js:2 Error fetching projects: AxiosError: Network Error
+these are the errors that i was getting in the console and when i try to open our work then there is no any works
+```
