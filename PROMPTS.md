@@ -2009,3 +2009,17 @@ see give me all commands i will run in a single terminal
 ```text
 see i am applying for a job so i give my project github link to them so they will download the code and run the commands in their laptop for running and seeing the project so give me the commands for sending to them for running these project in the terminal or vs code
 ```
+
+
+### C35 — Working directory path correction and Windows command prompt resolution
+
+```text
+C:\my projects>cd backend
+The system cannot find the path specified.
+
+C:\my projects>python -m venv venv
+pip install -r requirements.txt
+ERROR: Could not open requirements file: [Errno 2] No such file or directory: 'requirements.txt'
+python -m uvicorn server:app --host 127.0.0.1 --port 8002 --reload
+No module named uvicorn
+```
