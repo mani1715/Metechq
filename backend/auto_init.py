@@ -6,6 +6,8 @@ import asyncio
 from datetime import datetime
 import uuid
 
+now = datetime.utcnow().isoformat()
+
 # =========================
 # PORTFOLIO PROJECTS
 # =========================
