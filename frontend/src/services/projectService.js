@@ -1,7 +1,40 @@
 import { safeProjectUrl } from '../utils/projectUrls';
 import api from './api';
+import INITIAL_PROJECTS from '../data/initialProjects';
+
+const CACHE_KEY = 'metechq_cached_projects';
+let memoryCache = null;
 
 class ProjectService {
+  getCachedProjects() {
+    if (memoryCache && memoryCache.length > 0) return memoryCache;
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        const stored = window.localStorage.getItem(CACHE_KEY);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            memoryCache = parsed;
+            return parsed;
+          }
+        }
+      }
+    } catch (e) {
+      // LocalStorage access may fail in restricted environments
+    }
+    memoryCache = INITIAL_PROJECTS;
+    return INITIAL_PROJECTS;
+  }
+
+  saveProjectsToCache(projects) {
+    if (!Array.isArray(projects) || projects.length === 0) return;
+    memoryCache = projects;
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        window.localStorage.setItem(CACHE_KEY, JSON.stringify(projects));
+      }
+    } catch (e) {}
+  }
   async getAllProjects() {
     try {
       // For admin - get all projects including private ones
@@ -29,7 +62,7 @@ class ProjectService {
       if (response.data.length < pageSize) break;
       offset += pageSize;
     }
-    return Array.from(new Map(allProjects.map(project => [project.id || project._id || project.slug, project])).values()).filter(project => project.is_private !== true).map(project => ({
+    const transformed = Array.from(new Map(allProjects.map(project => [project.id || project._id || project.slug, project])).values()).filter(project => project.is_private !== true).map(project => ({
       ...project,
       id: String(project.id || project._id || project.slug),
       title: project.title || 'Untitled project',
@@ -41,6 +74,10 @@ class ProjectService {
       images: [project.image_url || project.image, ...(project.gallery_images || project.images || [])].map(safeProjectUrl).filter((url, index, list) => url && list.indexOf(url) === index),
       tech_stack: Array.isArray(project.tech_stack) ? project.tech_stack : (project.technologies || [])
     }));
+    if (transformed.length > 0) {
+      this.saveProjectsToCache(transformed);
+    }
+    return transformed;
   }
 
   async getProject(id) {

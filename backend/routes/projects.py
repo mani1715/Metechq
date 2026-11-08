@@ -14,14 +14,14 @@ router = APIRouter(prefix="/projects", tags=["projects"])
 @router.get("/", response_model=List[ProjectResponse])
 async def get_projects(offset: int = Query(0, ge=0), limit: int = Query(100, ge=1, le=100)):
     """Get public projects only (for public portfolio page)"""
-    cursor = projects_collection.find({"is_private": {"$ne": True}}).sort([("created_at", -1), ("id", 1)]).skip(offset).limit(limit)
+    cursor = projects_collection.find({"is_private": {"$ne": True}}).sort([("order", 1), ("created_at", -1), ("id", 1)]).skip(offset).limit(limit)
     projects = await cursor.to_list(length=limit)
     return [serialize_document(project) for project in projects]
 
 @router.get("/all", response_model=List[ProjectResponse])
 async def get_all_projects(offset: int = Query(0, ge=0), limit: int = Query(100, ge=1, le=100), current_admin: dict = Depends(require_permission("canManagePortfolio"))):
     """Get all projects including private ones (admin only)"""
-    cursor = projects_collection.find().sort([("created_at", -1), ("id", 1)]).skip(offset).limit(limit)
+    cursor = projects_collection.find().sort([("order", 1), ("created_at", -1), ("id", 1)]).skip(offset).limit(limit)
     projects = await cursor.to_list(length=limit)
     return [serialize_document(project) for project in projects]
 

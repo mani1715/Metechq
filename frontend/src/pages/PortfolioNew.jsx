@@ -13,11 +13,49 @@ import './pages.css';
 
 const PROJECTS_PER_PAGE = 6;
 
+const transformProject = (project) => {
+  const img = project.image_url || project.image || '';
+  const tech = project.tech_stack || project.technologies || [];
+  const live = project.live_demo_url || project.liveUrl || '';
+  const github = project.github_url || project.githubUrl || '';
+  return {
+    ...project,
+    id: project.id || project._id,
+    title: project.title,
+    slug: project.slug,
+    category: project.category,
+    description: project.description,
+    image: img,
+    image_url: img,
+    images: (project.images && project.images.length > 0) ? project.images : [img],
+    technologies: tech,
+    tech_stack: tech,
+    featured: Boolean(project.featured),
+    liveUrl: live,
+    live_demo_url: live,
+    github_url: github,
+    status: project.status,
+    order: project.order || (project.id === 'aishu-foods-ecommerce' ? 1 : project.id === 'studio-photography-portfolio' ? 2 : 99),
+    date: project.created_at || project.date
+  };
+};
+
 const Portfolio = () => {
-  const [portfolioProjects, setPortfolioProjects] = useState([]);
+  const [portfolioProjects, setPortfolioProjects] = useState(() => {
+    try {
+      const cached = projectService.getCachedProjects();
+      if (Array.isArray(cached) && cached.length > 0) {
+        return cached.map(transformProject);
+      }
+    } catch (e) {}
+    return [];
+  });
   const [loadError, setLoadError] = useState(false);
   const [attempt, setAttempt] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => {
+    const cached = projectService.getCachedProjects();
+    return !Array.isArray(cached) || cached.length === 0;
+  });
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('newest');
@@ -31,46 +69,31 @@ const Portfolio = () => {
     // Track page view
     trackPageView('portfolio');
     
+    let isMounted = true;
     const fetchProjects = async () => {
       try {
-        setLoading(true);
+        if (!portfolioProjects || portfolioProjects.length === 0) {
+          setLoading(true);
+        }
         setLoadError(false);
         const data = await projectService.getPublicProjects();
-        // Transform backend data to match frontend structure
-        const transformedProjects = data.map(project => {
-          const img = project.image_url || project.image || '';
-          const tech = project.tech_stack || project.technologies || [];
-          const live = project.live_demo_url || project.liveUrl || '';
-          const github = project.github_url || project.githubUrl || '';
-          return {
-            ...project,
-            id: project.id || project._id,
-            title: project.title,
-            slug: project.slug,
-            category: project.category,
-            description: project.description,
-            image: img,
-            image_url: img,
-            images: (project.images && project.images.length > 0) ? project.images : [img],
-            technologies: tech,
-            tech_stack: tech,
-            featured: Boolean(project.featured),
-            liveUrl: live,
-            live_demo_url: live,
-            github_url: github,
-            status: project.status,
-            date: project.created_at || project.date
-          };
-        });
-        setPortfolioProjects(transformedProjects);
+        if (isMounted && Array.isArray(data) && data.length > 0) {
+          const transformedProjects = data.map(transformProject);
+          setPortfolioProjects(transformedProjects);
+        }
       } catch (error) {
-        setLoadError(true);
-        console.error('Error fetching projects:', error);
+        if (isMounted && (!portfolioProjects || portfolioProjects.length === 0)) {
+          setLoadError(true);
+        }
+        console.warn('Network notice: using cached projects:', error);
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
     fetchProjects();
+    return () => { isMounted = false; };
   }, [attempt]);
 
   // Extract unique categories
@@ -120,15 +143,24 @@ const Portfolio = () => {
     // Sort projects
     switch (sortBy) {
       case 'featured':
-        filtered = [...filtered].sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+        filtered = [...filtered].sort((a, b) => {
+          if (b.featured !== a.featured) return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
+          return (a.order || 99) - (b.order || 99);
+        });
         break;
       case 'newest':
-        filtered = [...filtered].sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+        filtered = [...filtered].sort((a, b) => {
+          if (a.order && b.order && a.order !== b.order) {
+            return a.order - b.order;
+          }
+          return new Date(b.date || 0) - new Date(a.date || 0);
+        });
         break;
       case 'popular':
         filtered = [...filtered].sort((a, b) => (b.views || 0) - (a.views || 0));
         break;
       default:
+        filtered = [...filtered].sort((a, b) => (a.order || 99) - (b.order || 99));
         break;
     }
 

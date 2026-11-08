@@ -43,7 +43,7 @@ PORTFOLIO_PROJECTS = [
     },
     {
         "id": "studio-photography-portfolio",
-        "title": "Metechq Studio | Photography & Creative Portfolio",
+        "title": "Photography & Creative Portfolio",
         "slug": "studio-photography-portfolio",
         "category": "Photography & Studio",
         "description": "Elegant studio and photography portfolio website showcasing high-resolution gallery collections, visual storytelling, and client booking.",

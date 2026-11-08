@@ -2078,3 +2078,12 @@ debug setup_iva.py
 ```text
 Push the code into the github
 ```
+
+### C42 - Instant portfolio opening, Aishu Foods screenshot, and Photography portfolio order and cover update
+
+```text
+When ever i open our work in the website it was taking more time for opening 
+and also when ever our work opens then there is aishu foods right for thet keep the above screenshot
+Photography & Creative Portfolio keep these portifolio as the second one in first page 
+and also second screenshot keep that to Photography & Creative Portfolio
+```

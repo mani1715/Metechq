@@ -15,16 +15,36 @@ const offerings = [
 ];
 export default function Home() {
   const [content,setContent] = useState(null);
-  const [projects,setProjects] = useState([]);
-  const [projectState,setProjectState] = useState('loading');
+  const [projects,setProjects] = useState(() => {
+    try {
+      const cached = projectService.getCachedProjects();
+      if (Array.isArray(cached) && cached.length > 0) {
+        return cached.slice(0, 3);
+      }
+    } catch (e) {}
+    return [];
+  });
+  const [projectState,setProjectState] = useState(() => {
+    try {
+      const cached = projectService.getCachedProjects();
+      if (Array.isArray(cached) && cached.length > 0) return 'ready';
+    } catch (e) {}
+    return 'loading';
+  });
   const [attempt,setAttempt] = useState(0);
   const [quotes,setQuotes] = useState([]);
   useEffect(() => {
     let active = true;
     trackPageView('home');
     api.get('/content/').then(r => { if(active) setContent(r.data); }).catch(() => {});
-    setProjectState('loading');
-    projectService.getPublicProjects().then(data => { if(active) { setProjects([...data].sort((a,b) => Number(b.featured)-Number(a.featured)).slice(0,3)); setProjectState('ready'); } }).catch(() => { if(active) setProjectState('error'); });
+    projectService.getPublicProjects().then(data => {
+      if(active && Array.isArray(data) && data.length > 0) {
+        setProjects(data.slice(0, 3));
+        setProjectState('ready');
+      }
+    }).catch(() => {
+      if(active && projects.length === 0) setProjectState('error');
+    });
     getPublicTestimonials().then(data => { if(active) setQuotes(data.slice(0,3)); }).catch(() => {});
     return () => { active = false; };
   }, [attempt]);
