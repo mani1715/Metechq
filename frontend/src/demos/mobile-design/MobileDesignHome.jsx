@@ -1,493 +1,590 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Smartphone, Palette, Type, Layout, Zap, Grid3x3, Eye, Code, Download, Moon, Sun, Heart, ShoppingCart, Bell, Search, User, Home, Settings, Plus, Check, X, Star } from 'lucide-react';
+import { 
+  Smartphone, Palette, Type, Layout, Zap, Grid3x3, 
+  Eye, Download, Heart, Activity, Flame, Clock, 
+  ChevronRight, Play, Pause, Plus, Check, Trophy, 
+  Copy, Sparkles, Moon, Sun, ArrowRight, User
+} from 'lucide-react';
+import DemoTopNav from '../common/DemoTopNav';
 import './mobile-design.css';
 
-const MobileDesignHome = () => {
-  const [activeTab, setActiveTab] = useState('overview');
-  const [selectedScreen, setSelectedScreen] = useState(0);
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  // Design System Data
-  const colorPalette = {
-    primary: [
-      { name: 'Primary 50', color: '#f0f9ff', hex: '#f0f9ff' },
-      { name: 'Primary 100', color: '#e0f2fe', hex: '#e0f2fe' },
-      { name: 'Primary 500', color: '#0ea5e9', hex: '#0ea5e9' },
-      { name: 'Primary 600', color: '#0284c7', hex: '#0284c7' },
-      { name: 'Primary 700', color: '#0369a1', hex: '#0369a1' },
-    ],
-    secondary: [
-      { name: 'Secondary 50', color: '#faf5ff', hex: '#faf5ff' },
-      { name: 'Secondary 100', color: '#f3e8ff', hex: '#f3e8ff' },
-      { name: 'Secondary 500', color: '#a855f7', hex: '#a855f7' },
-      { name: 'Secondary 600', color: '#9333ea', hex: '#9333ea' },
-      { name: 'Secondary 700', color: '#7e22ce', hex: '#7e22ce' },
-    ],
-    neutral: [
-      { name: 'Gray 50', color: '#f9fafb', hex: '#f9fafb' },
-      { name: 'Gray 100', color: '#f3f4f6', hex: '#f3f4f6' },
-      { name: 'Gray 500', color: '#6b7280', hex: '#6b7280' },
-      { name: 'Gray 700', color: '#374151', hex: '#374151' },
-      { name: 'Gray 900', color: '#111827', hex: '#111827' },
-    ]
-  };
-
-  const typography = [
-    { name: 'Display', size: '48px', weight: '700', sample: 'The quick brown fox' },
-    { name: 'Heading 1', size: '32px', weight: '700', sample: 'The quick brown fox' },
-    { name: 'Heading 2', size: '24px', weight: '600', sample: 'The quick brown fox' },
-    { name: 'Body Large', size: '18px', weight: '400', sample: 'The quick brown fox jumps over the lazy dog' },
-    { name: 'Body', size: '16px', weight: '400', sample: 'The quick brown fox jumps over the lazy dog' },
-    { name: 'Caption', size: '14px', weight: '400', sample: 'The quick brown fox jumps over the lazy dog' },
-  ];
-
-  const appScreens = [
-    { name: 'Home Screen', category: 'Main', gradient: 'from-blue-500 to-purple-600' },
-    { name: 'Profile', category: 'User', gradient: 'from-purple-500 to-pink-600' },
-    { name: 'Activity Feed', category: 'Social', gradient: 'from-green-500 to-teal-600' },
-    { name: 'Settings', category: 'System', gradient: 'from-orange-500 to-red-600' },
-  ];
-
-  const components = [
-    { name: 'Buttons', count: 12, icon: 'Zap' },
-    { name: 'Cards', count: 8, icon: 'Layout' },
-    { name: 'Forms', count: 15, icon: 'Type' },
-    { name: 'Navigation', count: 6, icon: 'Grid3x3' },
-    { name: 'Icons', count: 120, icon: 'Palette' },
-    { name: 'Modals', count: 5, icon: 'Eye' },
-  ];
-
-  return (
-    <div className="mobile-design-container">
-      {/* Navigation Bar */}
-      <nav className="mobile-design-nav">
-        <div className="nav-content">
-          <div className="nav-left">
-            <Link to="/portfolio/mobile-app-design-system" className="back-link">
-              <ArrowLeft className="h-5 w-5" />
-              <span>Back to Case Study</span>
-            </Link>
-          </div>
-          <div className="nav-center">
-            <Smartphone className="h-6 w-6 text-blue-600" />
-            <h1 className="nav-title">FitLife Design System</h1>
-          </div>
-          <div className="nav-right">
-            <button className="theme-toggle" onClick={() => setIsDarkMode(!isDarkMode)}>
-              {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      {/* Hero Section */}
-      <section className="design-hero">
-        <div className="hero-content">
-          <div className="hero-badge">
-            <Palette className="h-4 w-4" />
-            <span>Mobile Design System</span>
-          </div>
-          <h1 className="hero-title">FitLife Fitness App</h1>
-          <p className="hero-description">
-            A comprehensive design system built for a mobile fitness application with consistent branding,
-            accessible components, and beautiful user interfaces.
-          </p>
-          <div className="hero-stats">
-            <div className="stat-item">
-              <div className="stat-value">120+</div>
-              <div className="stat-label">Components</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-value">24</div>
-              <div className="stat-label">Screens</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-value">100%</div>
-              <div className="stat-label">Accessible</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Tab Navigation */}
-      <div className="tabs-container">
-        <div className="tabs-nav">
-          <button
-            className={`tab-button ${activeTab === 'overview' ? 'active' : ''}`}
-            onClick={() => setActiveTab('overview')}
-          >
-            <Eye className="h-4 w-4" />
-            Overview
-          </button>
-          <button
-            className={`tab-button ${activeTab === 'colors' ? 'active' : ''}`}
-            onClick={() => setActiveTab('colors')}
-          >
-            <Palette className="h-4 w-4" />
-            Colors
-          </button>
-          <button
-            className={`tab-button ${activeTab === 'typography' ? 'active' : ''}`}
-            onClick={() => setActiveTab('typography')}
-          >
-            <Type className="h-4 w-4" />
-            Typography
-          </button>
-          <button
-            className={`tab-button ${activeTab === 'components' ? 'active' : ''}`}
-            onClick={() => setActiveTab('components')}
-          >
-            <Layout className="h-4 w-4" />
-            Components
-          </button>
-          <button
-            className={`tab-button ${activeTab === 'screens' ? 'active' : ''}`}
-            onClick={() => setActiveTab('screens')}
-          >
-            <Smartphone className="h-4 w-4" />
-            Screens
-          </button>
-        </div>
-      </div>
-
-      {/* Content Area */}
-      <div className="design-content">
-        <div className="content-wrapper">
-          {/* Overview Tab */}
-          {activeTab === 'overview' && (
-            <div className="tab-content">
-              <h2 className="section-title">Design System Overview</h2>
-              <p className="section-description">
-                FitLife's design system provides a unified visual language and component library that ensures
-                consistency across all mobile app screens. Built with React Native and TypeScript for maximum
-                type safety and developer experience.
-              </p>
-
-              <div className="features-grid">
-                {components.map((comp, idx) => (
-                  <div key={idx} className="feature-card">
-                    <div className="feature-icon">
-                      <Layout className="h-6 w-6" />
-                    </div>
-                    <h3 className="feature-name">{comp.name}</h3>
-                    <p className="feature-count">{comp.count} variants</p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="principles-section">
-                <h3 className="subsection-title">Design Principles</h3>
-                <div className="principles-grid">
-                  <div className="principle-card">
-                    <Zap className="principle-icon" />
-                    <h4>Performance First</h4>
-                    <p>Optimized components for smooth 60fps animations on all devices.</p>
-                  </div>
-                  <div className="principle-card">
-                    <Eye className="principle-icon" />
-                    <h4>Accessibility</h4>
-                    <p>WCAG 2.1 AA compliant with screen reader support and keyboard navigation.</p>
-                  </div>
-                  <div className="principle-card">
-                    <Grid3x3 className="principle-icon" />
-                    <h4>Consistency</h4>
-                    <p>Uniform spacing, sizing, and behavior across all components.</p>
-                  </div>
-                  <div className="principle-card">
-                    <Code className="principle-icon" />
-                    <h4>Developer Experience</h4>
-                    <p>Well-documented components with TypeScript support and Storybook integration.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Colors Tab */}
-          {activeTab === 'colors' && (
-            <div className="tab-content">
-              <h2 className="section-title">Color Palette</h2>
-              <p className="section-description">
-                Our color system is designed for maximum contrast and accessibility while maintaining a modern,
-                vibrant aesthetic that motivates users on their fitness journey.
-              </p>
-
-              <div className="color-section">
-                <h3 className="subsection-title">Primary Colors</h3>
-                <div className="color-grid">
-                  {colorPalette.primary.map((color, idx) => (
-                    <div key={idx} className="color-card">
-                      <div className="color-swatch" style={{ backgroundColor: color.color }}></div>
-                      <div className="color-info">
-                        <div className="color-name">{color.name}</div>
-                        <div className="color-hex">{color.hex}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="color-section">
-                <h3 className="subsection-title">Secondary Colors</h3>
-                <div className="color-grid">
-                  {colorPalette.secondary.map((color, idx) => (
-                    <div key={idx} className="color-card">
-                      <div className="color-swatch" style={{ backgroundColor: color.color }}></div>
-                      <div className="color-info">
-                        <div className="color-name">{color.name}</div>
-                        <div className="color-hex">{color.hex}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="color-section">
-                <h3 className="subsection-title">Neutral Colors</h3>
-                <div className="color-grid">
-                  {colorPalette.neutral.map((color, idx) => (
-                    <div key={idx} className="color-card">
-                      <div className="color-swatch" style={{ backgroundColor: color.color }}></div>
-                      <div className="color-info">
-                        <div className="color-name">{color.name}</div>
-                        <div className="color-hex">{color.hex}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Typography Tab */}
-          {activeTab === 'typography' && (
-            <div className="tab-content">
-              <h2 className="section-title">Typography System</h2>
-              <p className="section-description">
-                Our typography scale is based on a modular scale with carefully selected font sizes and weights
-                to create clear visual hierarchy and optimal readability on mobile devices.
-              </p>
-
-              <div className="typography-section">
-                <h3 className="subsection-title">Font Family</h3>
-                <div className="font-family-card">
-                  <div className="font-sample" style={{ fontSize: '48px', fontWeight: '700' }}>Aa</div>
-                  <div className="font-info">
-                    <h4>Inter</h4>
-                    <p>Primary font family for all text content</p>
-                    <div className="font-weights">
-                      <span>Regular (400)</span>
-                      <span>Medium (500)</span>
-                      <span>Semibold (600)</span>
-                      <span>Bold (700)</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="typography-section">
-                <h3 className="subsection-title">Type Scale</h3>
-                <div className="type-scale-list">
-                  {typography.map((type, idx) => (
-                    <div key={idx} className="type-scale-item">
-                      <div className="type-meta">
-                        <div className="type-name">{type.name}</div>
-                        <div className="type-specs">{type.size} / {type.weight}</div>
-                      </div>
-                      <div className="type-sample" style={{ fontSize: type.size, fontWeight: type.weight }}>
-                        {type.sample}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Components Tab */}
-          {activeTab === 'components' && (
-            <div className="tab-content">
-              <h2 className="section-title">Component Library</h2>
-              <p className="section-description">
-                A comprehensive collection of reusable, accessible components built with React Native and
-                documented in Storybook.
-              </p>
-
-              <div className="components-showcase">
-                <h3 className="subsection-title">Buttons</h3>
-                <div className="component-demo">
-                  <button className="btn btn-primary">Primary Button</button>
-                  <button className="btn btn-secondary">Secondary Button</button>
-                  <button className="btn btn-outline">Outline Button</button>
-                  <button className="btn btn-ghost">Ghost Button</button>
-                </div>
-              </div>
-
-              <div className="components-showcase">
-                <h3 className="subsection-title">Cards</h3>
-                <div className="cards-demo">
-                  <div className="demo-card">
-                    <div className="card-header">
-                      <div className="card-icon">
-                        <Zap className="h-6 w-6" />
-                      </div>
-                      <h4>Workout Card</h4>
-                    </div>
-                    <p className="card-description">Display workout information with progress tracking</p>
-                    <div className="card-footer">
-                      <span className="card-badge">Component</span>
-                    </div>
-                  </div>
-
-                  <div className="demo-card">
-                    <div className="card-header">
-                      <div className="card-icon">
-                        <Heart className="h-6 w-6" />
-                      </div>
-                      <h4>Activity Card</h4>
-                    </div>
-                    <p className="card-description">Show daily activity summary with metrics</p>
-                    <div className="card-footer">
-                      <span className="card-badge">Component</span>
-                    </div>
-                  </div>
-
-                  <div className="demo-card">
-                    <div className="card-header">
-                      <div className="card-icon">
-                        <Star className="h-6 w-6" />
-                      </div>
-                      <h4>Achievement Card</h4>
-                    </div>
-                    <p className="card-description">Display earned achievements and badges</p>
-                    <div className="card-footer">
-                      <span className="card-badge">Component</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="components-showcase">
-                <h3 className="subsection-title">Form Elements</h3>
-                <div className="form-demo">
-                  <div className="form-group">
-                    <label className="form-label">Email Address</label>
-                    <input type="email" className="form-input" placeholder="Enter your email" />
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">Password</label>
-                    <input type="password" className="form-input" placeholder="Enter your password" />
-                  </div>
-                  <button className="btn btn-primary btn-block">Sign In</button>
-                </div>
-              </div>
-
-              <div className="components-showcase">
-                <h3 className="subsection-title">Icons</h3>
-                <div className="icons-demo">
-                  <div className="icon-item"><Home className="h-6 w-6" /></div>
-                  <div className="icon-item"><Search className="h-6 w-6" /></div>
-                  <div className="icon-item"><Bell className="h-6 w-6" /></div>
-                  <div className="icon-item"><User className="h-6 w-6" /></div>
-                  <div className="icon-item"><Settings className="h-6 w-6" /></div>
-                  <div className="icon-item"><Heart className="h-6 w-6" /></div>
-                  <div className="icon-item"><ShoppingCart className="h-6 w-6" /></div>
-                  <div className="icon-item"><Plus className="h-6 w-6" /></div>
-                  <div className="icon-item"><Check className="h-6 w-6" /></div>
-                  <div className="icon-item"><X className="h-6 w-6" /></div>
-                  <div className="icon-item"><Star className="h-6 w-6" /></div>
-                  <div className="icon-item"><Zap className="h-6 w-6" /></div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Screens Tab */}
-          {activeTab === 'screens' && (
-            <div className="tab-content">
-              <h2 className="section-title">App Screens</h2>
-              <p className="section-description">
-                Explore the complete mobile app interface with 24 carefully designed screens covering all user
-                flows from onboarding to workout tracking.
-              </p>
-
-              <div className="screens-grid">
-                {appScreens.map((screen, idx) => (
-                  <div
-                    key={idx}
-                    className={`screen-card ${selectedScreen === idx ? 'active' : ''}`}
-                    onClick={() => setSelectedScreen(idx)}
-                  >
-                    <div className={`screen-preview bg-gradient-to-br ${screen.gradient}`}>
-                      <div className="screen-mockup">
-                        <div className="mockup-header">
-                          <div className="mockup-time">9:41</div>
-                          <div className="mockup-indicators">
-                            <div className="indicator"></div>
-                            <div className="indicator"></div>
-                            <div className="indicator"></div>
-                          </div>
-                        </div>
-                        <div className="mockup-content">
-                          <Smartphone className="h-16 w-16 text-white opacity-50" />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="screen-info">
-                      <div className="screen-category">{screen.category}</div>
-                      <div className="screen-name">{screen.name}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="screen-categories">
-                <h3 className="subsection-title">Screen Categories</h3>
-                <div className="categories-list">
-                  <div className="category-item">
-                    <div className="category-count">6</div>
-                    <div className="category-name">Onboarding</div>
-                  </div>
-                  <div className="category-item">
-                    <div className="category-count">8</div>
-                    <div className="category-name">Workout Tracking</div>
-                  </div>
-                  <div className="category-item">
-                    <div className="category-count">4</div>
-                    <div className="category-name">Progress & Stats</div>
-                  </div>
-                  <div className="category-item">
-                    <div className="category-count">4</div>
-                    <div className="category-name">Social & Community</div>
-                  </div>
-                  <div className="category-item">
-                    <div className="category-count">2</div>
-                    <div className="category-name">Settings & Profile</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Download Section */}
-      <section className="download-section">
-        <div className="download-content">
-          <Download className="download-icon" />
-          <h2 className="download-title">Download Design Assets</h2>
-          <p className="download-description">
-            Get access to the complete Figma file with all components, screens, and design tokens.
-          </p>
-          <button className="btn btn-primary btn-large">
-            <Download className="h-5 w-5" />
-            Download Figma File
-          </button>
-        </div>
-      </section>
-    </div>
-  );
+const colorPalette = {
+  brand: [
+    { name: 'FitPulse Red', hex: '#ef4444' },
+    { name: 'Hyper Orange', hex: '#f97316' },
+    { name: 'Neon Amber', hex: '#f59e0b' },
+    { name: 'Bio Emerald', hex: '#10b981' },
+    { name: 'Cyan Motion', hex: '#06b6d4' },
+    { name: 'Electric Violet', hex: '#8b5cf6' }
+  ],
+  neutrals: [
+    { name: 'Deep Space', hex: '#090d16' },
+    { name: 'Onyx Surface', hex: '#111827' },
+    { name: 'Charcoal Border', hex: '#1f2937' },
+    { name: 'Muted Slate', hex: '#4b5563' },
+    { name: 'Ghost Silver', hex: '#9ca3af' },
+    { name: 'Pure White', hex: '#ffffff' }
+  ]
 };
 
-export default MobileDesignHome;
+const typographyScale = [
+  { level: 'Hero / Display', size: '36px', weight: '800 ExtraBold', useCase: 'Workout summary statistics, countdown timers' },
+  { level: 'Title 1', size: '28px', weight: '700 Bold', useCase: 'Primary screen headers, metric totals' },
+  { level: 'Title 2', size: '22px', weight: '600 SemiBold', useCase: 'Section titles, exercise card names' },
+  { level: 'Body Regular', size: '15px', weight: '400 Regular', useCase: 'Instructional text, descriptions, notifications' },
+  { level: 'Caption', size: '12px', weight: '600 SemiBold', useCase: 'Badges, timestamps, secondary labels' }
+];
+
+export default function MobileDesignHome() {
+  const [activeTab, setActiveTab] = useState('simulator');
+  const [phoneScreen, setPhoneScreen] = useState('dashboard');
+  const [copiedHex, setCopiedHex] = useState(null);
+  
+  // Interactive Phone Simulator States
+  const [waterCups, setWaterCups] = useState(6);
+  const [workoutPlaying, setWorkoutPlaying] = useState(false);
+  const [workoutSeconds, setWorkoutSeconds] = useState(842);
+  const [activeSegment, setActiveSegment] = useState('Day');
+  const [customSampleText, setCustomSampleText] = useState('Break Your Personal Record Today.');
+  const [downloadSuccess, setDownloadSuccess] = useState(false);
+
+  // Timer simulation
+  useEffect(() => {
+    let interval;
+    if (workoutPlaying) {
+      interval = setInterval(() => {
+        setWorkoutSeconds(s => s + 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [workoutPlaying]);
+
+  const copyToClipboard = (hex) => {
+    navigator.clipboard?.writeText(hex);
+    setCopiedHex(hex);
+    setTimeout(() => setCopiedHex(null), 1800);
+  };
+
+  const formatTimer = (totalSeconds) => {
+    const mins = Math.floor(totalSeconds / 60);
+    const secs = totalSeconds % 60;
+    return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  };
+
+  const handleDownloadFigma = () => {
+    setDownloadSuccess(true);
+    setTimeout(() => setDownloadSuccess(false), 2500);
+  };
+
+  return (
+    <div className="mobile-design-page">
+      <DemoTopNav currentDemoTitle="FitLife Mobile App Design System" portfolioSlug="fitlife-mobile-app-design-system" />
+
+      {/* Hero Header */}
+      <header className="mobile-system-hero">
+        <div className="system-container">
+          <div className="system-hero-badge">
+            <Sparkles className="h-4 w-4 text-pink-400" />
+            <span>FitLife Design System v3.4 • iOS & Android Tokens</span>
+          </div>
+          <h1 className="system-hero-title">
+            Crafted for Velocity, <br />
+            <span className="text-gradient-pink">Engineered for Fitness.</span>
+          </h1>
+          <p className="system-hero-subtitle">
+            A battle-tested mobile design system featuring 120+ atomic components, WCAG AAA accessible high-contrast tokens, 
+            and an interactive iPhone 16 Pro real-time prototype.
+          </p>
+
+          {/* Navigation Tabs */}
+          <div className="system-nav-tabs">
+            {[
+              { id: 'simulator', label: 'Interactive iPhone Prototype', icon: Smartphone },
+              { id: 'colors', label: 'Color Token Palette', icon: Palette },
+              { id: 'typography', label: 'Dynamic Typography', icon: Type },
+              { id: 'components', label: 'Atomic Components', icon: Layout }
+            ].map(tab => {
+              const TabIcon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  className={`sys-tab-btn ${activeTab === tab.id ? 'active' : ''}`}
+                  onClick={() => setActiveTab(tab.id)}
+                >
+                  <TabIcon className="h-4 w-4" />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content Area */}
+      <main className="system-main-content">
+        <div className="system-container">
+
+          {/* TAB 1: INTERACTIVE PHONE SIMULATOR */}
+          {activeTab === 'simulator' && (
+            <div className="simulator-section-grid">
+              {/* Left Controls & Screen Picker */}
+              <div className="simulator-sidebar">
+                <div className="sim-panel-box">
+                  <h3 className="sim-panel-title">Active Screen Selector</h3>
+                  <p className="sim-panel-desc">Click any flow to load it live inside the device frame:</p>
+                  
+                  <div className="screen-picker-list">
+                    {[
+                      { id: 'dashboard', name: '1. Activity & Daily Rings', category: 'Home Dashboard', icon: Flame },
+                      { id: 'workout', name: '2. Live HIIT Workout Player', category: 'Active Session', icon: Zap },
+                      { id: 'nutrition', name: '3. Macro Nutrition Tracker', category: 'Fuel & Diet', icon: Heart },
+                      { id: 'social', name: '4. Club Leaderboard', category: 'Community', icon: Trophy }
+                    ].map(scr => {
+                      const Icon = scr.icon;
+                      const isCur = phoneScreen === scr.id;
+                      return (
+                        <button
+                          key={scr.id}
+                          className={`screen-item-btn ${isCur ? 'active' : ''}`}
+                          onClick={() => setPhoneScreen(scr.id)}
+                        >
+                          <div className={`scr-icon-pill ${isCur ? 'selected' : ''}`}>
+                            <Icon className="h-4 w-4" />
+                          </div>
+                          <div className="scr-info">
+                            <span className="scr-name">{scr.name}</span>
+                            <span className="scr-cat">{scr.category}</span>
+                          </div>
+                          {isCur && <span className="scr-live-dot"></span>}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <div className="sim-specs-card">
+                    <h4>Component Specs</h4>
+                    <ul>
+                      <li>Dynamic Island: <strong>Expanded Island API</strong></li>
+                      <li>Frame: <strong>Apple iPhone 16 Pro (402 × 874 pt)</strong></li>
+                      <li>Haptics: <strong>CoreHaptics Medium Impact</strong></li>
+                      <li>Accessibility: <strong>Dynamic Type Ready</strong></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              {/* Center: The Realistic iPhone Hardware Frame */}
+              <div className="simulator-phone-wrapper">
+                <div className="iphone-chassis">
+                  {/* Dynamic Island */}
+                  <div className="dynamic-island">
+                    <div className="island-camera"></div>
+                    <div className="island-sensor"></div>
+                  </div>
+
+                  {/* Status Bar */}
+                  <div className="phone-status-bar">
+                    <span className="status-time">9:41</span>
+                    <div className="status-icons">
+                      <span className="bar-signal">••••</span>
+                      <span className="bar-wifi">5G</span>
+                      <span className="bar-battery">98%</span>
+                    </div>
+                  </div>
+
+                  {/* Screen Content Viewport */}
+                  <div className="phone-viewport">
+                    
+                    {/* SCREEN 1: DASHBOARD */}
+                    {phoneScreen === 'dashboard' && (
+                      <div className="sim-screen-view">
+                        <div className="screen-user-header">
+                          <div>
+                            <span className="greeting-small">Good morning,</span>
+                            <h2 className="greeting-name">Alex Rivera</h2>
+                          </div>
+                          <div className="user-avatar-badge">AR</div>
+                        </div>
+
+                        {/* Move / Exercise / Stand Rings Banner */}
+                        <div className="phone-rings-card">
+                          <div className="rings-visual">
+                            <div className="ring-outer">
+                              <div className="ring-middle">
+                                <div className="ring-inner">
+                                  <Flame className="h-5 w-5 text-orange-400" />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="rings-metrics">
+                            <div className="ring-metric-row">
+                              <span className="dot red"></span>
+                              <span className="lbl">Move:</span>
+                              <strong>640 / 700 kcal</strong>
+                            </div>
+                            <div className="ring-metric-row">
+                              <span className="dot green"></span>
+                              <span className="lbl">Exercise:</span>
+                              <strong>42 / 30 mins</strong>
+                            </div>
+                            <div className="ring-metric-row">
+                              <span className="dot blue"></span>
+                              <span className="lbl">Stand:</span>
+                              <strong>11 / 12 hrs</strong>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Heart Rate Metric */}
+                        <div className="phone-stat-card">
+                          <div className="stat-head">
+                            <div className="stat-title-group">
+                              <Heart className="h-4 w-4 text-red-500 fill-red-500" />
+                              <span>Resting Heart Rate</span>
+                            </div>
+                            <span className="stat-badge-good">Optimal</span>
+                          </div>
+                          <div className="stat-number-row">
+                            <span className="big-stat">72</span>
+                            <span className="unit">BPM</span>
+                          </div>
+                          <div className="ecg-wave-sim">
+                            <div className="wave-line"></div>
+                          </div>
+                        </div>
+
+                        {/* Water Tracker with Interactive Tap */}
+                        <div className="phone-stat-card">
+                          <div className="stat-head">
+                            <div className="stat-title-group">
+                              <Activity className="h-4 w-4 text-cyan-400" />
+                              <span>Daily Hydration</span>
+                            </div>
+                            <button 
+                              className="add-cup-btn"
+                              onClick={() => setWaterCups(c => Math.min(12, c + 1))}
+                            >
+                              <Plus className="h-3 w-3" />
+                              Add 250ml
+                            </button>
+                          </div>
+                          <div className="water-level-display">
+                            <strong>{(waterCups * 0.25).toFixed(1)}L</strong>
+                            <span>/ 3.0L Target ({waterCups} glasses)</span>
+                          </div>
+                          <div className="water-progress-track">
+                            <div 
+                              className="water-progress-bar" 
+                              style={{ width: `${(waterCups / 12) * 100}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* SCREEN 2: WORKOUT PLAYER */}
+                    {phoneScreen === 'workout' && (
+                      <div className="sim-screen-view workout-view">
+                        <div className="workout-category-pill">HIIT INTERVAL TRAINING</div>
+                        <h2 className="workout-active-title">Full Body Metabolic Burn</h2>
+                        <span className="workout-coach">Coach Sarah Jenkins</span>
+
+                        <div className="workout-timer-circle">
+                          <div className="timer-display">{formatTimer(workoutSeconds)}</div>
+                          <span className="timer-sub">ACTIVE ELAPSED</span>
+                        </div>
+
+                        <div className="workout-live-stats">
+                          <div className="live-stat-box">
+                            <Flame className="h-4 w-4 text-orange-400 mx-auto mb-1" />
+                            <strong>342</strong>
+                            <small>KCAL</small>
+                          </div>
+                          <div className="live-stat-box">
+                            <Heart className="h-4 w-4 text-red-400 mx-auto mb-1" />
+                            <strong>158</strong>
+                            <small>BPM (Zone 4)</small>
+                          </div>
+                          <div className="live-stat-box">
+                            <Zap className="h-4 w-4 text-amber-400 mx-auto mb-1" />
+                            <strong>85%</strong>
+                            <small>INTENSITY</small>
+                          </div>
+                        </div>
+
+                        <div className="workout-next-card">
+                          <span className="next-tag">NEXT SET (IN 15S):</span>
+                          <h4>Kettlebell Goblet Squats • 3 × 12 Reps</h4>
+                        </div>
+
+                        <button 
+                          className={`workout-control-btn ${workoutPlaying ? 'playing' : ''}`}
+                          onClick={() => setWorkoutPlaying(!workoutPlaying)}
+                        >
+                          {workoutPlaying ? (
+                            <>
+                              <Pause className="h-5 w-5 mr-2" />
+                              Pause Interval
+                            </>
+                          ) : (
+                            <>
+                              <Play className="h-5 w-5 mr-2" />
+                              Start Interval
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    )}
+
+                    {/* SCREEN 3: NUTRITION */}
+                    {phoneScreen === 'nutrition' && (
+                      <div className="sim-screen-view">
+                        <h2 className="screen-main-heading">Macro Targets</h2>
+                        
+                        <div className="macro-breakdown-card">
+                          <div className="macro-col">
+                            <span className="macro-label">Protein</span>
+                            <strong className="macro-val text-red-400">142g</strong>
+                            <small>/ 160g</small>
+                            <div className="macro-bar"><div style={{ width: '88%', background: '#ef4444' }}></div></div>
+                          </div>
+                          <div className="macro-col">
+                            <span className="macro-label">Carbs</span>
+                            <strong className="macro-val text-amber-400">185g</strong>
+                            <small>/ 220g</small>
+                            <div className="macro-bar"><div style={{ width: '84%', background: '#f59e0b' }}></div></div>
+                          </div>
+                          <div className="macro-col">
+                            <span className="macro-label">Fats</span>
+                            <strong className="macro-val text-cyan-400">54g</strong>
+                            <small>/ 65g</small>
+                            <div className="macro-bar"><div style={{ width: '83%', background: '#06b6d4' }}></div></div>
+                          </div>
+                        </div>
+
+                        <h3 className="phone-subhead">Logged Meals Today</h3>
+                        <div className="meal-log-list">
+                          {[
+                            { name: 'Oatmeal with Blueberries & Whey', cal: '480 kcal', time: '8:15 AM' },
+                            { name: 'Grilled Chicken & Quinoa Bowl', cal: '620 kcal', time: '1:30 PM' },
+                            { name: 'Greek Yogurt & Almond Snack', cal: '240 kcal', time: '4:45 PM' }
+                          ].map((meal, i) => (
+                            <div key={i} className="phone-meal-item">
+                              <div>
+                                <strong>{meal.name}</strong>
+                                <span>{meal.time}</span>
+                              </div>
+                              <span className="meal-cal-pill">{meal.cal}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* SCREEN 4: SOCIAL */}
+                    {phoneScreen === 'social' && (
+                      <div className="sim-screen-view">
+                        <div className="social-challenge-banner">
+                          <Trophy className="h-6 w-6 text-amber-400" />
+                          <div>
+                            <h4>March 100k Challenge</h4>
+                            <p>Global Club Ranking: Top 5%</p>
+                          </div>
+                        </div>
+
+                        <h3 className="phone-subhead">Leaderboard (This Week)</h3>
+                        <div className="leaderboard-list">
+                          {[
+                            { rank: '1', name: 'Marcus Chen', steps: '94,210', badge: '🥇' },
+                            { rank: '2', name: 'Alex Rivera (You)', steps: '88,450', badge: '🥈', isUser: true },
+                            { rank: '3', name: 'Emma Watson', steps: '82,190', badge: '🥉' },
+                            { rank: '4', name: 'David Kim', steps: '79,800', badge: '' },
+                            { rank: '5', name: 'Sophia Patel', steps: '76,340', badge: '' }
+                          ].map(item => (
+                            <div key={item.rank} className={`leaderboard-item ${item.isUser ? 'highlight' : ''}`}>
+                              <span className="lb-rank">{item.badge || item.rank}</span>
+                              <div className="lb-name">
+                                <strong>{item.name}</strong>
+                                <span>{item.steps} steps</span>
+                              </div>
+                              <Heart className="h-4 w-4 text-pink-500 fill-pink-500 ml-auto" />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                  </div>
+
+                  {/* Home Indicator */}
+                  <div className="iphone-home-indicator"></div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 2: COLOR TOKENS */}
+          {activeTab === 'colors' && (
+            <div className="system-tab-content">
+              <div className="tab-header-row">
+                <div>
+                  <h2 className="tab-heading">Color Tokens & Accessibility Hierarchy</h2>
+                  <p className="tab-sub">Click any color card to copy the hex code directly to your clipboard:</p>
+                </div>
+                {copiedHex && (
+                  <div className="copied-pill">
+                    <Check className="h-3.5 w-3.5" />
+                    <span>Copied {copiedHex}!</span>
+                  </div>
+                )}
+              </div>
+
+              <h3 className="color-group-title">Brand Accents & High-Intensity Tokens</h3>
+              <div className="color-swatches-grid">
+                {colorPalette.brand.map(col => (
+                  <div 
+                    key={col.hex} 
+                    className="swatch-card"
+                    onClick={() => copyToClipboard(col.hex)}
+                  >
+                    <div className="swatch-color-box" style={{ backgroundColor: col.hex }}>
+                      <Copy className="h-4 w-4 swatch-copy-icon" />
+                    </div>
+                    <div className="swatch-meta">
+                      <strong>{col.name}</strong>
+                      <code>{col.hex}</code>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <h3 className="color-group-title mt-8">Dark Mode Surfaces & Neutral Tokens</h3>
+              <div className="color-swatches-grid">
+                {colorPalette.neutrals.map(col => (
+                  <div 
+                    key={col.hex} 
+                    className="swatch-card"
+                    onClick={() => copyToClipboard(col.hex)}
+                  >
+                    <div className="swatch-color-box" style={{ backgroundColor: col.hex }}>
+                      <Copy className="h-4 w-4 swatch-copy-icon" />
+                    </div>
+                    <div className="swatch-meta">
+                      <strong>{col.name}</strong>
+                      <code>{col.hex}</code>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* TAB 3: TYPOGRAPHY */}
+          {activeTab === 'typography' && (
+            <div className="system-tab-content">
+              <h2 className="tab-heading">Modular Typography System</h2>
+              <p className="tab-sub">Type custom text below to see live scale rendering:</p>
+
+              <div className="type-test-input-box">
+                <label>Interactive Preview Phrase:</label>
+                <input 
+                  type="text" 
+                  value={customSampleText}
+                  onChange={(e) => setCustomSampleText(e.target.value)}
+                  className="type-input"
+                />
+              </div>
+
+              <div className="type-scale-table">
+                {typographyScale.map((t, idx) => (
+                  <div key={idx} className="type-row">
+                    <div className="type-meta-col">
+                      <strong>{t.level}</strong>
+                      <span>{t.size} • {t.weight}</span>
+                      <small>{t.useCase}</small>
+                    </div>
+                    <div className="type-preview-col" style={{ fontSize: t.size }}>
+                      {customSampleText}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* TAB 4: COMPONENTS */}
+          {activeTab === 'components' && (
+            <div className="system-tab-content">
+              <h2 className="tab-heading">Interactive Atomic Components</h2>
+              <p className="tab-sub">Explore production ready micro-interactions built with Tailwind & React:</p>
+
+              <div className="components-interactive-grid">
+                {/* Buttons Sandbox */}
+                <div className="component-box">
+                  <h4>Button Variants</h4>
+                  <div className="comp-row">
+                    <button className="fit-btn fit-btn-primary">Primary Pill</button>
+                    <button className="fit-btn fit-btn-secondary">Secondary Dark</button>
+                    <button className="fit-btn fit-btn-outline">Outline Stroke</button>
+                  </div>
+                </div>
+
+                {/* Segmented Controls */}
+                <div className="component-box">
+                  <h4>Segmented Control</h4>
+                  <div className="fit-segmented">
+                    {['Day', 'Week', 'Month', 'Year'].map(seg => (
+                      <button 
+                        key={seg} 
+                        className={`seg-btn ${activeSegment === seg ? 'active' : ''}`}
+                        onClick={() => setActiveSegment(seg)}
+                      >
+                        {seg}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Badge Chips */}
+                <div className="component-box">
+                  <h4>Metric Badges</h4>
+                  <div className="comp-row">
+                    <span className="fit-badge badge-red">
+                      <Flame className="h-3 w-3 mr-1" />
+                      HIIT Mode
+                    </span>
+                    <span className="fit-badge badge-green">
+                      <Check className="h-3 w-3 mr-1" />
+                      Target Achieved
+                    </span>
+                    <span className="fit-badge badge-cyan">
+                      <Heart className="h-3 w-3 mr-1" />
+                      142 BPM
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+        </div>
+      </main>
+
+      {/* Asset Exporter CTA */}
+      <footer className="system-footer-banner">
+        <div className="system-container footer-banner-inner">
+          <div>
+            <h3 className="footer-title">Ready to implement in React Native or iOS?</h3>
+            <p className="footer-sub">Download complete token definition file (.json) and Figma UI Kit.</p>
+          </div>
+          <button className="download-kit-btn" onClick={handleDownloadFigma}>
+            <Download className="h-4 w-4 mr-2" />
+            <span>{downloadSuccess ? 'Design Tokens Saved!' : 'Export Tokens (.JSON)'}</span>
+          </button>
+        </div>
+      </footer>
+    </div>
+  );
+}

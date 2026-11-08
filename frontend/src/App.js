@@ -126,9 +126,11 @@ function AppContent() {
 
           {/* Mobile Design System Demo */}
           <Route path="/demo/mobile-design" element={<MobileDesignHome />} />
+          <Route path="/demo/fitness-app" element={<MobileDesignHome />} />
 
           {/* Restaurant Booking Demo */}
           <Route path="/demo/restaurant-booking" element={<RestaurantBookingHome />} />
+          <Route path="/demo/restaurant" element={<RestaurantBookingHome />} />
 
           {/* Hospitality Demo */}
           <Route path="/demo/hospitality" element={<HospitalityHome />} />
