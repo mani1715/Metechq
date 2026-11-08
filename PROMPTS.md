@@ -2066,3 +2066,9 @@ Real Estate Listing Portal -> /demo/real-estate
 EduLearn - Educational LMS Platform -> /demo/lms
 in these demos may be there are many issues and not at all looking perfectly so please redesign all of them with a perfect ui and ux in a perfect way
 ```
+
+### C40 - Debug and harden setup_iva.py in IVA-main
+
+```text
+debug setup_iva.py
+```
