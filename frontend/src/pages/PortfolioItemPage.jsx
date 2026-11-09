@@ -271,6 +271,8 @@ const PortfolioItemPage = () => {
                 {project.shortDesc || project.description}
               </p>
 
+              <Link className="project-credit project-detail-credit" to="/about">Powered by METECHQ ↗</Link>
+              {project.liveLink?.startsWith('/demo/') && <p className="project-concept-note">Interactive concept by METECHQ. Sample content and simulated workflows demonstrate the interface; this is not a live client service.</p>}
               {/* Tech Stack Badges */}
               <div className="project-hero-tech-badges">
                 {project.technologies.slice(0, 5).map((tech, idx) => (

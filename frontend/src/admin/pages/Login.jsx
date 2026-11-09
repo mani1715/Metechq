@@ -1,20 +1,18 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock, User } from 'lucide-react';
-import axios from 'axios';
-import { getBackendURL } from '../../lib/utils';
+import { useAdmin } from '../context/AdminContext';
 import '../admin.css';
 
-const BACKEND_URL = getBackendURL();
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const { login } = useAdmin();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,25 +20,13 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        `${BACKEND_URL}/api/auth/login`,   // ✅ FIXED URL
-        {
-          username,
-          password
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }
-      );
-
-      // ✅ Store JWT token
-      localStorage.setItem('admin_token', response.data.token);
-      localStorage.setItem('admin_user', JSON.stringify(response.data.admin));
-
-      // ✅ Redirect to admin dashboard
-      window.location.href = '/admin';
+      const result = await login(username, password);
+      if (!result.success) {
+        setError(result.error || 'Invalid username or password');
+        setLoading(false);
+        return;
+      }
+      navigate('/admin', { replace: true });
 
     } catch (err) {
       console.error('Login error:', err);
@@ -102,10 +88,12 @@ const Login = () => {
 
         <form onSubmit={handleSubmit}>
           <div className="admin-form-group">
-            <label className="admin-form-label">
+            <label htmlFor="admin-username" className="admin-form-label">
               <User size={16} /> Username
             </label>
             <input
+              id="admin-username"
+              autoComplete="username"
               type="text"
               className="admin-form-input"
               value={username}
@@ -115,10 +103,12 @@ const Login = () => {
           </div>
 
           <div className="admin-form-group">
-            <label className="admin-form-label">
+            <label htmlFor="admin-password" className="admin-form-label">
               <Lock size={16} /> Password
             </label>
             <input
+              id="admin-password"
+              autoComplete="current-password"
               type="password"
               className="admin-form-input"
               value={password}

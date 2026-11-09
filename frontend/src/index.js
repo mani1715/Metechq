@@ -5,6 +5,8 @@ import './pages/pages.css';
 import './mobile-responsive-fixes.css';
 import App from './App';
 import './studio-theme.css';
+import './pages/ContactStudio.css';
+import './pages/PortfolioStudio.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

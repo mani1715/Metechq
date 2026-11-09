@@ -400,3 +400,29 @@ def test_hybrid_rate_limiter_configured_and_failure_behavior(monkeypatch):
     assert limiter_redis.status == "degraded_in_memory_fallback"
     assert "Connection closed" in limiter_redis.last_error
     assert allowed is True  # First in-memory attempt allowed
+
+
+def test_contact_enquiry_roundtrip_preserves_brief(api_context):
+    """Public brief persists, appears for admins, and stays private to visitors."""
+    base, admin, _, _ = api_context
+    payload = {'name': 'Enquiry regression', 'email': 'enquiry@example.com',
+               'phone': '+91 9000000000', 'service': 'website', 'budget': 'discuss',
+               'consent': True, 'message': 'A responsive website for our local business.'}
+    response = requests.post(base + '/contacts/', json=payload, timeout=15)
+    assert response.status_code == 200, response.text
+    contact_id = response.json()['id']
+    try:
+        stored = requests.get(base + '/contacts/' + contact_id, headers=admin, timeout=15)
+        assert stored.status_code == 200
+        for field, value in payload.items():
+            assert stored.json()[field] == value
+        listing = requests.get(base + '/contacts/admin/all', headers=admin, timeout=15)
+        assert any(item['id'] == contact_id for item in listing.json())
+        assert requests.get(base + '/contacts/' + contact_id, timeout=15).status_code == 401
+        assert requests.get(base + '/contacts/admin/all', timeout=15).status_code == 401
+        updated = requests.patch(base + '/contacts/' + contact_id + '/read', headers=admin,
+                                 json={'read': True}, timeout=15)
+        assert updated.json()['read'] is True
+        assert updated.json()['budget'] == payload['budget']
+    finally:
+        requests.delete(base + '/contacts/' + contact_id, headers=admin, timeout=15)

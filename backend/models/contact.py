@@ -8,6 +8,8 @@ class ContactSubmission(BaseModel):
     email: EmailStr
     phone: Optional[str] = None
     service: Optional[str] = None
+    budget: Optional[str] = None
+    consent: Optional[bool] = None
     message: str
     read: bool = False
     created_at: datetime = Field(default_factory=datetime.utcnow)

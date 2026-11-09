@@ -105,10 +105,11 @@ export default function DemoTopNav({ currentDemoTitle, portfolioSlug }) {
           {/* Live Indicator Badge */}
           <div className="demo-live-pill">
             <span className="live-dot-pulse"></span>
-            <span className="live-text">Live Demo</span>
+            <span className="live-text">Interactive concept</span>
           </div>
 
           <span className="demo-name-badge">{activeDemo.name}</span>
+          <Link to="/about" className="demo-back-btn">Powered by METECHQ ↗</Link>
         </div>
 
         {/* Center/Right: Demo Switcher Dropdown */}

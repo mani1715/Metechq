@@ -385,6 +385,8 @@ const ContactManager = () => {
                       </a>
                     </div>
                   )}
+                  {selectedContact.budget && <div><label className="text-sm font-medium text-gray-500">Budget</label><p>{selectedContact.budget}</p></div>}
+                  {selectedContact.consent != null && <div><label className="text-sm font-medium text-gray-500">Permission to contact</label><p>{selectedContact.consent ? 'Given with enquiry' : 'Not given'}</p></div>}
                   {selectedContact.service && (
                     <div>
                       <div style={{ fontSize: '13px', color: '#6B7280', marginBottom: '4px' }}>Service Interested</div>

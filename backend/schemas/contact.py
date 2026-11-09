@@ -7,6 +7,8 @@ class ContactCreate(BaseModel):
     email: EmailStr
     phone: Optional[str] = None
     service: Optional[str] = None
+    budget: Optional[str] = None
+    consent: Optional[bool] = None
     message: str
 
 class ContactUpdate(BaseModel):
@@ -18,6 +20,8 @@ class ContactResponse(BaseModel):
     email: EmailStr
     phone: Optional[str]
     service: Optional[str]
+    budget: Optional[str] = None
+    consent: Optional[bool] = None
     message: str
     read: bool
     created_at: datetime

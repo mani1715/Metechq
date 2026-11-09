@@ -4,7 +4,7 @@ import {
   ArrowRight, Cloud, Shield, Database, Smartphone, 
   Cpu, Users, Briefcase, Globe, Star, Award, 
   CheckCircle2, TrendingUp, Sparkles, Send, Check,
-  BarChart, Layers, Lock, Zap
+  BarChart, Layers, Lock, Zap, Building2
 } from 'lucide-react';
 import CorporateNav from './CorporateNav';
 import './corporate.css';
@@ -322,10 +322,10 @@ const CorporateHome = () => {
                   <span className="case-date-tag">Completed</span>
                 </div>
                 <h3 className="case-card-title">{study.title}</h3>
-                <p className="case-card-desc">{study.description}</p>
+                <p className="case-card-desc">{study.description || `${study.challenge}. ${study.solution}.`}</p>
                 
                 <div className="case-results-list">
-                  {(study.results || []).map((res, rIdx) => (
+                  {(Array.isArray(study.results) ? study.results : study.results ? [study.results] : []).map((res, rIdx) => (
                     <div key={rIdx} className="case-result-badge">
                       <TrendingUp size={14} className="text-cyan-400" />
                       <span>{res}</span>
@@ -372,13 +372,12 @@ const CorporateHome = () => {
                   <div className="success-icon-ring">
                     <Check size={32} className="text-emerald-400" />
                   </div>
-                  <h3>Briefing Request Received</h3>
+                  <h3>Demo request complete</h3>
                   <p>
-                    Thank you, <strong>{formData.name}</strong>. A Managing Director from our 
-                    Enterprise Practice will reach out to <strong>{formData.email}</strong> within 4 business hours.
+                    This is a simulated consultation form; no request has been sent. To discuss a real project, use METECHQ’s contact page.
                   </p>
                   <button className="corp-btn-glass" onClick={() => setSubmitted(false)}>
-                    Submit Another Request
+                    Try another demo request
                   </button>
                 </div>
               ) : (

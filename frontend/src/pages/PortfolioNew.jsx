@@ -77,7 +77,7 @@ const Portfolio = () => {
         }
         setLoadError(false);
         const data = await projectService.getPublicProjects();
-        if (isMounted && Array.isArray(data) && data.length > 0) {
+        if (isMounted && Array.isArray(data)) {
           const transformedProjects = data.map(transformProject);
           setPortfolioProjects(transformedProjects);
         }
@@ -274,13 +274,12 @@ const Portfolio = () => {
             </div>
             
             <h1 className="portfolio-hero-title" data-admin-editable="portfolio-title">
-              Our Portfolio
+              Built with purpose.
+              Designed to be used.
             </h1>
             
             <p className="portfolio-hero-description" data-admin-editable="portfolio-description">
-              Explore our collection of successful projects spanning e-commerce platforms, 
-              web applications, dashboards, and innovative UI/UX designs. Each project showcases 
-              our commitment to quality, innovation, and client satisfaction.
+              Explore deployed websites and interactive concepts across commerce, services and digital products. Open a project to see its scope, interface and implementation. Demos illustrate an experience; they are not claims of client results.
             </p>
           </div>
         </section>

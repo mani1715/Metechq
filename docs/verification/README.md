@@ -20,3 +20,7 @@
 Backend execution runs against an isolated, ephemeral database (`metechq_evaluation_test_*`) with temporary upload directories created and cleanly dropped on exit by `scripts/run_evaluation_tests.py`. The frontend uses `frontend/yarn.lock` as the single authoritative lockfile matching CI (`yarn install --frozen-lockfile`).
 
 Reproduction commands and operational boundary notes are in `../../THREATS.md` and `../../SECURITY_SETUP.md`. Server diagnostic logs are never exposed or published. Hosted TLS/CSP verification, multi-worker Redis rate limiting, and HttpOnly session cookies are documented as staged production roadmap items.
+
+## Showcase revision — 9 November 2026
+
+See [SHOWCASE_REVIEW.md](SHOWCASE_REVIEW.md) for the local build, tests and browser scope for the contact/portfolio refresh. Historical reports in this directory belong to their recorded revisions.

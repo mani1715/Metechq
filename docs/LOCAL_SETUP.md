@@ -19,7 +19,7 @@ Ensure the following tools are installed on your machine before proceeding:
 | **Git** | 2.x | Latest | `git --version` |
 
 > [!NOTE]
-> **Test Environment Isolation:** You do **not** need to manually populate a database to run tests. The automated test runner (`python scripts/run_evaluation_tests.py`) automatically provisions an isolated, disposable database (`metechq_evaluation_test_*`), runs all 121 tests, and cleanly drops the database on exit. Only a running MongoDB server is required.
+> **Test Environment Isolation:** You do **not** need to manually populate a database to run tests. The automated test runner (`python scripts/run_evaluation_tests.py`) automatically provisions an isolated, disposable database (`metechq_evaluation_test_*`), runs all 122 checks, and cleanly drops the database on exit. Only a running MongoDB server is required.
 
 ---
 
@@ -66,7 +66,7 @@ From the repository root directory (`MSPN DEV\responsive-portfolio-website-main`
 
 ```powershell
 # 1. Ensure you are in the repository root
-cd "C:\my projects\MSPN DEV\responsive-portfolio-website-main"
+cd "C:\my projects\Metechq"
 
 # 2. Create Python 3.10 virtual environment
 py -3.10 -m venv .venv
@@ -81,7 +81,7 @@ python -m pip install -r backend/requirements.txt -r backend/requirements-dev.tx
 # 5. Configure local backend environment from template
 Copy-Item backend/.env.example backend/.env
 
-# 6. Run the full isolated evaluation test suite (validates 121 tests against ephemeral DB)
+# 6. Run the full isolated evaluation test suite (validates 122 checks against ephemeral DB)
 python scripts/run_evaluation_tests.py
 
 # 7. Start the FastAPI backend server (from the backend directory to resolve bare imports)
@@ -99,7 +99,7 @@ Open a second PowerShell terminal:
 
 ```powershell
 # 1. Navigate to the frontend directory
-cd "C:\my projects\MSPN DEV\responsive-portfolio-website-main\frontend"
+cd "C:\my projects\Metechq\frontend"
 
 # 2. Configure local frontend environment from template
 Copy-Item .env.example .env
@@ -107,7 +107,7 @@ Copy-Item .env.example .env
 # 3. Install frontend dependencies from the authoritative frozen lockfile
 yarn install --frozen-lockfile
 
-# 4. Run the frontend regression tests (17 passed)
+# 4. Run the frontend regression tests (20 passed)
 yarn test --watchAll=false --runInBand
 
 # 5. Start the React development server
@@ -143,7 +143,7 @@ python -m pip install -r backend/requirements.txt -r backend/requirements-dev.tx
 # 5. Configure local backend environment from template
 cp backend/.env.example backend/.env
 
-# 6. Run the full isolated evaluation test suite (validates 121 tests against ephemeral DB)
+# 6. Run the full isolated evaluation test suite (validates 122 checks against ephemeral DB)
 python scripts/run_evaluation_tests.py
 
 # 7. Start the FastAPI backend server (from the backend directory)
@@ -219,7 +219,7 @@ Once both backend and frontend servers are running, access the following URLs in
 | **Client Portal Sign-In** | [http://localhost:3003/client/login](http://localhost:3003/client/login) | Tenant-isolated client project workspace login. |
 | **Admin Panel Sign-In** | [http://localhost:3003/admin/login](http://localhost:3003/admin/login) | Administrative suite and Content Editor. |
 | **Admin Security Center** | [http://localhost:3003/admin/security](http://localhost:3003/admin/security) | Real-time audit log hash-chain verification and dependency monitoring. |
-| **Backend API Health Check** | [http://127.0.0.1:8002/api/](http://127.0.0.1:8002/api/) | Returns JSON status `{ "status": "healthy" }`. |
+| **Backend API Health Check** | [http://127.0.0.1:8002/api/](http://127.0.0.1:8002/api/) | Returns `{ "message": "METECHQ API is running" }`. |
 | **Interactive Swagger Docs** | [http://127.0.0.1:8002/docs](http://127.0.0.1:8002/docs) | Interactive OpenAPI documentation for all API routes. |
 
 ---

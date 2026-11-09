@@ -1,0 +1,124 @@
+{
+  "results": [
+    {
+      "route": "/",
+      "title": "Build Your Dream Website",
+      "overflow": false
+    },
+    {
+      "route": "/about",
+      "title": "About METECHQ",
+      "overflow": false
+    },
+    {
+      "route": "/services",
+      "title": "Our Services",
+      "overflow": false
+    },
+    {
+      "route": "/portfolio",
+      "title": "Built with purpose. Designed to be used.",
+      "overflow": false
+    },
+    {
+      "route": "/contact",
+      "title": "Let’s build your next chapter.",
+      "overflow": false
+    },
+    {
+      "route": "/blogs",
+      "title": "Blog & Insights",
+      "overflow": false
+    },
+    {
+      "route": "/security",
+      "title": "Security & Privacy.Evidence-based trust.",
+      "overflow": false
+    },
+    {
+      "route": "/client/login",
+      "title": "Great things.Built together.",
+      "overflow": false
+    },
+    {
+      "route": "/demo/ecommerce",
+      "title": "Effortless Elegance, Designed to Inspire.",
+      "overflow": false
+    },
+    {
+      "route": "/demo/corporate",
+      "title": "Engineering the Digital Backbone of Global Industry.",
+      "overflow": false
+    },
+    {
+      "route": "/demo/analytics",
+      "title": "Production Telemetry & Analytics",
+      "overflow": false
+    },
+    {
+      "route": "/demo/mobile-design",
+      "title": "Crafted for Velocity, Engineered for Fitness.",
+      "overflow": false
+    },
+    {
+      "route": "/demo/restaurant-booking",
+      "title": "Reserve Unforgettable Culinary Experiences.",
+      "overflow": false
+    },
+    {
+      "route": "/demo/hospitality",
+      "title": "Find Your Perfect Stay",
+      "overflow": false
+    },
+    {
+      "route": "/demo/saas-landing",
+      "title": "Project Management Built for Engineering Speed.",
+      "overflow": false
+    },
+    {
+      "route": "/demo/social-media",
+      "title": "Social Media Management",
+      "overflow": false
+    },
+    {
+      "route": "/demo/lms",
+      "title": "Master High-Impact Skills, Accelerate Your Future.",
+      "overflow": false
+    },
+    {
+      "route": "/demo/real-estate",
+      "title": "Exceptional Properties, Unrivaled Living.",
+      "overflow": false
+    },
+    {
+      "portfolio": "Search, project detail and studio attribution navigation verified"
+    },
+    {
+      "contact": "Browser submission, API storage and admin UI listing verified"
+    },
+    {
+      "route": "/",
+      "mobile": true,
+      "overflow": false
+    },
+    {
+      "route": "/contact",
+      "mobile": true,
+      "overflow": false
+    },
+    {
+      "route": "/portfolio",
+      "mobile": true,
+      "overflow": false
+    },
+    {
+      "route": "/about",
+      "mobile": true,
+      "overflow": false
+    },
+    {
+      "contactFailure": "Network failure keeps draft and shows error; no success state"
+    }
+  ],
+  "errors": []
+}

@@ -57,9 +57,9 @@ const EcommerceCheckout = () => {
         <div className="container-ecom">
           <div className="order-success">
             <CheckCircle2 className="success-icon" />
-            <h1 className="success-title">Order Placed Successfully!</h1>
+            <h1 className="success-title">Demo checkout complete</h1>
             <p className="success-message">
-              Thank you for your purchase. Your order has been confirmed and will be shipped soon.
+              This is a simulated checkout. No payment was taken and no order will be shipped.
             </p>
             <div className="success-details">
               <p><strong>Order Total:</strong> ${total.toFixed(2)}</p>

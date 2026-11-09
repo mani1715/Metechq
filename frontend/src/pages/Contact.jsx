@@ -42,7 +42,17 @@ const Contact = () => {
     try {
       setLoading(true);
       const data = await contactPageService.getContactPage();
-      setContactConfig(data);
+      // Refresh legacy default copy while preserving administrator-written content.
+      const copyUpdates = {
+        'Get in Touch': 'Let’s build your next chapter.',
+        "Let's discuss your project and bring your vision to life": 'A clear brief. A thoughtful solution. A website that works for you.',
+        "Join 35+ satisfied clients who have transformed their businesses with our solutions": 'Tell us what your business needs. We’ll help you define the right next step.'
+      };
+      setContactConfig({ ...data,
+        hero: { ...data.hero, title: copyUpdates[data.hero.title] || data.hero.title,
+          subtitle: copyUpdates[data.hero.subtitle] || data.hero.subtitle },
+        cta: { ...data.cta, description: copyUpdates[data.cta.description] || data.cta.description }
+      });
     } catch (error) {
       console.error('Error fetching contact page content:', error);
 
@@ -50,7 +60,7 @@ const Contact = () => {
       const fallbackContent = getDefaultContactContent();
       setContactConfig(fallbackContent);
 
-      toast.error('Using default contact page content');
+
     } finally {
       setLoading(false);
     }
@@ -61,8 +71,8 @@ const Contact = () => {
     return {
       "id": "fallback-" + Date.now(),
       "hero": {
-        "title": "Get in Touch",
-        "subtitle": "Let's discuss your project and bring your vision to life",
+        "title": "Let’s build your next chapter.",
+        "subtitle": "A clear brief. A thoughtful solution. A website that works for you.",
         "description": "We're here to help you transform your ideas into reality. Reach out and let's start building something amazing together.",
         "breadcrumbs": [
           { label: 'Home', path: '/' },
@@ -128,7 +138,7 @@ const Contact = () => {
             "rows": 6
           },
           "consent": {
-            "label": "I agree to the privacy policy and terms of service",
+            "label": "I agree to be contacted about this enquiry. See Security & Privacy for how information is handled.",
             "required": true,
             "type": "checkbox"
           }
@@ -157,8 +167,8 @@ const Contact = () => {
             "id": 1,
             "icon": "Mail",
             "label": "Email Address",
-            "value": "contact@metechq.com",
-            "href": "mailto:contact@metechq.com",
+            "value": "ettelamaneesh@gmail.com",
+            "href": "mailto:ettelamaneesh@gmail.com",
             "description": "Send us an email anytime"
           },
           {
@@ -229,7 +239,7 @@ const Contact = () => {
       "cta": {
         "title": "Ready to Start Your Project?",
         "subtitle": "Let's turn your vision into reality",
-        "description": "Join 35+ satisfied clients who have transformed their businesses with our solutions",
+        "description": "Tell us what your business needs. We’ll help you define the right next step.",
         "primaryButton": {
           "text": "Request a Quote",
           "link": "#contact-form"
@@ -294,6 +304,7 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (isSubmitting || isSuccess) return;
     if (!validateForm()) {
       toast.error(contactConfig.form.messages.error.title, {
         description: 'Please fix the errors in the form'
@@ -318,10 +329,12 @@ const Contact = () => {
 
       // Submit to backend API
       await contactService.submitContact({
-        name: formData.fullName,
-        email: formData.email,
+        name: formData.fullName.trim(),
+        email: formData.email.trim(),
         phone: formData.phone,
         service: formData.service,
+        budget: formData.budget,
+        consent: formData.consent,
         message: finalMessage
       });
 
@@ -334,19 +347,6 @@ const Contact = () => {
         description: contactConfig.form.messages.success.description
       });
 
-      // Reset form after 2 seconds
-      setTimeout(() => {
-        setFormData({
-          fullName: '',
-          email: '',
-          phone: '',
-          service: '',
-          budget: '',
-          message: '',
-          consent: false
-        });
-        setIsSuccess(false);
-      }, 2000);
     } catch (error) {
       toast.error('Submission Failed', {
         description: 'Failed to submit contact form. Please try again.'
@@ -430,7 +430,7 @@ const Contact = () => {
         <div className="contact-content-wrapper">
 
           {/* Two Column Layout: Form (Left) + Business Hours (Right) */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
+          <div className="enquiry-layout">
 
             {/* Contact Form - Left Side (50% width) */}
             <div className="lg:col-span-1" id="contact-form">
@@ -442,7 +442,8 @@ const Contact = () => {
                   <p className="form-subtitle">{contactConfig.form.subtitle}</p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="contact-form-premium" noValidate>
+                {isSuccess && <div className="enquiry-success" role="status"><CheckCircle size={24}/><h3>Your enquiry is with us.</h3><p>Thank you, {formData.fullName}. We’ll reply to {formData.email} about your project.</p><button type="button" onClick={() => { setIsSuccess(false); setFormData({ fullName: '', email: '', phone: '', service: '', budget: '', message: '', consent: false }); }}>Send another enquiry</button></div>}
+                {!isSuccess && <form onSubmit={handleSubmit} className="contact-form-premium" noValidate>
                 {/* Full Name */}
                 <div className="form-group">
                   <Label htmlFor="fullName" className="form-label">
@@ -451,6 +452,7 @@ const Contact = () => {
                   <Input
                     id="fullName"
                     name="fullName"
+                    autoComplete="name"
                     type="text"
                     value={formData.fullName}
                     onChange={handleChange}
@@ -476,6 +478,7 @@ const Contact = () => {
                   <Input
                     id="email"
                     name="email"
+                    autoComplete="email"
                     type="email"
                     value={formData.email}
                     onChange={handleChange}
@@ -501,6 +504,7 @@ const Contact = () => {
                   <Input
                     id="phone"
                     name="phone"
+                    autoComplete="tel"
                     type="tel"
                     value={formData.phone}
                     onChange={handleChange}
@@ -601,7 +605,7 @@ const Contact = () => {
                       data-testid="checkbox-consent"
                     />
                     <Label htmlFor="consent" className="checkbox-label">
-                      {contactConfig.form.fields.consent.label}
+                      I agree to be contacted about this enquiry. <Link to="/security">Read Security & Privacy</Link>
                     </Label>
                   </div>
                   {errors.consent && (
@@ -636,14 +640,15 @@ const Contact = () => {
                     </>
                   )}
                 </Button>
-              </form>
+              </form>}
             </Card>
           </div>
 
           {/* Business Hours & Contact Info - Right Side (50% width) */}
           <div className="lg:col-span-1 space-y-4">
             {/* Business Hours Card */}
-            <Card className="business-hours-card sticky top-24" data-testid="business-hours-card">
+            <Card className="business-hours-card" data-testid="business-hours-card">
+              <div className="enquiry-next"><span className="enquiry-eyebrow">THE NEXT STEP</span><h2>Good work starts with a conversation.</h2><p>Share your goals, audience and timeline. We’ll review your brief and discuss scope, approach and a quote before work begins.</p><ol><li><strong>01 · Tell us your idea</strong><span>A new website, a redesign or a product to build.</span></li><li><strong>02 · Shape the scope</strong><span>We’ll clarify priorities, deliverables and timing.</span></li><li><strong>03 · Build with visibility</strong><span>Follow agreed work through your client workspace.</span></li></ol><a href="mailto:ettelamaneesh@gmail.com">ettelamaneesh@gmail.com ↗</a></div>
               <h3 className="business-hours-title">{contactConfig.businessHours.title}</h3>
               <div className="business-hours-list">
                 {contactConfig.businessHours.schedule.map((schedule, index) => (
@@ -670,7 +675,8 @@ const Contact = () => {
                     Phone,
                     Clock,
                     MapPin
-                  }[card.icon];
+                  }[card.icon] || Mail;
+                  if (card.icon === 'Mail') card = { ...card, value: 'ettelamaneesh@gmail.com', href: 'mailto:ettelamaneesh@gmail.com' };
 
                   return (
                     <div key={card.id} className="flex items-start gap-3" data-testid={`contact-info-${card.id}`}>
@@ -700,15 +706,11 @@ const Contact = () => {
         </div>
 
         {/* Booking Section - Added between contact form and pricing calculator */}
-        <div className="my-16">
-          <BookingSection />
-        </div>
+        <details className="enquiry-extra"><summary>Prefer a scheduled conversation?</summary><BookingSection /></details>
 
         {/* Pricing Calculator - At the Bottom (Full Width) */}
         <div className="contact-content-wrapper">
-          <div className="mb-12">
-            <PricingCalculator onEstimateChange={(estimate) => setPriceEstimate(estimate)} />
-          </div>
+          <details className="enquiry-extra"><summary>Explore an indicative project estimate</summary><p>Estimates help start the discussion. Final scope and pricing are agreed together. Calculate before submitting to include the estimate with your enquiry.</p><PricingCalculator onEstimateChange={setPriceEstimate} /></details>
         </div>
       </section>
 
@@ -768,15 +770,6 @@ const Contact = () => {
             </h2>
             <p className="contact-cta-subtitle">{contactConfig.cta.subtitle}</p>
             <p className="contact-cta-description">{contactConfig.cta.description}</p>
-
-            <div className="contact-cta-stats">
-              {contactConfig.cta.stats.map((stat, index) => (
-                <div key={index} className="cta-stat-item">
-                  <div className="stat-value">{stat.value}</div>
-                  <div className="stat-label">{stat.label}</div>
-                </div>
-              ))}
-            </div>
 
             <div className="contact-cta-buttons">
               <a href={contactConfig.cta.primaryButton.link} onClick={scrollToForm}>

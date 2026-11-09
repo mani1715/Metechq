@@ -5,7 +5,7 @@ export const agencyInfo = {
   tagline: 'Crafting Digital Excellence',
   description: 'Full-stack web development agency specializing in custom solutions',
   developer: 'Maneesh',
-  email: 'contact@metechq.com',
+  email: 'ettelamaneesh@gmail.com',
   phone: '+1 (555) 123-4567',
   location: 'Worldwide',
   whatsapp: '+918328284501',
@@ -674,8 +674,8 @@ export const contactConfig = {
         id: 1,
         icon: 'Mail',
         label: 'Email Address',
-        value: 'contact@metechq.com',
-        href: 'mailto:contact@metechq.com',
+        value: 'ettelamaneesh@gmail.com',
+        href: 'mailto:ettelamaneesh@gmail.com',
         description: 'Send us an email anytime'
       },
       {

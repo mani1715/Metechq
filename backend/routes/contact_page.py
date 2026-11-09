@@ -90,8 +90,8 @@ def get_default_contact_content() -> Dict[str, Any]:
     return {
         "id": str(uuid.uuid4()),
         "hero": {
-            "title": "Get in Touch",
-            "subtitle": "Let's discuss your project and bring your vision to life",
+            "title": "Let’s build your next chapter.",
+            "subtitle": "A clear brief. A thoughtful solution. A website that works for you.",
             "description": "We're here to help you transform your ideas into reality. Reach out and let's start building something amazing together."
         },
         "form": {
@@ -182,8 +182,8 @@ def get_default_contact_content() -> Dict[str, Any]:
                     "id": 1,
                     "icon": "Mail",
                     "label": "Email Address",
-                    "value": "contact@metechq.com",
-                    "href": "mailto:contact@metechq.com",
+                    "value": "ettelamaneesh@gmail.com",
+                    "href": "mailto:ettelamaneesh@gmail.com",
                     "description": "Send us an email anytime"
                 },
                 {
@@ -254,7 +254,7 @@ def get_default_contact_content() -> Dict[str, Any]:
         "cta": {
             "title": "Ready to Start Your Project?",
             "subtitle": "Let's turn your vision into reality",
-            "description": "Join 35+ satisfied clients who have transformed their businesses with our solutions",
+            "description": "Tell us what your business needs. We’ll help you define the right next step.",
             "primaryButton": {
                 "text": "Request a Quote",
                 "link": "#contact-form"

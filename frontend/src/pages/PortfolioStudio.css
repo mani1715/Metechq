@@ -1,0 +1,41 @@
+.main-content .portfolio-page-premium { background: #fbf7ef; }
+.main-content .portfolio-page-premium .portfolio-hero-premium { padding: 64px 24px 48px; background: #fbf7ef; min-height: 0; text-align: left; }
+.main-content .portfolio-page-premium .portfolio-hero-background { display: none; }
+.main-content .portfolio-page-premium .portfolio-hero-container { max-width: 1160px; text-align: left; }
+.main-content .portfolio-page-premium .portfolio-hero-title { max-width: 850px; font: 500 clamp(2.6rem, 6vw, 4.8rem)/1.08 Georgia, serif; color: #352a21; background: none; -webkit-text-fill-color: currentColor; letter-spacing: -.04em; }
+.main-content .portfolio-page-premium .portfolio-hero-description { max-width: 720px; margin: 24px 0 0; font-size: 1.05rem; line-height: 1.8; color: #796958; }
+.main-content .portfolio-page-premium .portfolio-content-section { padding: 24px 24px 56px; }
+.main-content .portfolio-page-premium .section-container-premium { max-width: 1160px; padding: 0; }
+.main-content .portfolio-page-premium .portfolio-grid-premium { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; }
+.portfolio-grid-item { min-width: 0; }
+.main-content .portfolio-page-premium .project-card-premium { height: 100%; display: flex; flex-direction: column; border-radius: 14px; background: #fffdfa; border: 1px solid #ded2c0; box-shadow: none; }
+.main-content .portfolio-page-premium .project-card-premium:hover { transform: translateY(-4px); box-shadow: 0 16px 40px #352a2110; }
+.main-content .portfolio-page-premium .project-card-image-wrapper { aspect-ratio: 16 / 10; height: auto; }
+.main-content .portfolio-page-premium .project-card-image { object-position: top; }
+.main-content .portfolio-page-premium .project-card-content { padding: 28px; flex: 1; display: flex; flex-direction: column; }
+.project-kind { font-size: .65rem; font-weight: 700; letter-spacing: .14em; color: #796958; margin-bottom: 12px; }
+.main-content .portfolio-page-premium .project-card-title { font: 500 1.8rem/1.2 Georgia, serif; }
+.main-content .portfolio-page-premium .project-card-description { line-height: 1.75; color: #796958; }
+.main-content .portfolio-page-premium .project-card-footer { margin-top: auto; padding-top: 24px; flex-wrap: wrap; gap: 16px; }
+.main-content .portfolio-page-premium .project-tech-tags { margin-bottom: 24px; }
+.main-content .portfolio-page-premium .project-card-overlay { background: #352a21cc; }
+.project-card-premium:focus-within .project-card-overlay { opacity: 1; }
+.project-credit { display: flex; justify-content: space-between; padding: 15px 28px; border-top: 1px solid #e4d8c8; font-size: .75rem; color: #6e5b49; }
+.project-credit:hover { color: #352a21; text-decoration: underline; }
+.project-detail-credit { display: inline-flex; gap: 24px; margin: 18px 0; border: 1px solid #ded2c0; border-radius: 40px; }
+.project-concept-note { max-width: 680px; margin: 0 auto 24px; color: #796958; line-height: 1.7; }
+@media(max-width: 700px) {
+ .main-content .portfolio-page-premium .portfolio-grid-premium { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+ .main-content .portfolio-page-premium .portfolio-hero-premium { padding: 36px 20px; }
+ .main-content .portfolio-page-premium .portfolio-content-section { padding: 16px 20px 36px; }
+ .main-content .portfolio-page-premium .project-card-content { padding: 24px; }
+}
+.main-content .portfolio-page-premium .portfolio-hero-container { width: 100%; }
+.main-content .portfolio-page-premium .portfolio-breadcrumb { display: flex; width: fit-content; border: 0; background: none; padding: 0; border-radius: 0; }
+.main-content .portfolio-page-premium .breadcrumb-link,
+.main-content .portfolio-page-premium .breadcrumb-separator { color: #796958; }
+.main-content .portfolio-page-premium .portfolio-hero-badge { display: none; }
+.main-content .portfolio-page-premium .filters-categories { justify-content: flex-start; gap: 10px; margin: 20px 0; }
+.main-content .portfolio-page-premium .filter-category-btn { box-shadow: none; border-radius: 6px; padding: 8px 16px; }
+.main-content .portfolio-page-premium .filter-category-btn.active { background: #5b4632; color: white; }
+.main-content .portfolio-page-premium .portfolio-filters-section { margin-bottom: 28px; }

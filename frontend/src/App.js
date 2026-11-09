@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import './App.css';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, Link } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ChatWidget from './components/ChatWidget';
@@ -189,6 +189,7 @@ function AppContent() {
         </Routes>
       </main>
       {!isDemoRoute && !isAdminRoute && !isClientWorkspace && <Footer />}
+      {isDemoRoute && <aside className="demo-maker-credit"><Link to="/about">Powered by METECHQ ↗</Link><span>Design & development · Interactive concept</span><a href="mailto:ettelamaneesh@gmail.com">Contact the studio</a></aside>}
       {showChatWidget && <ChatWidget />}
       <Toaster />
     </>

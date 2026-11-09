@@ -398,6 +398,7 @@ const About = () => {
             {aboutData.cta_title}
           </h2>
 
+          <p><a href="mailto:ettelamaneesh@gmail.com">Project enquiries & support: ettelamaneesh@gmail.com</a></p>
           <p className="cta-description-premium-about" data-admin-editable="cta-description">
             {aboutData.cta_description}
           </p>

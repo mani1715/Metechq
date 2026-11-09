@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ExternalLink, Github, Star, Eye } from 'lucide-react';
 import { Card } from '../ui/card';
-import { Button } from '../ui/button';
+
 import './portfolio-components.css';
 
 
@@ -89,8 +89,9 @@ const ProjectCard = ({ project, onQuickView }) => {
 
       {/* Project Info */}
       <div className="project-card-content">
+        <p className="project-kind">{liveDemoUrl?.startsWith('/demo/') ? 'INTERACTIVE CONCEPT' : 'SELECTED PROJECT'}</p>
         <h3 className="project-card-title">
-          {title}
+          <Link to={`/portfolio/${slug || id}`}>{title}</Link>
         </h3>
 
         <p className="project-card-description">
@@ -123,7 +124,7 @@ const ProjectCard = ({ project, onQuickView }) => {
                 to={liveDemoUrl}
                 className="project-live-external-link"
                 title="View live demo"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '0.875rem', fontWeight: 600, color: '#7C5CFF', textDecoration: 'none' }}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '0.875rem', fontWeight: 600, color: '#79451e', textDecoration: 'none' }}
               >
                 <span>Live Demo</span>
                 <ExternalLink className="h-3.5 w-3.5" />
@@ -135,7 +136,7 @@ const ProjectCard = ({ project, onQuickView }) => {
                 rel="noopener noreferrer"
                 className="project-live-external-link"
                 title="Visit live website"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '0.875rem', fontWeight: 600, color: '#7C5CFF', textDecoration: 'none' }}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '0.875rem', fontWeight: 600, color: '#79451e', textDecoration: 'none' }}
               >
                 <span>Visit Site</span>
                 <ExternalLink className="h-3.5 w-3.5" />
@@ -157,7 +158,7 @@ const ProjectCard = ({ project, onQuickView }) => {
         </div>
       </div>
 
-      <div className="project-card-gradient"></div>
+      <Link className="project-credit" to="/about">Powered by METECHQ <span aria-hidden="true">↗</span></Link>
     </Card>
   );
 };

@@ -2527,3 +2527,12 @@ The guide must cover:
 9. Include exact commands to stop the local processes and database.
 10. Explain that the hosted-header verifier checks the deployed URLs; it is not a local-only test.
 ```
+
+
+## 2026-11-09 — Agency showcase and enquiry flow
+
+User requested a code-grounded professional README, a page/content review, improved Let’s talk alignment, admin persistence of enquiry details, stronger portfolio presentation, and clickable Powered by METECHQ attribution. Support email: ettelamaneesh@gmail.com. The attached brief required truthful evidence, real screenshots, consistent local setup and no push or deployment.
+
+AI-assisted work: traced React/FastAPI/MongoDB flows; updated contact/portfolio presentation; retained budget and consent in enquiries; repaired the admin login endpoint through the existing shared auth service; added regression coverage; captured local browser previews; rewrote README and recorded verification limits. No production data or deployment was changed.
+
+Follow-up: user explicitly requested pushing the completed code to https://github.com/mani1715/Metechq.git.
