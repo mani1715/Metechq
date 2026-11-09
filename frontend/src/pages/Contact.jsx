@@ -46,7 +46,8 @@ const Contact = () => {
       const copyUpdates = {
         'Get in Touch': 'Let’s build your next chapter.',
         "Let's discuss your project and bring your vision to life": 'A clear brief. A thoughtful solution. A website that works for you.',
-        "Join 35+ satisfied clients who have transformed their businesses with our solutions": 'Tell us what your business needs. We’ll help you define the right next step.'
+        "Join 35+ satisfied clients who have transformed their businesses with our solutions": 'Tell us what your business needs. We’ll help you define the right next step.',
+        "Join 10+ satisfied clients who have transformed their businesses with our solutions": 'Tell us what your business needs. We’ll help you define the right next step.'
       };
       setContactConfig({ ...data,
         hero: { ...data.hero, title: copyUpdates[data.hero.title] || data.hero.title,
@@ -249,8 +250,8 @@ const Contact = () => {
           "link": "/portfolio"
         },
         "stats": [
-          {"value": "35+", "label": "Happy Clients"},
-          {"value": "50+", "label": "Projects Delivered"},
+          {"value": "10+", "label": "Happy Clients"},
+          {"value": "10+", "label": "Projects Delivered"},
           {"value": "24hrs", "label": "Response Time"}
         ]
       }

@@ -164,13 +164,13 @@ def get_default_about_content() -> AboutContentResponse:
             {
                 "id": str(uuid.uuid4()),
                 "icon": "Briefcase",
-                "value": "50+",
+                "value": "10+",
                 "label": "Projects Completed"
             },
             {
                 "id": str(uuid.uuid4()),
                 "icon": "Users",
-                "value": "35+",
+                "value": "10+",
                 "label": "Happy Clients"
             },
             {

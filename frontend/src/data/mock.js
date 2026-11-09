@@ -561,8 +561,8 @@ export const testimonials = [
 ];
 
 export const stats = [
-  { label: 'Projects Completed', value: '50+' },
-  { label: 'Happy Clients', value: '35+' },
+  { label: 'Projects Completed', value: '10+' },
+  { label: 'Happy Clients', value: '10+' },
   { label: 'Years Experience', value: '5+' },
   { label: 'Technologies', value: '20+' }
 ];
@@ -749,7 +749,7 @@ export const contactConfig = {
   cta: {
     title: 'Ready to Start Your Project?',
     subtitle: 'Let\'s turn your vision into reality',
-    description: 'Join 35+ satisfied clients who have transformed their businesses with our solutions',
+    description: 'Join 10+ satisfied clients who have transformed their businesses with our solutions',
     primaryButton: {
       text: 'Request a Quote',
       link: '#contact-form'
@@ -759,8 +759,8 @@ export const contactConfig = {
       link: '/portfolio'
     },
     stats: [
-      { value: '35+', label: 'Happy Clients' },
-      { value: '50+', label: 'Projects Delivered' },
+      { value: '10+', label: 'Happy Clients' },
+      { value: '10+', label: 'Projects Delivered' },
       { value: '24hrs', label: 'Response Time' }
     ]
   }
@@ -830,8 +830,8 @@ export const aboutData = {
     image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop'
   },
   achievements: [
-    { id: 1, value: '50+', label: 'Projects Completed', icon: 'Briefcase' },
-    { id: 2, value: '35+', label: 'Happy Clients', icon: 'Users' },
+    { id: 1, value: '10+', label: 'Projects Completed', icon: 'Briefcase' },
+    { id: 2, value: '10+', label: 'Happy Clients', icon: 'Users' },
     { id: 3, value: '3+', label: 'Years Experience', icon: 'TrendingUp' },
     { id: 4, value: '10+', label: 'Technologies', icon: 'Layers' }
   ],

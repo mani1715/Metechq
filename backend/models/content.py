@@ -14,9 +14,9 @@ class WebsiteContent(BaseModel):
     hero_cta2_text: str = "View Our Work"
     
     # Stats Section
-    stat_projects_value: str = "50+"
+    stat_projects_value: str = "10+"
     stat_projects_label: str = "Completed Projects"
-    stat_clients_value: str = "35+"
+    stat_clients_value: str = "10+"
     stat_clients_label: str = "Happy Clients"
     stat_experience_value: str = "3+"
     stat_experience_label: str = "Years Experience"
@@ -62,7 +62,7 @@ class WebsiteContent(BaseModel):
         json_schema_extra = {
             "example": {
                 "hero_headline": "Build Your Dream Website",
-                "stat_projects_value": "50+",
-                "stat_clients_value": "35+"
+                "stat_projects_value": "10+",
+                "stat_clients_value": "10+"
             }
         }

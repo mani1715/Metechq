@@ -73,8 +73,8 @@ const About = () => {
     achievements_badge: "Achievements",
     achievements_title: "Numbers That Speak",
     achievements: [
-      { id: "1", icon: "Briefcase", value: "50+", label: "Projects Completed" },
-      { id: "2", icon: "Users", value: "35+", label: "Happy Clients" },
+      { id: "1", icon: "Briefcase", value: "10+", label: "Projects Completed" },
+      { id: "2", icon: "Users", value: "10+", label: "Happy Clients" },
       { id: "3", icon: "TrendingUp", value: "3+", label: "Years Experience" },
       { id: "4", icon: "Layers", value: "10+", label: "Technologies" },
     ],

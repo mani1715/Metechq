@@ -17,8 +17,8 @@ export const adminData = {
       stats: {
         visible: true,
         items: [
-          { icon: 'Briefcase', value: '50+', label: 'Completed Projects' },
-          { icon: 'Users', value: '35+', label: 'Happy Clients' },
+          { icon: 'Briefcase', value: '10+', label: 'Completed Projects' },
+          { icon: 'Users', value: '10+', label: 'Happy Clients' },
           { icon: 'TrendingUp', value: '3+', label: 'Years Experience' },
           { icon: 'Zap', value: '98%', label: 'Client Satisfaction' }
         ]

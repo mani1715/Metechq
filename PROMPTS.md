@@ -2529,7 +2529,7 @@ The guide must cover:
 ```
 
 
-## 2026-11-09 — Agency showcase and enquiry flow
+### Agency showcase and enquiry flow
 
 User requested a code-grounded professional README, a page/content review, improved Let’s talk alignment, admin persistence of enquiry details, stronger portfolio presentation, and clickable Powered by METECHQ attribution. Support email: ettelamaneesh@gmail.com. The attached brief required truthful evidence, real screenshots, consistent local setup and no push or deployment.
 

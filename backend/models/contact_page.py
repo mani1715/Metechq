@@ -79,7 +79,7 @@ class CTA(BaseModel):
     """CTA section"""
     title: str = "Ready to Start Your Project?"
     subtitle: str = "Let's turn your vision into reality"
-    description: str = "Join 35+ satisfied clients who have transformed their businesses"
+    description: str = "Join 10+ satisfied clients who have transformed their businesses"
     primaryButton: CTAButton
     secondaryButton: CTAButton
     stats: List[CTAStats]

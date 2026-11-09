@@ -264,8 +264,8 @@ def get_default_contact_content() -> Dict[str, Any]:
                 "link": "/portfolio"
             },
             "stats": [
-                {"value": "35+", "label": "Happy Clients"},
-                {"value": "50+", "label": "Projects Delivered"},
+                {"value": "10+", "label": "Happy Clients"},
+                {"value": "10+", "label": "Projects Delivered"},
                 {"value": "24hrs", "label": "Response Time"}
             ]
         }

@@ -242,7 +242,7 @@ Response:
   },
   "stats": {
     "visible": true,
-    "stat1": "50+",
+    "stat1": "10+",
     "stat1Label": "Projects Completed"
   }
 }
