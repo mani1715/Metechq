@@ -3,6 +3,8 @@ import './App.css';
 import { BrowserRouter, Routes, Route, useLocation, Link } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import ScrollReveal from './components/ScrollReveal';
+import DemoTopNav from './demos/common/DemoTopNav';
 import ChatWidget from './components/ChatWidget';
 import Home from './pages/Home';
 import About from './pages/About';
@@ -91,6 +93,8 @@ function AppContent() {
   const location = useLocation();
   useEffect(() => { window.scrollTo(0, 0); }, [location.pathname]);
   const isDemoRoute = location.pathname.startsWith('/demo/');
+  const demoSlug = location.pathname.split('/')[2];
+  const demoFamily = ({ 'fitness-app': 'mobile-design', 'restaurant-booking': 'restaurant', 'saas-landing': 'saas' })[demoSlug] || demoSlug;
   const isAdminRoute = location.pathname.startsWith('/admin');
   const isClientWorkspace = location.pathname === '/client/dashboard';
   const showChatWidget = !isAdminRoute && !isClientWorkspace; // Show chat widget on all pages except admin
@@ -98,7 +102,8 @@ function AppContent() {
   return (
     <>
       {!isDemoRoute && !isAdminRoute && <Navbar />}
-      <main id="main-content" tabIndex={-1} className={isDemoRoute || isAdminRoute ? "" : "main-content"}>
+      <main id="main-content" tabIndex={-1} data-demo-family={isDemoRoute ? demoFamily : undefined} className={isDemoRoute ? "demo-shell" : isAdminRoute ? "" : "main-content"}>
+        {isDemoRoute && <DemoTopNav />}
         <Routes>
           {/* Main Website Routes */}
           <Route path="/" element={<Home />} />
@@ -191,6 +196,7 @@ function AppContent() {
       {!isDemoRoute && !isAdminRoute && !isClientWorkspace && <Footer />}
       {isDemoRoute && <aside className="demo-maker-credit"><Link to="/about">Powered by METECHQ ↗</Link><span>Design & development · Interactive concept</span><a href="mailto:ettelamaneesh@gmail.com">Contact the studio</a></aside>}
       {showChatWidget && <ChatWidget />}
+      <ScrollReveal />
       <Toaster />
     </>
   );

@@ -5,7 +5,6 @@ import {
   Phone, Star, Check, Sparkles, Wine, Coffee, 
   Award, ArrowRight, ShieldCheck, Heart, ChefHat
 } from 'lucide-react';
-import DemoTopNav from '../common/DemoTopNav';
 import './restaurant.css';
 
 const RESTAURANTS = [
@@ -109,7 +108,6 @@ export default function RestaurantBookingHome() {
 
   return (
     <div className="restaurant-demo-page">
-      <DemoTopNav currentDemoTitle="Restaurant Booking Platform" portfolioSlug="restaurant-booking-platform" />
 
       {/* Hero Banner */}
       <section className="restaurant-hero-banner">

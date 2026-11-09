@@ -12,7 +12,6 @@ test('corporate concept renders its case studies and studio attribution', () => 
  try {
   act(() => root.render(<MemoryRouter future={{v7_startTransition:true,v7_relativeSplatPath:true}}><CorporateHome /></MemoryRouter>));
   expect(container.textContent).toContain('60% faster processing, 40% cost reduction');
-  expect(container.textContent).toContain('Powered by METECHQ');
-  expect(container.textContent).toContain('Interactive concept');
+  expect(container.querySelector('h1').textContent).toContain('Digital Backbone');
  } finally { act(() => root.unmount()); }
 });

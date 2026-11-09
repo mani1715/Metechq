@@ -5,7 +5,6 @@ import {
   Users, BarChart3, Layers, Plus, ChevronDown, 
   ChevronUp, CheckCircle2, Play, Star, Rocket
 } from 'lucide-react';
-import DemoTopNav from '../common/DemoTopNav';
 import './saas.css';
 
 const initialTasks = {
@@ -82,7 +81,6 @@ export default function SaasLandingHome() {
 
   return (
     <div className="saas-demo-page">
-      <DemoTopNav currentDemoTitle="TaskFlow Pro - SaaS Landing Page" portfolioSlug="taskflow-pro-saas-landing-page" />
 
       {/* Hero Section */}
       <section className="saas-hero-modern">

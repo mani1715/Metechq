@@ -6,7 +6,6 @@ import {
   Play, Pause, Check, ShieldCheck, GraduationCap, FileCheck
 } from 'lucide-react';
 import { courses, instructors } from '../../data/lmsData';
-import DemoTopNav from '../common/DemoTopNav';
 import './lms.css';
 
 const LMS_CATEGORIES = [
@@ -67,7 +66,6 @@ export default function LmsHome() {
 
   return (
     <div className="lms-demo-page">
-      <DemoTopNav currentDemoTitle="EduLearn - Educational LMS Platform" portfolioSlug="educational-lms-platform" />
 
       {/* Hero Section */}
       <section className="lms-hero-modern">

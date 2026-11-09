@@ -44,7 +44,7 @@ export default function Home() {
     trackPageView('home');
     api.get('/content/').then(r => { if(active) setContent(r.data); }).catch(() => {});
     projectService.getPublicProjects().then(data => {
-      if(active && Array.isArray(data) && data.length > 0) {
+      if(active && Array.isArray(data)) {
         setProjects(data.slice(0, 3));
         setProjectState('ready');
       }

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Building2, ArrowRight, Menu, X, PhoneCall } from 'lucide-react';
 import { corporateInfo } from '../../data/corporateData';
-import DemoTopNav from '../common/DemoTopNav';
 import './corporate.css';
 
 const CorporateNav = ({ onContactClick }) => {
@@ -10,7 +9,6 @@ const CorporateNav = ({ onContactClick }) => {
 
   return (
     <>
-      <DemoTopNav currentDemoTitle="TechVentures Inc. Corporate" portfolioSlug="techventures-corporate-website" />
       
       <nav className="corporate-nav">
         <div className="container">

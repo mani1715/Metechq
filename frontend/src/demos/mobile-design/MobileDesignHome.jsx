@@ -6,7 +6,6 @@ import {
   ChevronRight, Play, Pause, Plus, Check, Trophy, 
   Copy, Sparkles, Moon, Sun, ArrowRight, User
 } from 'lucide-react';
-import DemoTopNav from '../common/DemoTopNav';
 import './mobile-design.css';
 
 const colorPalette = {
@@ -79,7 +78,6 @@ export default function MobileDesignHome() {
 
   return (
     <div className="mobile-design-page">
-      <DemoTopNav currentDemoTitle="FitLife Mobile App Design System" portfolioSlug="fitlife-mobile-app-design-system" />
 
       {/* Hero Header */}
       <header className="mobile-system-hero">

@@ -2,7 +2,6 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ShoppingCart, Store, Search, Heart, Sparkles } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
-import DemoTopNav from '../common/DemoTopNav';
 import './ecommerce.css';
 
 const EcommerceNav = () => {
@@ -12,7 +11,6 @@ const EcommerceNav = () => {
 
   return (
     <>
-      <DemoTopNav currentDemoTitle="StyleHub E-Commerce" portfolioSlug="shopify-ecommerce-platform" />
       
       {/* Promotional Ticker */}
       <div className="ecommerce-promo-ticker">

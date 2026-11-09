@@ -7,7 +7,6 @@ import {
   Map, Grid, Calculator, Eye, Check
 } from 'lucide-react';
 import { properties } from '../../data/realEstateData';
-import DemoTopNav from '../common/DemoTopNav';
 import './real-estate.css';
 
 export default function RealEstateHome() {
@@ -78,7 +77,6 @@ export default function RealEstateHome() {
 
   return (
     <div className="real-estate-demo-page">
-      <DemoTopNav currentDemoTitle="Real Estate Listing Portal" portfolioSlug="real-estate-listing-portal" />
 
       {/* Hero Search Section */}
       <section className="real-estate-hero">

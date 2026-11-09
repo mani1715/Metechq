@@ -5,7 +5,6 @@ import {
   RefreshCw, Download, Play, Pause, Zap, Globe, ShieldCheck, 
   ArrowUpRight, ArrowDownRight, Layers, Sparkles
 } from 'lucide-react';
-import DemoTopNav from '../common/DemoTopNav';
 import './analytics.css';
 
 const TIME_RANGES = ['Today (Realtime)', 'Last 7 Days', 'Last 30 Days', 'Quarter-to-Date'];
@@ -114,7 +113,6 @@ export default function AnalyticsDashboard() {
 
   return (
     <div className="analytics-dark-theme">
-      <DemoTopNav currentDemoTitle="Analytics Dashboard Pro" portfolioSlug="real-time-analytics-dashboard" />
 
       {/* Dashboard Sticky Controls Bar */}
       <div className="analytics-control-bar">

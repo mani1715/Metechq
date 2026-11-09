@@ -1,0 +1,439 @@
+/* Shared demo chrome and narrow-screen geometry. Each demo owns its palette. */
+.demo-shell { width: 100%; min-width: 0; font-family: 'Segoe UI', Arial, sans-serif; }
+.demo-shell *, .demo-shell *::before, .demo-shell *::after { box-sizing: border-box; }
+.demo-shell :is(h1,h2,h3,h4,h5,h6) { font-family: inherit; color: inherit; }
+.demo-shell :is(img,video,canvas) { max-width: 100%; }
+.demo-shell :is(input,select,textarea) { max-width: 100%; }
+.demo-shell :is(button,a,input,select,textarea):focus-visible { outline: 3px solid #818cf8; outline-offset: 3px; }
+.demo-shell [class*="grid"] > *, .demo-shell [class*="-row"] > * { min-width: 0; }
+.demo-shell .demo-switcher-menu { max-width: calc(100vw - 32px); }
+
+/* ==========================================================================
+   MOBILE LAYOUT (390px and below) - ALL 10 DEMOS
+   ========================================================================== */
+@media (max-width: 767px) {
+  .demo-shell { overflow-wrap: break-word; }
+  .demo-shell :is(.container,.container-ecom,.container-lms,.container-re) { width: 100%; max-width: 100%; padding-inline: 20px; }
+  .demo-shell h1 { font-size: clamp(26px, 8vw, 40px) !important; line-height: 1.15 !important; letter-spacing: -.035em; }
+  .demo-shell h2 { font-size: clamp(22px, 6vw, 30px) !important; line-height: 1.25 !important; }
+  .demo-shell h3 { font-size: 18px !important; line-height: 1.3 !important; }
+  .demo-shell :is(input,select,textarea) { min-width: 0; font-size: 16px !important; }
+  .demo-shell [class*="grid"] { grid-template-columns: minmax(0, 1fr) !important; }
+  .demo-shell [class*="-section-grid"] { padding-block: 0 !important; }
+
+  /* Demo Top Nav Chrome */
+  .demo-shell .metechq-demo-topbar { position: relative; z-index: 100; }
+  .demo-shell .metechq-demo-topbar-inner { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; padding: 12px 16px; }
+  .demo-shell .demo-topbar-left { display: flex; gap: 8px; flex-wrap: nowrap; min-width: 0; justify-content: space-between; align-items: center; }
+  .demo-shell .demo-topbar-right { display: flex; justify-content: space-between; gap: 12px; min-width: 0; align-items: center; }
+  .demo-shell .demo-divider, .demo-shell .demo-name-badge { display: none; }
+  .demo-shell .demo-back-btn { padding: 8px 10px; min-height: 36px; font-size: 11px; white-space: nowrap; flex-shrink: 0; }
+  .demo-shell .demo-live-pill { padding: 6px 8px; font-size: 9px; white-space: nowrap; }
+  .demo-shell .demo-live-pill .live-text { font-size: 9px; }
+  .demo-shell .demo-switcher-wrapper { position: static; }
+  .demo-shell .demo-switcher-btn, .demo-shell .demo-hire-btn { width: auto !important; min-height: 40px; padding: 8px 14px !important; font-size: 12px; border-radius: 8px; white-space: nowrap; }
+  .demo-shell .demo-switcher-menu { left: 16px; right: 16px; top: 100%; width: auto; max-height: 65vh; overflow-y: auto; }
+  .demo-shell .demo-switcher-list { max-height: none; }
+  .demo-shell .demo-switcher-item { min-height: 52px; }
+  .demo-shell .demo-item-info { min-width: 0; }
+  .demo-shell .demo-item-name { white-space: normal; }
+
+  /* 1. Analytics Demo: controls and dashboard elements */
+  [data-demo-family="analytics"] :is(.analytics-title-group,.analytics-actions-group,.range-pills-selector,.dash-title-row,.chart-header) { flex-wrap: wrap; min-width: 0; max-width: 100%; gap: 12px; }
+  [data-demo-family="analytics"] .analytics-title-group > div { min-width: 0; }
+  [data-demo-family="analytics"] .range-pills-selector { display: flex; overflow-x: auto; max-width: 100%; }
+  [data-demo-family="analytics"] .chart-metric-selector { flex-wrap: wrap; }
+  [data-demo-family="analytics"] :is(.analytics-middle-grid,.analytics-bottom-grid) { grid-template-columns: minmax(0, 1fr) !important; }
+
+  /* 2. Commerce Demo: nav, catalog, layout, and product details */
+  [data-demo-family="ecommerce"] .ecommerce-nav-container { display: flex; flex-wrap: wrap; gap: 12px; padding: 12px 20px; }
+  [data-demo-family="ecommerce"] .ecommerce-logo { flex: 1; }
+  [data-demo-family="ecommerce"] .ecommerce-nav-actions { display: flex; gap: 16px; width: auto; }
+  [data-demo-family="ecommerce"] .ecommerce-nav-links { display: flex; order: 3; width: 100%; min-width: 0; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+  [data-demo-family="ecommerce"] .ecommerce-nav-links .nav-link { flex: 0 0 auto; white-space: nowrap; padding: 10px 12px; font-size: 13px; }
+  [data-demo-family="ecommerce"] .ecom-hero-grid { gap: 28px !important; }
+  [data-demo-family="ecommerce"] .ecom-hero-title { color: #fff; }
+  [data-demo-family="ecommerce"] .ecom-cta-row { flex-wrap: wrap; gap: 16px; }
+  [data-demo-family="ecommerce"] :is(.flash-sale-content,.filters-header,.product-footer) { flex-wrap: wrap; gap: 12px; }
+  [data-demo-family="ecommerce"] .price-stack { flex-wrap: wrap; }
+  [data-demo-family="ecommerce"] .ecom-add-btn { width: auto !important; }
+  [data-demo-family="ecommerce"] :is(.shop-layout,.product-detail-layout,.checkout-layout,.cart-layout) { grid-template-columns: minmax(0, 1fr); min-width: 0; gap: 24px; }
+  [data-demo-family="ecommerce"] :is(.shop-main,.product-images-section,.product-details-section) { min-width: 0; width: 100%; }
+  [data-demo-family="ecommerce"] .shop-toolbar { flex-direction: column; align-items: stretch; }
+  [data-demo-family="ecommerce"] .search-box { width: 100%; min-width: 0; }
+  [data-demo-family="ecommerce"] .thumbnail-gallery { display: flex; flex-wrap: wrap; gap: 10px; }
+  [data-demo-family="ecommerce"] .thumbnail { width: 64px; height: 64px; flex: 0 0 64px; }
+  [data-demo-family="ecommerce"] :is(.product-rating-detail,.product-pricing-detail,.product-actions) { flex-wrap: wrap; gap: 12px; }
+  [data-demo-family="ecommerce"] .shop-sidebar { width: min(300px, calc(100vw - 32px)); }
+  [data-demo-family="ecommerce"] .shop-sidebar:not(.show-mobile) { visibility: hidden; }
+  [data-demo-family="ecommerce"] .shop-sidebar.show-mobile { visibility: visible; }
+  [data-demo-family="ecommerce"] .breadcrumb { flex-wrap: wrap; word-break: break-word; }
+
+  /* 3. Corporate Demo */
+  [data-demo-family="corporate"] :is(.solution-interactive-wrapper,.solution-tabs-nav,.solution-detail-card,.roi-grid,.consult-grid) { min-width: 0; max-width: 100%; }
+  [data-demo-family="corporate"] :is(.solution-detail-card,.roi-inputs-card,.consult-form-box) { padding: 24px 20px; }
+  [data-demo-family="corporate"] .corp-metrics-bar { flex-wrap: wrap; gap: 20px; }
+  [data-demo-family="corporate"] .metric-divider { display: none; }
+  [data-demo-family="corporate"] .corp-metric-item { flex: 1 1 100px; }
+  [data-demo-family="corporate"] .corp-hero-ambient { overflow: hidden; }
+
+  /* 4. Mobile Design / Fitness Simulator */
+  [data-demo-family="mobile-design"] :is(.simulator-section-grid,.simulator-sidebar,.simulator-phone-wrapper) { width: 100%; min-width: 0; max-width: 100%; }
+  [data-demo-family="mobile-design"] .iphone-chassis { width: min(100%, 380px); min-width: 0; height: 700px; border-width: 8px; border-radius: 40px; }
+  [data-demo-family="mobile-design"] .sim-panel-box { padding: 24px 20px; }
+  [data-demo-family="mobile-design"] .phone-status-bar { padding-inline: 18px; }
+
+  /* 5. Restaurant & Hospitality Demos */
+  [data-demo-family="restaurant"] .rest-card { width: 100%; min-width: 0; }
+  [data-demo-family="restaurant"] .rest-card-content { padding: 22px 18px; }
+  [data-demo-family="restaurant"] .booking-modal { width: calc(100% - 24px); max-width: 520px; max-height: 90dvh; overflow-y: auto; }
+  [data-demo-family="hospitality"] :is(.features-section,.hotel-card,.room-card,.search-form,.booking-form) { min-width: 0; max-width: 100%; }
+  [data-demo-family="hospitality"] .nav-content { flex-wrap: wrap; gap: 12px; }
+
+  /* 6. LMS Education Demo */
+  [data-demo-family="lms"] .lms-nav-container { flex-wrap: wrap; gap: 12px; }
+  [data-demo-family="lms"] .lms-nav-actions { gap: 10px; flex-wrap: wrap; }
+  [data-demo-family="lms"] .lms-courses-layout { grid-template-columns: minmax(0, 1fr); }
+  [data-demo-family="lms"] .lms-courses-main { min-width: 0; }
+  [data-demo-family="lms"] .lms-courses-toolbar { flex-wrap: wrap; gap: 16px; }
+  [data-demo-family="lms"] .lms-sort-container { flex-wrap: wrap; min-width: 0; }
+  [data-demo-family="lms"] .lms-sidebar { width: min(300px, calc(100vw - 32px)); }
+  [data-demo-family="lms"] .lms-sidebar:not(.lms-sidebar-mobile-open) { visibility: hidden; }
+  [data-demo-family="lms"] .lms-sidebar-mobile-open { visibility: visible; }
+  [data-demo-family="lms"] .certificate-simulator-card { padding: 24px 20px; }
+  [data-demo-family="lms"] :is(.cert-form,.cert-input-row,.cert-diploma-preview) { min-width: 0; max-width: 100%; }
+  [data-demo-family="lms"] .cert-input-row { flex-direction: column; align-items: stretch; }
+  [data-demo-family="lms"] .cert-diploma-preview { padding: 20px 14px; }
+  [data-demo-family="lms"] .diploma-placeholder { min-width: 0; }
+}
+
+/* ==========================================================================
+   320px NARROW-SCREEN REFINEMENTS (iPhone SE, Small Handsets, Extreme Narrow)
+   ========================================================================== */
+@media (max-width: 359px) {
+  .demo-shell :is(.container,.container-ecom,.container-lms,.container-re) {
+    padding-inline: 12px !important;
+  }
+  .demo-shell .demo-live-pill { display: none; }
+  .demo-shell .metechq-demo-topbar-inner { padding: 10px 12px; }
+  .demo-shell .demo-back-btn { font-size: 10px; padding: 6px 8px; min-height: 32px; }
+  .demo-shell .demo-switcher-btn, .demo-shell .demo-hire-btn { font-size: 11px; padding: 6px 10px !important; min-height: 36px; }
+  .demo-shell .demo-switcher-menu { left: 8px; right: 8px; width: auto; }
+
+  /* 1. Analytics Controls at 320px */
+  [data-demo-family="analytics"] .analytics-control-bar {
+    padding: 0.6rem 0;
+  }
+  [data-demo-family="analytics"] .control-bar-inner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.6rem;
+    padding-inline: 12px;
+  }
+  [data-demo-family="analytics"] .analytics-title-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    width: 100%;
+  }
+  [data-demo-family="analytics"] .dash-heading {
+    font-size: 1.15rem !important;
+    line-height: 1.25 !important;
+    word-break: break-word;
+  }
+  [data-demo-family="analytics"] .dash-subheading {
+    font-size: 0.7rem;
+    line-height: 1.3;
+    word-break: break-word;
+  }
+  [data-demo-family="analytics"] .analytics-actions-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+    align-items: center;
+  }
+  [data-demo-family="analytics"] .range-pills-selector {
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    padding: 2px;
+    gap: 3px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  [data-demo-family="analytics"] .range-pill {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    padding: 0.3rem 0.5rem;
+    font-size: 0.7rem;
+  }
+  [data-demo-family="analytics"] .stream-toggle-btn,
+  [data-demo-family="analytics"] .refresh-btn {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+  }
+  [data-demo-family="analytics"] .export-action-btn {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.72rem;
+    white-space: nowrap;
+  }
+  [data-demo-family="analytics"] .chart-tab {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.45rem;
+  }
+  [data-demo-family="analytics"] .card-panel {
+    padding: 14px 12px;
+  }
+
+  /* 2. Shop Filters at 320px */
+  [data-demo-family="ecommerce"] .shop-toolbar {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  [data-demo-family="ecommerce"] .search-box {
+    width: 100%;
+    min-width: 0;
+  }
+  [data-demo-family="ecommerce"] .search-input {
+    width: 100%;
+    font-size: 13px !important;
+    padding: 8px 12px 8px 36px;
+  }
+  [data-demo-family="ecommerce"] .mobile-filter-btn {
+    width: 100%;
+    min-height: 38px;
+    padding: 8px 12px;
+    font-size: 13px;
+    justify-content: center;
+  }
+  [data-demo-family="ecommerce"] .sort-select {
+    width: 100%;
+    min-height: 38px;
+    padding: 8px 12px;
+    font-size: 13px !important;
+  }
+  [data-demo-family="ecommerce"] .shop-sidebar {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    padding: 16px 12px;
+  }
+  [data-demo-family="ecommerce"] .price-inputs {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  [data-demo-family="ecommerce"] .price-input {
+    min-width: 0;
+    width: 100%;
+    font-size: 12px !important;
+    padding: 6px 8px;
+  }
+  [data-demo-family="ecommerce"] .filter-option {
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+
+  /* 3. Product Details at 320px */
+  [data-demo-family="ecommerce"] .breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    font-size: 11px;
+    margin-bottom: 12px;
+    word-break: break-word;
+  }
+  [data-demo-family="ecommerce"] .breadcrumb span,
+  [data-demo-family="ecommerce"] .breadcrumb a {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  [data-demo-family="ecommerce"] .product-detail-layout {
+    gap: 16px;
+  }
+  [data-demo-family="ecommerce"] .product-detail-title {
+    font-size: 20px !important;
+    line-height: 1.2 !important;
+    word-break: break-word;
+  }
+  [data-demo-family="ecommerce"] .main-product-image {
+    max-height: 260px;
+    object-fit: cover;
+  }
+  [data-demo-family="ecommerce"] .thumbnail {
+    width: 48px;
+    height: 48px;
+    flex: 0 0 48px;
+  }
+  [data-demo-family="ecommerce"] .price-current {
+    font-size: 22px;
+  }
+  [data-demo-family="ecommerce"] .price-original {
+    font-size: 14px;
+  }
+  [data-demo-family="ecommerce"] .option-buttons {
+    gap: 6px;
+  }
+  [data-demo-family="ecommerce"] .option-btn {
+    min-width: 34px;
+    min-height: 34px;
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+  [data-demo-family="ecommerce"] .quantity-selector {
+    gap: 6px;
+    padding: 4px;
+  }
+  [data-demo-family="ecommerce"] .qty-btn {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+  }
+  [data-demo-family="ecommerce"] .qty-input {
+    width: 32px;
+    font-size: 13px !important;
+  }
+  [data-demo-family="ecommerce"] .product-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+  [data-demo-family="ecommerce"] .add-to-cart-btn-large {
+    width: 100%;
+    padding: 11px 14px;
+    font-size: 14px;
+    border-radius: 8px;
+    justify-content: center;
+  }
+  [data-demo-family="ecommerce"] .wishlist-btn-large {
+    width: 100%;
+    justify-content: center;
+    padding: 10px;
+  }
+
+  /* 4. Course Navigation at 320px */
+  [data-demo-family="lms"] .lms-nav-container {
+    padding: 8px 12px;
+    gap: 8px;
+  }
+  [data-demo-family="lms"] .lms-nav-links {
+    display: flex !important;
+    width: 100%;
+    overflow-x: auto;
+    gap: 10px;
+    padding: 4px 0;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  [data-demo-family="lms"] .lms-nav-link {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    font-size: 12px;
+    padding: 4px 6px;
+  }
+  [data-demo-family="lms"] .lms-nav-actions {
+    gap: 6px;
+  }
+  [data-demo-family="lms"] .lms-nav-btn,
+  [data-demo-family="lms"] .lms-nav-btn-primary {
+    padding: 5px 8px;
+    font-size: 11px;
+    min-height: 30px;
+  }
+  [data-demo-family="lms"] .lms-courses-toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  [data-demo-family="lms"] .lms-sort-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    width: 100%;
+  }
+  [data-demo-family="lms"] .lms-filter-btn-mobile,
+  [data-demo-family="lms"] .lms-sort-select {
+    width: 100%;
+    min-height: 36px;
+    font-size: 12px !important;
+  }
+  [data-demo-family="lms"] .lms-sidebar {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    padding: 16px 12px;
+  }
+  [data-demo-family="lms"] .lms-category-pills {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 6px;
+    width: 100%;
+    padding-bottom: 6px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  [data-demo-family="lms"] .lms-cat-pill {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+  [data-demo-family="lms"] .lms-curriculum-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 10px 12px;
+  }
+  [data-demo-family="lms"] .lms-curriculum-header-left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+  }
+  [data-demo-family="lms"] .lms-section-title {
+    font-size: 13px !important;
+    line-height: 1.25 !important;
+    word-break: break-word;
+  }
+  [data-demo-family="lms"] .lms-section-meta {
+    font-size: 10px;
+    padding-left: 22px;
+  }
+  [data-demo-family="lms"] .lms-lesson-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 8px 12px;
+  }
+  [data-demo-family="lms"] .lms-lesson-left {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+  }
+  [data-demo-family="lms"] .lms-lesson-title {
+    font-size: 12px;
+    word-break: break-word;
+  }
+  [data-demo-family="lms"] .lms-lesson-duration {
+    font-size: 10px;
+    padding-left: 20px;
+  }
+  [data-demo-family="lms"] .lms-instructor-stats-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+}

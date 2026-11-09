@@ -7,6 +7,7 @@ import App from './App';
 import './studio-theme.css';
 import './pages/ContactStudio.css';
 import './pages/PortfolioStudio.css';
+import './demos/common/demo-responsive.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
